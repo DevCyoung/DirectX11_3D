@@ -22,7 +22,7 @@ Engine::Engine(const HWND hWnd, const UINT renderTargetWidth, const UINT renderT
 	, mGraphicDevice(new GraphicDeviceDX11(mHwnd, mRenderTargetWidth, mRenderTargetHeight))
 {
 	setWindowSize(mRenderTargetWidth, mRenderTargetHeight);
-	FBXLoadManager::Initialize();
+	FBXLoadManager::initialize();
 	Fmod::Initialize();	
 	TimeManager::initialize();
 	WindowManager::initialize();
@@ -44,7 +44,7 @@ Engine::~Engine()
 	TimeManager::deleteInstance();	
 	FontManager::deleteInstance();
 	Fmod::Release();
-	FBXLoadManager::DeleteInstance();
+	FBXLoadManager::deleteInstance();
 	DELETE_POINTER_NOT_NULL(mGraphicDevice);	
 }
 

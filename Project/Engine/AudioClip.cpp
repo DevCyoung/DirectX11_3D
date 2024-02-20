@@ -23,7 +23,7 @@ HRESULT AudioClip::Load(const std::wstring& path)
 	(void)path;
 	//std::string cPath(path.begin(), path.end());
 
-	std::string stringPath = helper::String::WStrToStr(path);
+	std::string stringPath = StringHelper::WStrToStr(path);
 
 
 	if (!Fmod::CreateSound(stringPath, &mSound))

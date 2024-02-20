@@ -33,6 +33,8 @@
 **/FBXSDK/Debug/*
 **/FBXSDK/Release/*
 
+**/Helper/Debug/*
+**/Helper/Release/*
 
 #hlsl
 *.cso

@@ -26,18 +26,13 @@
 #include <algorithm> 
 #include <limits>
 #include <memory> 
-//#include <filesystem> 
+//#include <filesystem>
 #include <wrl.h>
 #include <commdlg.h>
-
-#include <Engine\DXMath.h>
-
+#include <Helper\Helper.h>
+//#include <Engine\DXMath.h>
 #include <FBXLoader\fbxsdk.h>
-#include "define.h"
-//#include "EnumFlag.h"
-//#include "DefineMacro.h"
-//#include "SafeDelete.h"
 
-using namespace engine::math;
+//using namespace engine::math;
 
 #endif //PCH_H

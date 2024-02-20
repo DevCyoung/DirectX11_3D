@@ -21,7 +21,7 @@
 #include <Engine/Texture.h>
 #include <Engine/FBXLoader.h>
 #include <Engine/EnumResource.h>
-#include <Engine/String.h>
+
 eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 {
 	wchar_t szExt[50] = {};

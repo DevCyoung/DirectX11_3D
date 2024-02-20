@@ -15,7 +15,6 @@
 #include <Engine/GameObject.h>
 //#include <Engine/Component.h>
 #include <Engine/ScriptComponent.h>
-#include <Engine/String.h>
 #include "ComponentUIRender.h"
 #include <ImGUI/imgui_filter.h>
 
@@ -74,7 +73,7 @@ void InspectorUI::drawForm()
 	//Ãß»óÈ­
 	if (nullptr != mGameObject)
 	{
-		std::string name = helper::String::WStrToStr(mGameObject->GetName());
+		std::string name = StringHelper::WStrToStr(mGameObject->GetName());
 		ImGui::Bullet();
 		ImGui::Text("%s\t\t\t%d", name.c_str(), mGameObject->GetID());		
 
@@ -86,7 +85,7 @@ void InspectorUI::drawForm()
 			{				
 				eComponentType type = engineComponent->GetType();
 				std::wstring wstr = GetComponentName(type);
-				std::string str = helper::String::WStrToStr(wstr);		
+				std::string str = StringHelper::WStrToStr(wstr);		
 				RenderComponentName(str);
 				ComponentUIRender(engineComponent);					
 			}
@@ -99,7 +98,7 @@ void InspectorUI::drawForm()
 		{		
 			eScriptComponentType type = scriptCompnent->GetScriptType();
 			std::wstring wstr = GetScriptComponentName(type);
-			std::string str = helper::String::WStrToStr(wstr);
+			std::string str = StringHelper::WStrToStr(wstr);
 			RenderComponentName(str);
 			ComponentUIRender(scriptCompnent);
 		}
@@ -111,13 +110,13 @@ void InspectorUI::drawForm()
 		for (UINT i = 0; i < static_cast<UINT>(eComponentType::End); ++i)
 		{
 			eComponentType type = static_cast<eComponentType>(i);
-			std::string str = helper::String::WStrToStr(GetComponentName(type));
+			std::string str = StringHelper::WStrToStr(GetComponentName(type));
 			selectItems.push_back(str);
 		}
 		for (UINT i = 0; i < static_cast<UINT>(eScriptComponentType::End); ++i)
 		{
 			eScriptComponentType type = static_cast<eScriptComponentType>(i);
-			std::string str = helper::String::WStrToStr(GetScriptComponentName(type));
+			std::string str = StringHelper::WStrToStr(GetScriptComponentName(type));
 			selectItems.push_back(str);
 		}
 

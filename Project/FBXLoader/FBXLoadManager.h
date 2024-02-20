@@ -1,11 +1,8 @@
 #pragma once
-#include "define.h"
 #include <Engine\StructBuffer.h>
 #include <FBXLoader\fbxsdk.h>
 
 using namespace fbxsdk;
-
-//#include "fbxsdk.h"
 
 struct tFbxMaterial
 {
@@ -88,6 +85,7 @@ class FBXLoadManager
 public:
 	
 	void Load(const std::wstring& filePath);
+	void Release();
 
 	void triangulate(FbxNode* _pNode);
 	void loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbxNode);

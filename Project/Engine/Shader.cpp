@@ -6,7 +6,6 @@
 #include "GraphicDeviceDx11.h"
 #include "EnumResource.h"
 
-const wchar_t* EnumResourcePath(eResShader type);
 
 Shader::Shader(const D3D11_PRIMITIVE_TOPOLOGY topology,
 	const std::wstring& VSRelativePath, const std::wstring& VSFunName,
@@ -30,17 +29,6 @@ Shader::Shader(const D3D11_PRIMITIVE_TOPOLOGY topology,
 
 	createVSShader(VSRelativePath, VSFunName, SMType);
 	createPSShader(PSRelativePath, PSFunName);
-}
-
-Shader::Shader(const D3D11_PRIMITIVE_TOPOLOGY topology,
-	const eResShader VSRelativePath, const std::wstring& VSFunName,
-	const eResShader PSRelativePath, const std::wstring& PSFunName,
-	const eSMType SMType, const eRSType RSType, const eDSType DSType, const eBSType BSType)
-	: Shader(topology,
-		EnumResourcePath(VSRelativePath), VSFunName,
-		EnumResourcePath(PSRelativePath), PSFunName,
-		SMType, RSType, DSType, BSType)
-{
 }
 
 Shader::~Shader()
@@ -108,8 +96,8 @@ void Shader::shaderCompile(const std::wstring& relativePath,
 	ID3DBlob** const ppErrorBlob)
 {
 	const std::wstring& SHADER_FULL_PATH = PathManager::GetInstance()->GetResourcePath() + relativePath;
-	const std::string& FUN_NAME = helper::String::WStrToStr(funName);
-	const std::string& VERSION_NAME = helper::String::WStrToStr(version);
+	const std::string& FUN_NAME = StringHelper::WStrToStr(funName);
+	const std::string& VERSION_NAME = StringHelper::WStrToStr(version);
 
 	if (FAILED(D3DCompileFromFile(SHADER_FULL_PATH.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		FUN_NAME.c_str(), VERSION_NAME.c_str(), 0, 0, ppBlob, ppErrorBlob)))

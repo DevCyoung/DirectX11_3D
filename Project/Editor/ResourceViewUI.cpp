@@ -6,7 +6,6 @@
 #include <Engine/ResourceManager.h>
 #include <Engine/GameSystem.h>
 #include <Engine/GameObject.h>
-#include <Engine/String.h>
 #include <Engine/Texture.h>
 #include <Engine/EnumResource.h>
 #include "PanelUIManager.h"
@@ -105,7 +104,7 @@ void ResourceViewUI::drawForm()
 			for (; citer != cend; ++citer)
 			{
 				std::string relativePath =
-					helper::String::WStrToStr(citer->second->GetRelativePath());
+					StringHelper::WStrToStr(citer->second->GetRelativePath());
 				ImGui::Bullet();
 				ImGui::Selectable(relativePath.c_str(), false);
 				if (ImGui::IsItemClicked())

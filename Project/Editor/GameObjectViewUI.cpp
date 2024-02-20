@@ -2,7 +2,6 @@
 #include "GameObjectViewUI.h"
 #include <Engine/SceneManager.h>
 #include <Engine/Layer.h>
-#include <Engine/String.h>
 #include <Engine/GameObject.h>
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
@@ -32,7 +31,7 @@ void GameObjectViewUI::drawForm()
 		for (GameObject* gameObject : gameObjects)
 		{
 			
-			std::string itemName = helper::String::WStrToStr(gameObject->GetName());
+			std::string itemName = StringHelper::WStrToStr(gameObject->GetName());
 			ImGui::Bullet();
 			ImGui::Selectable(itemName.c_str(), false);
 			if (ImGui::IsItemClicked())

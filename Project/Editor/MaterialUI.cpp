@@ -3,7 +3,6 @@
 #include <Engine/Texture.h>
 #include <Engine/Material.h>
 #include <Engine/ResourceManager.h>
-#include <Engine/String.h>
 
 #include <ImGUI/imgui_filter.h>
 
@@ -24,7 +23,7 @@ void MaterialUI(Material* material)
 
 	for (; citer != cend; ++citer)
 	{
-		std::string patah = helper::String::WStrToStr(citer->first);
+		std::string patah = StringHelper::WStrToStr(citer->first);
 		if (patah.front() != '\\')
 		{
 			continue;
@@ -74,7 +73,7 @@ void MaterialUI(Material* material)
 		for (const std::string& item : selectItems)
 		{
 			Texture* tex =
-				gResourceManager->FindOrNull<Texture>(helper::String::StrToWStr(item).c_str());
+				gResourceManager->FindOrNull<Texture>(StringHelper::StrToWStr(item).c_str());
 
 			if (ImGui::ImageButton(tex->GetSRVOrNull(), ImVec2(100.f, 100.f)))
 			{
@@ -111,7 +110,7 @@ void MaterialUI(Material* material)
 		for (const std::string& item : selectItems)
 		{
 			Texture* tex =
-				gResourceManager->FindOrNull<Texture>(helper::String::StrToWStr(item).c_str());
+				gResourceManager->FindOrNull<Texture>(StringHelper::StrToWStr(item).c_str());
 
 			if (ImGui::ImageButton(tex->GetSRVOrNull(), ImVec2(100.f, 100.f)))
 			{

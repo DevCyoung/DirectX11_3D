@@ -1,5 +1,4 @@
 #pragma once
-#include "Singleton.h"
 #include "Resource.h"
 #include "PathManager.h"
 #include "ResourceTypeTrait.h"
@@ -20,24 +19,14 @@ public:
 	template<typename T>
 		requires (is_engine_resource<T>::value)
 	T* FindOrNull(const Key& relativePathOrName) const ;
-	template<typename T>
-		requires (is_engine_resource<T>::value)
-	T* FindOrNullByEnum(const typename engine_resource_type<T>::eResEnumType resNameType) const ;
 
 	template<typename T>
 		requires (is_engine_resource<T>::value)
 	T* Find(const Key& relativePathOrName);
-	template<typename T>
-		requires (is_engine_resource<T>::value)
-	T* FindByEnum(const typename engine_resource_type<T>::eResEnumType resNameType);
 
 	template <typename T>
 		requires (is_engine_resource<T>::value)
 	void Load(const Key& relativePathOrName);
-
-	template <typename T>
-		requires (is_engine_resource<T>::value)
-	void LoadByEnum(const typename engine_resource_type<T>::eResEnumType resNameType);
 
 	template<typename T>
 		requires (is_engine_resource<T>::value)
@@ -93,12 +82,6 @@ inline T* ResourceManager::FindOrNull(const Key& relativePathOrName) const
 	return res;
 }
 
-template<typename T>
-	requires (is_engine_resource<T>::value)
-inline T* ResourceManager::FindOrNullByEnum(const typename engine_resource_type<T>::eResEnumType resNameType) const
-{
-	return FindOrNull<T>(EnumResourcePath(resNameType));
-}
 
 template<typename T>
 	requires (is_engine_resource<T>::value)
@@ -116,12 +99,6 @@ inline T* ResourceManager::Find(const Key& relativePathOrName)
 	return resource;
 }
 
-template<typename T>
-	requires (is_engine_resource<T>::value)
-inline T* ResourceManager::FindByEnum(const typename engine_resource_type<T>::eResEnumType resNameType)
-{
-	return Find<T>(EnumResourcePath(resNameType));
-}
 
 template<typename T>
 	requires (is_engine_resource<T>::value)
@@ -137,13 +114,6 @@ inline void ResourceManager::Load(const Key& relativePathOrName)
 	resource->Load(FILE_PATH);
 	resource->mRelativePath = relativePathOrName;
 	resources.insert(std::make_pair(relativePathOrName, resource)); //key : relative Path
-}
-
-template<typename T>
-	requires (is_engine_resource<T>::value)
-inline void ResourceManager::LoadByEnum(const typename engine_resource_type<T>::eResEnumType resNameType)
-{
-	Load<T>(EnumResourcePath(resNameType));
 }
 
 template<typename T>

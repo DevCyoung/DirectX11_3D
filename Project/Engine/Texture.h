@@ -2,7 +2,7 @@
 #include <wrl.h>
 #include <d3d11.h>	
 #include "Resource.h"
-#include "DirectXTex.h"
+#include <Helper\DirectXTex.h>
 
 class Texture : public Resource
 {

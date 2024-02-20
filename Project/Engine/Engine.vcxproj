@@ -74,13 +74,13 @@
     <OutDir>$(SolutionDir)Output\Library\Engine\Debug\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <LibraryPath>$(SolutionDir)Output\Library\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(SolutionDir)Project\Helper\</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Output\Library\Engine\Release\</OutDir>
     <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Output\Library\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(SolutionDir)Project\Helper\</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -193,7 +193,6 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
       </SubType>
     </ClInclude>
     <ClInclude Include="CollisionManagement2D.h" />
-    <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentTrait.h" />
     <ClInclude Include="ComputeShader.h" />
@@ -203,16 +202,12 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
     </ClInclude>
     <ClInclude Include="EngineComponentTrait.h" />
     <ClInclude Include="ConstantBuffer.h" />
-    <ClInclude Include="DirectXTex.h" />
     <ClInclude Include="DSCollection.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EngineResourceLoader.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EnumComponent.h" />
-    <ClInclude Include="EnumFlag.h" />
-    <ClInclude Include="DXMath.h" />
     <ClInclude Include="EnumLayer.h" />
     <ClInclude Include="EnumRenderType.h" />
     <ClInclude Include="EnumResource.h" />
@@ -259,7 +254,6 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
     <ClInclude Include="GraphicDeviceDX11.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="DefineMacro.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="MessageManager.h">
@@ -275,14 +269,11 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RSCollection.h" />
-    <ClInclude Include="SafeDelete.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScriptComponent.h" />
     <ClInclude Include="ScriptComponentTrait.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="String.h" />
     <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="SBCollection.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -323,7 +314,6 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
       </SubType>
     </ClCompile>
     <ClCompile Include="CollisionManagement2D.cpp" />
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
@@ -333,7 +323,6 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
     </ClCompile>
     <ClCompile Include="DSCollection.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="DXMath.cpp" />
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="EngineResourceLoader.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -395,12 +384,10 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RSCollection.cpp" />
-    <ClCompile Include="SafeDelete.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScriptComponent.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="String.cpp" />
     <ClCompile Include="StructBuffer.cpp" />
     <ClCompile Include="SBCollection.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
@@ -414,9 +401,7 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
   </ItemGroup>
   <ItemGroup>
     <None Include="component.priority" />
-    <None Include="DirectXTex.inl" />
     <None Include="dpend.diff" />
-    <None Include="DXMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,8 +16,8 @@ ComputeShader::ComputeShader(const std::wstring& CSRelativePath, const std::wstr
 	, m_iGroupPerThreadZ(1)
 {
 	const std::wstring& SHADER_FULL_PATH = PathManager::GetInstance()->GetResourcePath() + CSRelativePath;
-	const std::string& FUN_NAME = helper::String::WStrToStr(CSFunName);
-	const std::string& VERSION_NAME = helper::String::WStrToStr(L"cs_5_0");
+	const std::string& FUN_NAME = StringHelper::WStrToStr(CSFunName);
+	const std::string& VERSION_NAME = StringHelper::WStrToStr(L"cs_5_0");
 
 	Microsoft::WRL::ComPtr<ID3DBlob> errBlob;
 

@@ -19,10 +19,7 @@
 
 #define MAX_LOADSTRING 100
 
-//TestCode
-//#pragma comment(lib, "FBXLoader/Debug/FBXLoader_d")
-//#include <FBXLoader/FBXLoader.h>
-//TestCode
+#define DEBUG_TARGET 0
 
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
@@ -45,7 +42,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// TODO: 여기에 코드를 입력합니다.        	
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(3210785);
+#if DEBUG_TARGET
+	_CrtSetBreakAlloc(DEBUG_TARGET);
+#endif
 #endif
 
 #pragma region LoadStringW

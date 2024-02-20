@@ -74,11 +74,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Output\Library\Content\Debug\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(SolutionDir)Project\Helper\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Output\Library\Content\Release\</OutDir>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(SolutionDir)Project\Helper\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,9 +132,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)Project\Content\Helper\Resource\Release\net6.0
-call ResourceHelper.exe $(SolutionDir)Output\bin\Resources $(SolutionDir)Project\Content
-cd $(SolutionDir)Project\Content\Helper\ScriptGen\Release\net6.0
+      <Command>cd $(SolutionDir)Project\Content\Helper\ScriptGen\Release\net6.0
 call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)Project\Content\EnumScriptComponent.h $(SolutionDir)Project\Content\EnumScriptComponent.cpp TRUE</Command>
     </PreBuildEvent>
     <FxCompile>
@@ -182,15 +180,6 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="EnumResourceTypeAnimation.h" />
-    <ClInclude Include="EnumResourceTypeAudioClip.h" />
-    <ClInclude Include="EnumResourceTypeFont.h" />
-    <ClInclude Include="EnumResourceTypeMaterial.h" />
-    <ClInclude Include="EnumResourceTypeMesh.h" />
-    <ClInclude Include="EnumResourceTypeScene.h" />
-    <ClInclude Include="EnumResourceTypeShader.h" />
-    <ClInclude Include="EnumResourceTypeSound.h" />
-    <ClInclude Include="EnumResourceTypeTexture.h" />
     <ClInclude Include="EnumScriptComponent.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -208,15 +197,6 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="EnumResourceTypeAnimation.cpp" />
-    <ClCompile Include="EnumResourceTypeAudioClip.cpp" />
-    <ClCompile Include="EnumResourceTypeFont.cpp" />
-    <ClCompile Include="EnumResourceTypeMaterial.cpp" />
-    <ClCompile Include="EnumResourceTypeMesh.cpp" />
-    <ClCompile Include="EnumResourceTypeScene.cpp" />
-    <ClCompile Include="EnumResourceTypeShader.cpp" />
-    <ClCompile Include="EnumResourceTypeSound.cpp" />
-    <ClCompile Include="EnumResourceTypeTexture.cpp" />
     <ClCompile Include="EnumScriptComponent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

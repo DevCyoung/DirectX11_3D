@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{8f3a7ccb-0539-4ae7-ae93-b4b5f7a43c64}</ProjectGuid>
-    <RootNamespace>FBXLoader</RootNamespace>
+    <ProjectGuid>{d919954f-a0a0-42c6-812c-1da584a91cf8}</ProjectGuid>
+    <RootNamespace>Helper</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,15 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)Output\Library\FBXLoader\Debug\</OutDir>
+    <OutDir>$(SolutionDir)Output\Library\Helper\Debug\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Output\Library\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)Output\Library\FBXLoader\Release\</OutDir>
-    <IncludePath>$(SolutionDir)Project\;$(SolutionDir)Project\FBXLoader\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Output\Library\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Output\Library\Helper\Release\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,19 +148,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="FBXLoadManager.h" />
-    <ClInclude Include="fbxsdk.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="DefineMacro.h" />
+    <ClInclude Include="DirectXTex.h" />
+    <ClInclude Include="DXMath.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StringHelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FBXLoadManager.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="DXMath.cpp" />
+    <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StringHelper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectXTex.inl" />
+    <None Include="DXMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

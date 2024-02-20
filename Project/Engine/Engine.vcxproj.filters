@@ -145,35 +145,11 @@
     <Filter Include="Source\Helper\File">
       <UniqueIdentifier>{2d9164a7-f9d1-44ba-b093-7a129be4a17c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Helper\String">
-      <UniqueIdentifier>{8a8f7d10-2e43-4c78-93bc-2cd3bc497544}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Helper\Math">
       <UniqueIdentifier>{c6fe055c-5313-4b7b-b8b0-9caf2912f921}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Helper\SafeDelete">
-      <UniqueIdentifier>{aeb89aa9-f7a8-4330-9142-7dcf545eaa7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Helper\Singleton">
-      <UniqueIdentifier>{ee78ce07-d9a5-4e30-bcf8-2e77dbd9fa7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Helper\Include">
-      <UniqueIdentifier>{75a58b25-b5b9-4fcb-ab41-d8b4a2cbedb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Helper\Color">
-      <UniqueIdentifier>{f8d2bd68-04f3-4972-ab4d-9d26af22791b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{fa146637-41d5-4cfd-a22f-e855ac8d7bc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Windows\Extern">
-      <UniqueIdentifier>{76c9455a-0147-49a4-8582-413a530bd265}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Windows\Extern\MicrosoftTex">
-      <UniqueIdentifier>{9e4a9ccb-9191-42b7-b96f-fcf1c16a86a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Windows\Extern\MicrosoftMath">
-      <UniqueIdentifier>{b6269c47-ecb2-4beb-902d-116f19f3c122}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows\diff">
       <UniqueIdentifier>{21b12c7c-f83e-496c-a646-ca9e8834ddc3}</UniqueIdentifier>
@@ -261,23 +237,11 @@
     <ClInclude Include="InputManager.h">
       <Filter>Source\01. Manager\01. Input</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Source\Helper\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineIncludes.h">
-      <Filter>Source\Helper\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="EnumFlag.h">
-      <Filter>Source\Helper\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Source\06. Resource\00. Texture</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Source\06. Resource\03. Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="String.h">
-      <Filter>Source\Helper\String</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Source\02. GameObject</Filter>
@@ -303,9 +267,6 @@
     <ClInclude Include="Transform.h">
       <Filter>Source\03. Component\01. Transform</Filter>
     </ClInclude>
-    <ClInclude Include="SafeDelete.h">
-      <Filter>Source\Helper\SafeDelete</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Source\01. Manager\05. Resource</Filter>
     </ClInclude>
@@ -324,20 +285,11 @@
     <ClInclude Include="ResourceTypeTrait.h">
       <Filter>Source\06. Resource</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXTex.h">
-      <Filter>Windows\Extern\MicrosoftTex</Filter>
-    </ClInclude>
-    <ClInclude Include="DXMath.h">
-      <Filter>Windows\Extern\MicrosoftMath</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source\03. Component\02. Camera</Filter>
     </ClInclude>
     <ClInclude Include="MessageManager.h">
       <Filter>Source\01. Manager\04. Message</Filter>
-    </ClInclude>
-    <ClInclude Include="DefineMacro.h">
-      <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="DSCollection.h">
       <Filter>Source\00. Engine\01. Graphics\Collection\02. DS</Filter>
@@ -429,9 +381,6 @@
     <ClInclude Include="Animation2D.h">
       <Filter>Source\03. Component\03. Render\01. Animator</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Source\Helper\Color</Filter>
-    </ClInclude>
     <ClInclude Include="Light2D.h">
       <Filter>Source\03. Component\05. Light2D</Filter>
     </ClInclude>
@@ -519,9 +468,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source\06. Resource\03. Shader</Filter>
     </ClCompile>
-    <ClCompile Include="String.cpp">
-      <Filter>Source\Helper\String</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Source\02. GameObject</Filter>
     </ClCompile>
@@ -549,9 +495,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Source\03. Component\01. Transform</Filter>
     </ClCompile>
-    <ClCompile Include="SafeDelete.cpp">
-      <Filter>Source\Helper\SafeDelete</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source\01. Manager\05. Resource</Filter>
     </ClCompile>
@@ -566,9 +509,6 @@
     </ClCompile>
     <ClCompile Include="StructBuffer.cpp">
       <Filter>Source\00. Engine\01. Graphics\Struct</Filter>
-    </ClCompile>
-    <ClCompile Include="DXMath.cpp">
-      <Filter>Windows\Extern\MicrosoftMath</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source\03. Component\02. Camera</Filter>
@@ -648,9 +588,6 @@
     <ClCompile Include="Animation2D.cpp">
       <Filter>Source\03. Component\03. Render\01. Animator</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Source\Helper\Color</Filter>
-    </ClCompile>
     <ClCompile Include="Light2D.cpp">
       <Filter>Source\03. Component\05. Light2D</Filter>
     </ClCompile>
@@ -717,12 +654,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectXTex.inl">
-      <Filter>Windows\Extern\MicrosoftTex</Filter>
-    </None>
-    <None Include="DXMath.inl">
-      <Filter>Windows\Extern\MicrosoftMath</Filter>
-    </None>
     <None Include="dpend.diff">
       <Filter>Windows\diff</Filter>
     </None>

@@ -7,13 +7,3 @@
 #include <Engine/ComputeShader.h>
 #include <Engine/Prefab.h>
 #include <Engine/ResourceManager.h>
-
-#include "EnumResourceTypeAnimation.h"	
-#include "EnumResourceTypeFont.h"
-#include "EnumResourceTypeScene.h"
-#include "EnumResourceTypeMaterial.h"
-#include "EnumResourceTypeMesh.h"
-#include "EnumResourceTypeShader.h"
-#include "EnumResourceTypeSound.h"
-#include "EnumResourceTypeTexture.h"
-#include "EnumResourceTypeAudioClip.h"

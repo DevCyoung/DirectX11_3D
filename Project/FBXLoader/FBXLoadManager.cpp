@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "framework.h"
 #include "FBXLoadManager.h"
-
+#include "Helper\Memory.h"
 FBXLoadManager::FBXLoadManager()
 	: mFbxManager(nullptr)
 	, mIos(nullptr)
@@ -19,10 +19,7 @@ FBXLoadManager::~FBXLoadManager()
 
 	mFbxManager->Destroy();
 
-	for (tBone* bone : m_vecBone)
-	{
-		delete bone;
-	}
+	//for (tAnimClip* m_vecAnimClip)
 }
 
 void FBXLoadManager::Load(const std::wstring& wFilePath)
@@ -47,26 +44,55 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 
 		mVecContainer.clear();
 
+		//if (m_Animc)
+
 		//bon
 		loadSkeleton(fbxScene->GetRootNode());
 
 		//animation names
 		fbxScene->FillAnimStackNameArray(m_arrAnimName);
-
+		
 		loadAnimationClip(fbxScene);
-
-		//삼각화
+		//
+		////삼각화
 		triangulate(fbxScene->GetRootNode());
-
-		// 메쉬 데이터 얻기
+		//
+		//// 메쉬 데이터 얻기
 		loadMeshDataFromNode(fbxScene, fbxScene->GetRootNode());
-
-		loadTextrue();
+		//
+		//loadTextrue();
 
 		imposter->Destroy();
+
+		fbxScene->Destroy();
 	}
 
 
+}
+
+void FBXLoadManager::Release()
+{
+	
+	for (tBone* bone : m_vecBone)
+	{
+		delete bone;
+	}
+	m_vecBone.clear();
+
+	for (tAnimClip* clip : m_vecAnimClip)
+	{
+		delete clip;
+	}
+
+	m_vecAnimClip.clear();
+
+	for (int i = 0; i < m_arrAnimName.GetCount(); ++i)
+	{
+		FbxString* takeName = m_arrAnimName.GetAt(i);
+		delete takeName;
+	}
+
+	m_arrAnimName.Clear();
 }
 
 void FBXLoadManager::triangulate(FbxNode* _pNode)

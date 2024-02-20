@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <assert.h>
-#include "Singleton.h"
+#include <Helper\Helper.h>
 
 class GraphicDeviceDX11;
 class RenderTargetRenderer;

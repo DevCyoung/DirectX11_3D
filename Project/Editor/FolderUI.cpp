@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "FolderUI.h"
-#include <Engine/String.h>
 
 FolderUI::FolderUI()
 {
@@ -17,14 +16,14 @@ void FolderUI::AddResourceUI(ResourceUI* const resourceUI)
 {
 	std::string relativePath = resourceUI->GetName();
 
-	const std::wstring& wRelativePath = helper::String::StrToWStr(relativePath);
+	const std::wstring& wRelativePath = StringHelper::StrToWStr(relativePath);
 	std::wstring wOutRootName;
 	std::wstring wOutFilePath;
 
-	helper::String::SplitRootNameAndFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
+	StringHelper::SplitRootNameAndFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
 
-	std::string outRootName = helper::String::WStrToStr(wOutRootName);
-	std::string outFilePath = helper::String::WStrToStr(wOutFilePath);
+	std::string outRootName = StringHelper::WStrToStr(wOutRootName);
+	std::string outFilePath = StringHelper::WStrToStr(wOutFilePath);
 
 	resourceUI->SetName(outFilePath);
 

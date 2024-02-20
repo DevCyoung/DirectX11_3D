@@ -1,5 +1,4 @@
 #pragma once
-#include "Singleton.h"
 #include "Scene.h"
 
 struct ID3D11DepthStencilView;

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{9863a0b1-0e46-4099-89a0-35e19d053b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{b4b62007-2d58-42fe-9348-0ffbd009e108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Memory">
+      <UniqueIdentifier>{8a93287a-7e4b-4369-98cc-93b7ee8da200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extern">
+      <UniqueIdentifier>{f28cb289-c3ba-4b16-bfa6-4adbb0fc1a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extern\MSMath">
+      <UniqueIdentifier>{46da1b2c-5135-426f-a34c-e9ff49c1f4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extern\MSTex">
+      <UniqueIdentifier>{9bcea99a-6074-448d-a869-e4d39a7667bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\File">
+      <UniqueIdentifier>{ac44bbe8-9037-4ae4-b761-9495b3d5e69c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\String">
+      <UniqueIdentifier>{823247cb-7c5a-4876-9c46-ec5815578abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Color">
+      <UniqueIdentifier>{0b5f8c79-d7fe-438c-9f3b-01b4bb28e93d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="DefineMacro.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="DXMath.h">
+      <Filter>Extern\MSMath</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXTex.h">
+      <Filter>Extern\MSTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Source\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Source\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Source\Color</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="DXMath.cpp">
+      <Filter>Extern\MSMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Source\String</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Source\Color</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DXMath.inl">
+      <Filter>Extern\MSMath</Filter>
+    </None>
+    <None Include="DirectXTex.inl">
+      <Filter>Extern\MSTex</Filter>
+    </None>
+  </ItemGroup>
+</Project>

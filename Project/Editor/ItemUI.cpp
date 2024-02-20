@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ItemUI.h"
 #include "LogUI.h"
-#include <Engine/String.h>
 #include <Engine/GameObject.h>
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
@@ -12,8 +11,6 @@
 #include <Engine/Mesh.h>
 #include <Engine/Shader.h>
 #include <Engine/ComputeShader.h>
-
-#include <Engine/String.h>
 #include <Engine/Resource.h>
 
 ItemUI::ItemUI()
@@ -51,7 +48,7 @@ void ItemUI::render()
 		PanelUI* inspectorUI =
 			PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI");
 
-		std::wstring path = helper::String::StrToWStr(mFullName);
+		std::wstring path = StringHelper::StrToWStr(mFullName);
 		static_cast<InspectorUI*>(inspectorUI)->Register(mResource);	
 	}		
 }

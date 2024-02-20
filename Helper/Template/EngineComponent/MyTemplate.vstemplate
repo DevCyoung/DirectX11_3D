@@ -1,0 +1,15 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>EngineComponent.h</DefaultName>
+    <Name>EngineComponent</Name>
+      <Description>&lt;엔진 스크립트 입니다. eComponentType enum class에 항목을 추가해주세요&gt;</Description>
+    <ProjectType>VC</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.h" ReplaceParameters="true">Camera.h</ProjectItem>
+      <ProjectItem SubType="" TargetFileName="$fileinputname$.cpp" ReplaceParameters="true">Camera.cpp</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

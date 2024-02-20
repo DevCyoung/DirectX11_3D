@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{35ed6a03-5dfe-4232-83f2-fdc3b0a60e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\diff">
+      <UniqueIdentifier>{a3755df9-006f-44d9-9b02-2f1ca79c02bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{979c0109-8357-4852-b535-29e01dc23a1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\01. ScriptComponent">
+      <UniqueIdentifier>{de857324-cd4d-4a4d-80a7-707699222472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\01. ScriptComponent\Camera">
+      <UniqueIdentifier>{f33adfa7-ae53-4c27-b2dc-1f5fa529591d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\01. ScriptComponent\Cursur">
+      <UniqueIdentifier>{f0c38e71-c5ab-4474-874a-981d4a959921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enum">
+      <UniqueIdentifier>{c34d8bbf-e30d-458e-8f53-43db7792fa6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{df7c758c-f2a8-43fd-9b81-4685458a5dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{696114eb-0954-476b-85b0-ef47c3412d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{faede2d2-c3d9-43c8-ba24-6bec305df60e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode">
+      <UniqueIdentifier>{2c32228f-6400-4c12-ba3a-80bcc9e68287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Header">
+      <UniqueIdentifier>{abd7499d-ca04-4dfd-b4d0-94b1bb510403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Debug">
+      <UniqueIdentifier>{e40c434b-8c6d-410e-abaa-cb5f10dd81d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Debug\Fill">
+      <UniqueIdentifier>{56924750-d941-47f0-9ad0-d5751dc777bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Debug\Line">
+      <UniqueIdentifier>{42f24343-9c0a-4f7f-b0df-4c6daf0472e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Debug\Grid">
+      <UniqueIdentifier>{86fb1d1f-6799-44f0-9fbe-64c00bcfe0dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Sprite2D">
+      <UniqueIdentifier>{c87d12e4-e329-4c8d-b9d2-4a66d513ed5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Sprite2D\Light">
+      <UniqueIdentifier>{78ccee1b-3e48-4026-9589-3bb739d068eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Sprite2D\Default">
+      <UniqueIdentifier>{a8f7cc13-baea-4ca8-a8c7-db20a794fdea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Animation2D">
+      <UniqueIdentifier>{0aa6e45d-3d83-43a5-8f60-4cbc676cca7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Animation2D\Light">
+      <UniqueIdentifier>{2bf96aef-c877-4f89-9857-5792d3415454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Animation2D\Default">
+      <UniqueIdentifier>{94448bfb-0a9c-49b0-be0b-e372b3e909ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Animation2D\Func">
+      <UniqueIdentifier>{46deedfb-ba22-4e88-95bb-c97fb76e3859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\UI2D">
+      <UniqueIdentifier>{aee2bc8d-d011-4783-9a74-cbcb67812661}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\Light">
+      <UniqueIdentifier>{4bd83d62-b18b-4315-9551-1e88dc02a6c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\CS">
+      <UniqueIdentifier>{79fab949-91ff-4944-bcfd-33db9e478b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\PostProcess">
+      <UniqueIdentifier>{c153dbaa-2d4f-402b-8399-f18f9cb1e231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\PostProcess\Gray">
+      <UniqueIdentifier>{e7ce679c-7359-4d55-a696-6e5625880d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\PostProcess\Rewind">
+      <UniqueIdentifier>{43a7ba40-e780-42cb-b1ef-726a7fcd626b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\PostProcess\Wave">
+      <UniqueIdentifier>{7a53df83-11e2-4b51-a365-71eca2be745e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\ColorFun">
+      <UniqueIdentifier>{903e7170-e939-465b-abe1-b003ce72f52d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\AfterImage">
+      <UniqueIdentifier>{0045478e-be68-4b9f-9682-3c4add6b082e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\NextScene">
+      <UniqueIdentifier>{5b54fdfb-721b-4509-a6f6-46a87bc3fcc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\AlphaTo">
+      <UniqueIdentifier>{7201c858-a042-4236-877b-61cf4596e9cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Sound">
+      <UniqueIdentifier>{9dc54863-4ef6-4da2-a1ca-66faeadde459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Resource">
+      <UniqueIdentifier>{b5760e71-803f-4f22-9af7-d44435ab071e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderCode\3D">
+      <UniqueIdentifier>{1b1eecd1-2066-4029-8af2-afc65023ad1b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Content.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeAnimation.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeFont.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeMaterial.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeMesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeShader.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeSound.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeTexture.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeScene.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Manager\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumScriptComponent.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorMovement.h">
+      <Filter>Source\01. ScriptComponent\Cursur</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraInputMoveMent.h">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumResourceTypeAudioClip.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Manager\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenSize.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Content.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeAnimation.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeFont.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeMaterial.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeMesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeShader.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeSound.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeTexture.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeScene.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumScriptComponent.cpp">
+      <Filter>Enum</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorMovement.cpp">
+      <Filter>Source\01. ScriptComponent\Cursur</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraInputMoveMent.cpp">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumResourceTypeAudioClip.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Manager\Sound</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Output\bin\Resources\Shader\Header\Struct.fxh">
+      <Filter>ShaderCode\Header</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\Header\ConstantBuffer.fxh">
+      <Filter>ShaderCode\Header</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\Header\Sampler.fxh">
+      <Filter>ShaderCode\Header</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\Header\Texture.fxh">
+      <Filter>ShaderCode\Header</Filter>
+    </None>
+    <None Include="Material_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Mesh_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Font_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Animation_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Texture_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Sound_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Shader_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="Scene_Res_dpend.diff">
+      <Filter>Windows\diff</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSFillDebug2D.hlsl">
+      <Filter>ShaderCode\Debug\Fill</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSLineDebug2D.hlsl">
+      <Filter>ShaderCode\Debug\Line</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSGrid2D.hlsl">
+      <Filter>ShaderCode\Debug\Grid</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSGrid2D.hlsl">
+      <Filter>ShaderCode\Debug\Grid</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSLineDebug2D.hlsl">
+      <Filter>ShaderCode\Debug\Line</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSFillDebug2D.hlsl">
+      <Filter>ShaderCode\Debug\Fill</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSUI2D.hlsl">
+      <Filter>ShaderCode\UI2D</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSUI2D.hlsl">
+      <Filter>ShaderCode\UI2D</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSLightAnimation2D.hlsl">
+      <Filter>ShaderCode\Animation2D\Light</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSLightAnimation2D.hlsl">
+      <Filter>ShaderCode\Animation2D\Light</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSAnimation2D.hlsl">
+      <Filter>ShaderCode\Animation2D\Default</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSSprite2D.hlsl">
+      <Filter>ShaderCode\Sprite2D\Default</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSSprite2D.hlsl">
+      <Filter>ShaderCode\Sprite2D\Default</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSLightSprite2D.hlsl">
+      <Filter>ShaderCode\Sprite2D\Light</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSLightSprite2D.hlsl">
+      <Filter>ShaderCode\Sprite2D\Light</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\Light2D.hlsl">
+      <Filter>ShaderCode\Light</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\stdCS.hlsl">
+      <Filter>ShaderCode\CS</Filter>
+    </None>
+    <None Include="component.priority">
+      <Filter>Windows</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSGrayPostProcess.hlsl">
+      <Filter>ShaderCode\PostProcess\Gray</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSGrayPostProcess.hlsl">
+      <Filter>ShaderCode\PostProcess\Gray</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSWave.hlsl">
+      <Filter>ShaderCode\PostProcess\Wave</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSWave.hlsl">
+      <Filter>ShaderCode\PostProcess\Wave</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\ColorFun.hlsl">
+      <Filter>ShaderCode\ColorFun</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSAfterImage.hlsl">
+      <Filter>ShaderCode\AfterImage</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSAfterImage.hlsl">
+      <Filter>ShaderCode\AfterImage</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSNextScene.hlsl">
+      <Filter>ShaderCode\NextScene</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSNextScene.hlsl">
+      <Filter>ShaderCode\NextScene</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\PSAlphaTo.hlsl">
+      <Filter>ShaderCode\AlphaTo</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSAlphaTo.hlsl">
+      <Filter>ShaderCode\AlphaTo</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl">
+      <Filter>ShaderCode\Animation2D\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d.hlsl">
+      <Filter>ShaderCode\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Output\bin\Resources\Shader\animation3d.hlsl">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

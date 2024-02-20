@@ -1,0 +1,15 @@
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Project\Content\Helper\ScriptGen\Release\net6.0\ScriptGen.exe
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Project\Content\Helper\ScriptGen\Release\net6.0\ScriptGen.deps.json
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Project\Content\Helper\ScriptGen\Release\net6.0\ScriptGen.runtimeconfig.json
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Project\Content\Helper\ScriptGen\Release\net6.0\ScriptGen.dll
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Project\Content\Helper\ScriptGen\Release\net6.0\ScriptGen.pdb
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.csproj.AssemblyReference.cache
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.AssemblyInfoInputs.cache
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.AssemblyInfo.cs
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.csproj.CoreCompileInputs.cache
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.dll
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\refint\ScriptGen.dll
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.pdb
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ScriptGen.genruntimeconfig.cache
+C:\Users\tkdlq\Desktop\assort\DirectX2D_Engine\Helper\ScriptGen\ScriptGen\obj\Release\net6.0\ref\ScriptGen.dll

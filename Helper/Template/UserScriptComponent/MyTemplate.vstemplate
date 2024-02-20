@@ -1,0 +1,15 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>ScriptComponent.h</DefaultName>
+    <Name>ScriptComponent</Name>
+    <Description>&lt;사용자정의 스크립트 입니다. eScriptType enum class에 항목을 추가해주세요&gt;</Description>
+    <ProjectType>VC</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.h" ReplaceParameters="true">SampleScript.h</ProjectItem>
+     <ProjectItem SubType="" TargetFileName="$fileinputname$.cpp" ReplaceParameters="true">SampleScript.cpp</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

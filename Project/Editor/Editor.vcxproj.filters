@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{49153210-a63f-4abb-98be-776c06a34bb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{a3c5b8c0-c1ff-4ef5-8d58-47cf8813f89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor">
+      <UniqueIdentifier>{fec105ef-5702-4b59-9880-fe5cb40bc210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CustomUI">
+      <UniqueIdentifier>{f728e0ec-12dd-4276-8d0a-358f629f97a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\PanelManager">
+      <UniqueIdentifier>{7fd5feaf-9be0-409b-b2af-55edad231d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel">
+      <UniqueIdentifier>{de9df3b7-8c21-4af3-bc93-a577231a1f67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\Resource">
+      <UniqueIdentifier>{93c7702c-de19-4059-8153-d9076cf53f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\Inspector">
+      <UniqueIdentifier>{7601b6da-c9d6-47e9-aa1d-28b40be34f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\Item">
+      <UniqueIdentifier>{19c11746-4eed-4ea9-bd0a-3deb52b8fc4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\EditorHelper">
+      <UniqueIdentifier>{dcfbb994-e4d9-43d8-976f-fbb27ed13c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UIHelper">
+      <UniqueIdentifier>{52a4441f-b19b-4bcb-9eae-24b5074522da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\View">
+      <UniqueIdentifier>{4ae1b263-7816-4516-88a1-251bc4e230e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AlphaHelper">
+      <UniqueIdentifier>{ab6da451-8003-4f82-8f4b-ec15a89dd730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\View">
+      <UniqueIdentifier>{a1cf5775-9392-4f0e-bfd4-c710f474e993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\View\SceneView">
+      <UniqueIdentifier>{7ce5c965-142d-49ae-bb0b-00a94234db92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Log">
+      <UniqueIdentifier>{b183d20b-e28f-47bd-8e41-0016e78d6c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\View\Editor">
+      <UniqueIdentifier>{0339ef9b-249f-4d0f-9d61-ffda9bd52bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\GameObject">
+      <UniqueIdentifier>{ca570f88-0ec3-4685-b4de-fe353554d46e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Panel\Resorce">
+      <UniqueIdentifier>{f03369ea-9262-40d6-9992-b8c71145fe60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{1ead07eb-b646-4a61-9c40-98f998dca0e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\ComponentUIRender">
+      <UniqueIdentifier>{b4abaf8c-c656-43c0-a7e8-d77fa1035c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Engine">
+      <UniqueIdentifier>{425f879a-4d7b-4b9f-aac5-daf2dd15eeb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Script">
+      <UniqueIdentifier>{4d2d6e39-fbac-46d8-8a86-6f76ce3b7bfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Res">
+      <UniqueIdentifier>{953d77db-2d38-4813-b10d-37942003b543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{1b424573-3fd1-4d5f-83e1-0137135e62f4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelUI.h">
+      <Filter>Source\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
+      <Filter>Source\Panel\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorPanelInitialize.h">
+      <Filter>Source\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Source\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUI.h">
+      <Filter>Source\CustomUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUI2.h">
+      <Filter>Source\CustomUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelUIManager.h">
+      <Filter>Source\PanelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ESCUI.h">
+      <Filter>Source\CustomUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceUI.h">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="DockSpace.h">
+      <Filter>Source\Editor\EditorHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="GameViewUI.h">
+      <Filter>Source\View\SceneView</Filter>
+    </ClInclude>
+    <ClInclude Include="UIHelper.h">
+      <Filter>Source\UIHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorViewUI.h">
+      <Filter>Source\View\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorResourceLoader.h">
+      <Filter>Source\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaHelper.h">
+      <Filter>Source\AlphaHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="LogUI.h">
+      <Filter>Source\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectViewUI.h">
+      <Filter>Source\Panel\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FolderUI.h">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewUI.h">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="InspectorUI.h">
+      <Filter>Source\Panel\Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUIRender.h">
+      <Filter>Component\ComponentUIRender</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShaderUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelUI.cpp">
+      <Filter>Source\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>Source\Panel\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorPanelInitialize.cpp">
+      <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUI.cpp">
+      <Filter>Source\CustomUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUI2.cpp">
+      <Filter>Source\CustomUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelUIManager.cpp">
+      <Filter>Source\PanelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ESCUI.cpp">
+      <Filter>Source\CustomUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceUI.cpp">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="DockSpace.cpp">
+      <Filter>Source\Editor\EditorHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="GameViewUI.cpp">
+      <Filter>Source\View\SceneView</Filter>
+    </ClCompile>
+    <ClCompile Include="UIHelper.cpp">
+      <Filter>Source\UIHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorViewUI.cpp">
+      <Filter>Source\View\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorResourceLoader.cpp">
+      <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaHelper.cpp">
+      <Filter>Source\AlphaHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="LogUI.cpp">
+      <Filter>Source\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectViewUI.cpp">
+      <Filter>Source\Panel\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FolderUI.cpp">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceViewUI.cpp">
+      <Filter>Source\Panel\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="InspectorUI.cpp">
+      <Filter>Source\Panel\Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUIRender.cpp">
+      <Filter>Component\ComponentUIRender</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptComponentUIRender.cpp">
+      <Filter>Component\ComponentUIRender</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioListenerUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSourceUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Light2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="RectCollider2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponentUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptComponentUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRendererUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraInputMoveMentUI.cpp">
+      <Filter>Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorMovementUI.cpp">
+      <Filter>Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialUI.cpp">
+      <Filter>Res</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleCollider2DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRendererUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystemUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Light3DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureUI.cpp">
+      <Filter>Res</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderUI.cpp">
+      <Filter>Res</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderUI.cpp">
+      <Filter>Res</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUI.cpp">
+      <Filter>Res</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator3DUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

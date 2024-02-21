@@ -23,4 +23,7 @@ public:
 		std::wstring* outFilePath);
 
 	static std::wstring SWPrintf(const wchar_t* const format, ...);
+
+	static std::wstring GetDirectoryNameFromPath(const std::wstring& filePath);
+	static std::wstring GetFileNameFromPath(const std::wstring& filePath);
 };

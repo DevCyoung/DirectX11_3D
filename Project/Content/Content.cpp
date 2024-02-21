@@ -207,11 +207,11 @@ Content::Content()
 		//}
 
 		{
-			MeshData* data =  FBXLoader::FbxInstantiate(L"\\Fbx\\Dragon.fbx");
+			//MeshData* data =  FBXLoader::FbxInstantiate(L"\\Fbx\\Dragon.fbx");
 			//gResourceManager->Insert(L"\\MeshData\\black.mesh_data", data);		
-			data->Save(L"black");
+			//data->Save(L"black");
 
-			//MeshData* data = gResourceManager->Find<MeshData>(L"\\MeshData\\black.mesh_data");
+			MeshData* data = gResourceManager->Find<MeshData>(L"\\MeshData\\black.mesh_data");
 
 			GameObject* obj =  data->Instantiate();
 			
@@ -223,7 +223,7 @@ Content::Content()
 			obj->GetComponent<Transform>()->SetScale(10.f, 10.f, 10.f);
 			testScene->AddGameObject(obj, eLayerType::TileMap);
 			
-			obj->GetComponent<MeshRenderer>()->GetMesh()->Save(L"\\Mesh\\black.mesh");			
+			///obj->GetComponent<MeshRenderer>()->GetMesh()->Save(L"\\Mesh\\black.mesh");			
 		}
 
 		//{

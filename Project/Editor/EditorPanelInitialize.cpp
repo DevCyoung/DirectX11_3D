@@ -11,6 +11,7 @@
 #include "LogUI.h"
 #include "GameObjectViewUI.h"
 #include "ResourceViewUI.h"
+#include "FolderViewUI.h"
 
 void EditorPanelInitialize()
 {		
@@ -23,6 +24,7 @@ void EditorPanelInitialize()
 	AddPanel(new GameViewUI);
 	AddPanel(new GameObjectViewUI);
 	AddPanel(new LogUI);
+	AddPanel(new FolderViewUI);
 }
 
 void AddPanel(PanelUI* const panelUI)

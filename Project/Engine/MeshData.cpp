@@ -34,13 +34,6 @@ MeshData::MeshData()
 }
 MeshData::~MeshData()
 {
-    //DELETE_POINTER(mMesh);
-    //for (Material* mat : mMaterials)
-    //{
-    //    DELETE_POINTER(mat);
-    //}
-    //
-    //mMaterials.clear();
 }
 
 HRESULT MeshData::Load(const std::wstring& filePath)
@@ -83,12 +76,7 @@ HRESULT MeshData::Save(const std::wstring& name)
     errno_t err = _wfopen_s(&file, meshDataPath.c_str(), L"wb");
     (void)err;
 
-    //Assert(err, ASSERT_MSG_INVALID);
     Assert(file, ASSERT_MSG_NULL);
-
-    //SaveWString(meshDataPath, file);
-
-
     std::wstring meshPath = L"\\Mesh\\";    
     meshPath += name;
     meshPath += L".mesh";

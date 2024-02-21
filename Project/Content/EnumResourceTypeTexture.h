@@ -11,6 +11,7 @@ enum class eResTexture
 	Dragon_Floor_N,
 	Dragon_Floor_S,
 	Dummy_UIdummy,
+	ImGUI_folder,
 	Noise_01,
 	Noise_02,
 	Noise_03,

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "StringHelper.h"
+#include <filesystem>
 
+namespace fs = std::filesystem;
 
 StringHelper::StringHelper()
 {
@@ -137,4 +139,23 @@ std::wstring StringHelper::SWPrintf(const wchar_t* const format, ...)
 	va_end(args);
 
 	return szBuffer;
+}
+
+std::wstring StringHelper::GetDirectoryNameFromPath(const std::wstring& filePath)
+{
+	fs::path pathObj(filePath);
+
+	if (fs::is_directory(pathObj)) 
+	{
+		return pathObj.filename().wstring();
+	}
+
+	fs::path dirPath = pathObj.parent_path();
+	return dirPath.filename().wstring();
+}
+
+std::wstring StringHelper::GetFileNameFromPath(const std::wstring& filePath)
+{
+	fs::path pathObj(filePath);	
+	return pathObj.filename().wstring();
 }

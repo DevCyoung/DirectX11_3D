@@ -12,6 +12,7 @@ static constexpr const wchar_t* eResTexturePath[static_cast<UINT>(eResTexture::E
 	L"\\Texture\\Dragon\\Floor_N.jpg",
 	L"\\Texture\\Dragon\\Floor_S.jpg",
 	L"\\Texture\\Dummy\\UIdummy.png",
+	L"\\Texture\\ImGUI\\folder.png",
 	L"\\Texture\\Noise\\01.png",
 	L"\\Texture\\Noise\\02.png",
 	L"\\Texture\\Noise\\03.png",

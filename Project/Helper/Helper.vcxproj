@@ -152,6 +152,7 @@
     <ClInclude Include="DefineMacro.h" />
     <ClInclude Include="DirectXTex.h" />
     <ClInclude Include="DXMath.h" />
+    <ClInclude Include="FileHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Memory.h" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DXMath.cpp" />
+    <ClCompile Include="FileHelper.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="pch.cpp">

@@ -77,15 +77,16 @@ public:
 	eRenderPriorityType GetRenderType() const { return mRenderType; }
 
 	void SetShader(Shader* const shader) { Assert(shader, ASSERT_MSG_NULL); mShader = shader; }
-	void SetTexture(const TEX_PARAM param, Texture* const texture)
+	void SetTexture(const TEX_PARAM param, Texture* const textureOrNull)
 	{ 
-		Assert(texture, ASSERT_MSG_NULL); mTextures[param] = texture;
+		mTextures[param] = textureOrNull;
 	}
 
 	void SetAnim3D(bool _bTrue) { mData.arrAnimData[0] = (int)_bTrue; }
 	void SetBoneCount(int _iBoneCount) { mData.arrAnimData[1] = _iBoneCount; }
 
 	virtual HRESULT Load(const std::wstring& filePath) override final;
+	virtual HRESULT Save(const std::wstring& relativePath);
 
 	void UpdateData();
 

@@ -11,12 +11,16 @@ public:
 	virtual ~Resource();
 
 	virtual HRESULT Load(const std::wstring& filePath) = 0;
+	virtual HRESULT Save(const std::wstring& filePath) { (void)filePath; return S_OK; }
 
-	const std::wstring& GetRelativePath() const { return mRelativePath; }
+	const std::wstring& GetRelativePathorName() const { return mRelativePathOrName; }
 
 	eResourceType GetType() { return mResourceType; }
 
+protected:
+	void SetRelativePath(const std::wstring& relativePath) { mRelativePathOrName = relativePath; }
+
 private:
 	eResourceType mResourceType;
-	std::wstring mRelativePath;
+	std::wstring mRelativePathOrName;
 };

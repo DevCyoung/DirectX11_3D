@@ -11,7 +11,7 @@ struct tIndexInfo
 	ComPtr<ID3D11Buffer>    pIB;
 	D3D11_BUFFER_DESC       tIBDesc;
 	UINT				    iIdxCount;
-	void* pIdxSysMem;
+	void*					pIdxSysMem;
 };
 
 class StructuredBuffer;
@@ -49,6 +49,7 @@ public:
 	UINT GetVertexCount() const { return static_cast<UINT>(mVertexCount); }
 	//UINT GetIndexCount()  const { return static_cast<UINT>(mIndexCount); }
 	virtual HRESULT Load(const std::wstring& filePath) override;
+	virtual HRESULT Save(const std::wstring& relativePath) override;
 	UINT GetIndexBufferCount() 
 	{
 		return static_cast<UINT>(mIndexBuffers.size());
@@ -71,16 +72,16 @@ private:
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
+	BYTE* mVertexData;
 	size_t mVertexCount;
 	size_t mVertexSize;
-	D3D11_BUFFER_DESC mVertexDesc;
+	D3D11_BUFFER_DESC mVertexDesc;	
+
 	std::vector<tIndexInfo> mIndexBuffers;
 
-	// 하나의 버텍스버퍼에 여러개의 인덱스버퍼가 연결
-	//vector<tIndexInfo>		m_vecIdxInfo;
-
-	// Animation3D 정보
-
+	UINT*		mIndexesData;
+	size_t*		mIndexCounts;
+	size_t		mIndexesCount;
 
 
 public:

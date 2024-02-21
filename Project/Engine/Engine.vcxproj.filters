@@ -220,6 +220,9 @@
     <Filter Include="Source\03. Component\03. Render\Animator3D">
       <UniqueIdentifier>{42cce8ed-ea55-4b24-91bc-515fb9b75034}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\06. Resource\09. MeshData">
+      <UniqueIdentifier>{4bd7408e-c4dd-4f33-a7b6-cf26fed7c882}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -451,6 +454,9 @@
     <ClInclude Include="Anim3DBuuferCopyCS.h">
       <Filter>Source\06. Resource\03. Shader\ComputeShader</Filter>
     </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>Source\06. Resource\09. MeshData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -651,6 +657,9 @@
     </ClCompile>
     <ClCompile Include="Anim3DBuuferCopyCS.cpp">
       <Filter>Source\06. Resource\03. Shader\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp">
+      <Filter>Source\06. Resource\09. MeshData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

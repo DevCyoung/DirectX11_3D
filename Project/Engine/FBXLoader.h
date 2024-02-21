@@ -1,7 +1,18 @@
 #pragma once
+
+#include <FBXLoader/FBXLoadManager.h>
 class Mesh;
 class GameObject;
-#include <FBXLoader/FBXLoadManager.h>
+class MeshData;
+
+#ifdef _DEBUG
+#pragma comment(lib, "FBXLoader/Debug/FBXLoader_d")
+#else
+#pragma comment(lib, "FBXLoader/Release/FBXLoader")
+#endif
+
+#pragma comment(lib, "shlwapi")
+
 
 // ============
 // Animation 3D
@@ -52,6 +63,6 @@ class FBXLoader
 public:
 	static void LoadFBX(const std::wstring& relativePath);
 	static void CreateMeshFromFBX();
-	static GameObject* FbxInstantiate(const std::wstring& relativePath);
+	static MeshData* FbxInstantiate(const std::wstring& relativePath);
 };
 

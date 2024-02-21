@@ -21,6 +21,7 @@
 #include <Engine/Texture.h>
 #include <Engine/FBXLoader.h>
 #include <Engine/EnumResource.h>
+#include <Engine/MeshData.h>
 
 eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 {
@@ -42,6 +43,8 @@ eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 		return eResourceType::Texture;
 	else if (L".mp3" == strExt || L".wav" == strExt || L".oga" == strExt)
 		return eResourceType::Sound;
+	else if (L".mesh_data" == strExt)
+		return eResourceType::MeshData;
 	else
 		return eResourceType::End;
 }
@@ -49,6 +52,7 @@ eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 //GPT
 #include <filesystem>
 namespace fs = std::filesystem;
+
 void listFiles(const std::wstring& path) 
 {
 	for (const auto& entry : fs::directory_iterator(path)) 
@@ -69,8 +73,11 @@ void listFiles(const std::wstring& path)
 			case eResourceType::Mesh:
 				//gResourceManager->Load<Mesh>(path2);
 				break;
+			case eResourceType::MeshData:
+				gResourceManager->Load<MeshData>(path2);
+				break;
 			case eResourceType::Material:
-				//gResourceManager->Load<Material>(path2);
+				gResourceManager->Load<Material>(path2);
 				break;
 			case eResourceType::Shader:
 				//gResourceManager->Load<Material>(sha);
@@ -200,14 +207,23 @@ Content::Content()
 		//}
 
 		{
-			GameObject* obj = FBXLoader::FbxInstantiate(L"\\Fbx\\black.fbx");
+			MeshData* data =  FBXLoader::FbxInstantiate(L"\\Fbx\\Dragon.fbx");
+			//gResourceManager->Insert(L"\\MeshData\\black.mesh_data", data);		
+			data->Save(L"black");
+
+			//MeshData* data = gResourceManager->Find<MeshData>(L"\\MeshData\\black.mesh_data");
+
+			GameObject* obj =  data->Instantiate();
+			
 			obj->GetComponent<Transform>()->SetPosition(100.f, 1.f, 0.f);
 			obj->SetName(L"Dragon");
-			Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();
-			//rotation.x -= 90;
+			
+			Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();			
 			obj->GetComponent<Transform>()->SetRotation(rotation);
 			obj->GetComponent<Transform>()->SetScale(10.f, 10.f, 10.f);
 			testScene->AddGameObject(obj, eLayerType::TileMap);
+			
+			obj->GetComponent<MeshRenderer>()->GetMesh()->Save(L"\\Mesh\\black.mesh");			
 		}
 
 		//{

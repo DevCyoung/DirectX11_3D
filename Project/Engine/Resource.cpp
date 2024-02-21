@@ -3,13 +3,13 @@
 #include "EnumResource.h"
 
 Resource::Resource()	
-	: mRelativePath(L"")
+	: mRelativePathOrName(L"")
 	, mResourceType(eResourceType::End)
 {
 }
 
 Resource::Resource(eResourceType mResourceType)
-	: mRelativePath(L"")
+	: mRelativePathOrName(L"")
 	, mResourceType(mResourceType)
 
 {

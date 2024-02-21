@@ -13,5 +13,6 @@ enum class eResourceType
 	Prefab,
 	ComputeShader,
 	AudioClip,
+	MeshData,
 	End
 };

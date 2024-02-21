@@ -12,6 +12,8 @@ public:
 	const std::wstring& GetName() const { return mName; }
 	UINT GetID() const { return mID; }
 
+	//virtual void Save() {};
+
 	virtual Entity* Clone() = 0;
 private:
 	inline static UINT sID = 0;

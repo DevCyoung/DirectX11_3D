@@ -17,15 +17,7 @@
 #include <Shlwapi.h>
 #include "StructuredBuffer.h"
 #include "Animator3D.h"
-//#include ""
-
-#ifdef _DEBUG
-#pragma comment(lib, "FBXLoader/Debug/FBXLoader_d")
-#else
-#pragma comment(lib, "FBXLoader/Release/FBXLoader")
-#endif
-
-#pragma comment(lib, "shlwapi")
+#include "MeshData.h"
 
 //Shlwapi.lib
 
@@ -58,15 +50,17 @@ Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
 	return mat;
 }
 
-GameObject* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
+MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 {
+	MeshData* resultMeshData = new MeshData;
+
 	std::wstring filePath = PathManager::GetInstance()->GetResourcePath();
 	filePath += relativePath;
 	FBXLoadManager::GetInstance()->Load(filePath);
 
-	GameObject* obj = new GameObject();
+	//GameObject* obj = new GameObject();
 
-	obj->AddComponent<MeshRenderer>();
+	//obj->AddComponent<MeshRenderer>();
 
 	FBXLoadManager* const fbxLoadManager = FBXLoadManager::GetInstance();
 
@@ -116,15 +110,16 @@ GameObject* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 		container.vecIdx.size(),
 		sizeof(UINT));
 
-	
-	std::wstring meshPath = relativePath;
-	meshPath += L"Mesh";
-	gResourceManager->Insert(meshPath, mesh);
-	obj->GetComponent<MeshRenderer>()->SetMesh(mesh);
+	resultMeshData->SetMesh(mesh);
 
-	Shader* shader =
-		gResourceManager->FindAndLoad<Shader>(L"Std3D");
+	//std::wstring meshPath = relativePath;
+	//meshPath += L"Mesh";
+	//gResourceManager->Insert(meshPath, mesh);
+	//obj->GetComponent<MeshRenderer>()->SetMesh(mesh);
 
+	Shader* shader = gResourceManager->FindAndLoad<Shader>(L"Std3D");
+
+	std::vector<Material*> materials;
 	for (UINT i = 0; i < container.vecMtrl.size(); ++i)
 	{
 		//FIXME
@@ -170,24 +165,24 @@ GameObject* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 			}			
 		}
 			
-		std::wstring materialPath = relativePath;
-		materialPath += L"Material_";
-		materialPath += std::to_wstring(i);
+		//std::wstring materialPath = relativePath;
+		//materialPath += L"Material_";
+		//materialPath += std::to_wstring(i);
 
-		gResourceManager->Insert(materialPath, material);
-		obj->GetComponent<MeshRenderer>()->SetMaterial(material, i);
+		materials.push_back(material);
+		//gResourceManager->Insert(materialPath, material);
+		//obj->GetComponent<MeshRenderer>()->SetMaterial(material, i);
 	}
+	resultMeshData->SetMaterial(materials);
 
 	// Animation3D
 	if (!container.bAnimation)
 	{
 		FBXLoadManager::GetInstance()->Release();
-		return obj;
+		return resultMeshData;
 	}		
 
-	obj->AddComponent<Animator3D>();
-
-
+	//obj->AddComponent<Animator3D>();
 
 	std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();
 	UINT iFrameCount = 0;
@@ -285,11 +280,8 @@ GameObject* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 			gGraphicDevice->UnSafe_GetDevice());
 	}
 
-	obj->GetComponent<Animator3D>()->SetBones(mesh->GetBones());
-	obj->GetComponent<Animator3D>()->SetAnimClip(mesh->GetAnimClip());
-
-
+	//obj->GetComponent<Animator3D>()->SetBones(mesh->GetBones());
+	//obj->GetComponent<Animator3D>()->SetAnimClip(mesh->GetAnimClip());
 	FBXLoadManager::GetInstance()->Release();
-
-	return obj;
+	return resultMeshData;
 }

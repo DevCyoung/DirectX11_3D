@@ -24,12 +24,15 @@
 #include <Engine/Shader.h>
 #include <Engine/ComputeShader.h>
 #include <Engine/EnumResource.h>
+#include <Engine/MeshData.h>
+
 
 #include "TextureUI.h"
 #include "MaterialUI.h"
 #include "MeshUI.h"
 #include "ShaderUI.h"
 #include "ComputeShaderUI.h"
+#include "MeshDataUI.h"
 
 static void RenderComponentName(std::string str)
 {
@@ -184,6 +187,9 @@ void InspectorUI::drawForm()
 			break;
 		case eResourceType::AudioClip:
 			break;		
+		case eResourceType::MeshData:
+			MeshDataUI(static_cast<MeshData*>(mResource));
+			break;
 		default:
 			Assert(false, ASSERT_MSG_INVALID);
 			break;

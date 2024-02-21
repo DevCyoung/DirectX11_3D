@@ -19,7 +19,7 @@ void MaterialUI(Material* material)
 	ImVec2 renderTargetSize = ImVec2(200.f, 200.f);
 
 	static int selectIdx = -1;
-	static Texture* prevTex = nullptr;
+	static Texture* prevTexOrNull = nullptr;
 
 	for (; citer != cend; ++citer)
 	{
@@ -31,29 +31,34 @@ void MaterialUI(Material* material)
 		selectItems.push_back(patah);
 	}
 
+	ID3D11ShaderResourceView* dummy 
+		= gResourceManager->Find<Texture>(L"\\Texture\\Dummy\\UIdummy.png")->GetSRV();
+
+	std::string pathOrName = StringHelper::WStrToStr(material->GetRelativePathorName());
+	ImGui::Text(pathOrName.c_str());
+
 	for (int i = 0; i <= TEX_7; ++i)
 	{
+		ID3D11ShaderResourceView* rv = dummy;
 		if (material->GetTextureOrNull((TEX_PARAM)i))
 		{
-			ID3D11ShaderResourceView* rv =
-				material->GetTextureOrNull((TEX_PARAM)i)->GetSRVOrNull();
-			ImGui::Image((void*)rv, renderTargetSize);
-			std::string textureSelectButton = "##ShaderSelectBtn_";
-			textureSelectButton += std::to_string(i);
-			ImGui::SameLine();
-
-			if (ImGui::Button(textureSelectButton.c_str(), ImVec2(18, 18)))
-			{
-				selectIdx = i;
-				prevTex = material->GetTexture(TEX_PARAM(i));
-				ImGui::OpenPopup("Stacked 111");
-			}
+			rv = material->GetTextureOrNull((TEX_PARAM)i)->GetSRV();	
 		}
-	}
+		std::string texNum = "Tex_";
+		texNum += std::to_string(i);
+		ImGui::Text(texNum.c_str());
+		ImGui::Image((void*)rv, renderTargetSize);
+		std::string textureSelectButton = "##ShaderSelectBtn_";
+		textureSelectButton += std::to_string(i);
+		ImGui::SameLine();
 
-	if (ImGui::Button("Add Textrue##MaterialUI"))
-	{
-		ImGui::OpenPopup("Stacked 222");
+		if (ImGui::Button(textureSelectButton.c_str(), ImVec2(18, 18)))
+		{
+			selectIdx = i;
+			prevTexOrNull = material->GetTextureOrNull(TEX_PARAM(i));
+			ImGui::OpenPopup("Stacked 111");
+		}
+
 	}
 
 	if (ImGui::BeginPopupModal("Stacked 111", NULL, ImGuiWindowFlags_MenuBar))
@@ -61,12 +66,18 @@ void MaterialUI(Material* material)
 
 		if (ImGui::Button("revert##Material"))
 		{
-			material->SetTexture(TEX_PARAM(selectIdx), prevTex);
+			material->SetTexture(TEX_PARAM(selectIdx), prevTexOrNull);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("close##Material"))
 		{
 			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("remove##Material"))
+		{
+			prevTexOrNull = nullptr;
+			material->SetTexture(TEX_PARAM(selectIdx), nullptr);
 		}
 
 		int texOrder = 0;
@@ -93,40 +104,4 @@ void MaterialUI(Material* material)
 		ImGui::EndPopup();
 	}
 
-
-	if (ImGui::BeginPopupModal("Stacked 222", NULL, ImGuiWindowFlags_MenuBar))
-	{
-		if (ImGui::Button("close##Material"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-
-		int texOrder = 0;
-
-		static int texNum = 0;
-
-		ImGui::InputInt("##Material Input Int", &texNum);
-
-		for (const std::string& item : selectItems)
-		{
-			Texture* tex =
-				gResourceManager->FindOrNull<Texture>(StringHelper::StrToWStr(item).c_str());
-
-			if (ImGui::ImageButton(tex->GetSRVOrNull(), ImVec2(100.f, 100.f)))
-			{
-				material->SetTexture(TEX_PARAM(texNum), tex);
-			}
-
-			++texOrder;
-
-
-			if (texOrder % 5 != 0)
-			{
-				ImGui::SameLine();
-			}
-
-		}
-
-		ImGui::EndPopup();
-	}
 }

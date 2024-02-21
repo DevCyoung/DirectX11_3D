@@ -334,6 +334,22 @@ void EngineResourceLoader::loadTexture()
 		gResourceManager->Insert(L"CopyRenderTargetTexture", copyRenderTargetTexture);
 	}
 
+	{
+		/*XMUINT2 size = { static_cast<UINT>(gEngine->GetRenderTargetSize().x),
+						 static_cast<UINT>(gEngine->GetRenderTargetSize().y)};*/
+						 //FIXME 다시 고칠것 하드코딩으로 해결
+
+		XMUINT2 size = { static_cast<UINT>(200),
+						 static_cast<UINT>(200) };
+
+		Texture* const dummyUI = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+
+		gResourceManager->Insert(L"DummyUI", dummyUI);
+	}
+
 	//Noise
 	{
 

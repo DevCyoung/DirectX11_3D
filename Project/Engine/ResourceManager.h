@@ -104,15 +104,20 @@ template<typename T>
 	requires (is_engine_resource<T>::value)
 inline void ResourceManager::Load(const Key& relativePathOrName)
 {	
-	Assert(!FindOrNull<T>(relativePathOrName), ASSERT_MSG_NOT_NULL);
+	//Assert(!FindOrNull<T>(relativePathOrName), ASSERT_MSG_NOT_NULL);
+	T* resource = FindOrNull<T>(relativePathOrName);
+	if (resource)
+	{
+		return;
+	}
 
-	T* resource = new T();
+	resource = new T();
 	constexpr eResourceType RES_TYPE = engine_resource_type<T>::type;
 	Dictionary& resources = mResourceMapArray[static_cast<UINT>(RES_TYPE)];
 	const std::wstring FILE_PATH = PathManager::GetInstance()->GetResourcePath() + relativePathOrName;
 
 	resource->Load(FILE_PATH);
-	resource->mRelativePath = relativePathOrName;
+	resource->mRelativePathOrName = relativePathOrName;
 	resources.insert(std::make_pair(relativePathOrName, resource)); //key : relative Path
 }
 
@@ -148,7 +153,7 @@ inline void ResourceManager::Insert(const Key& relativePathOrName, T* const valu
 	Assert(value, ASSERT_MSG_NULL);
 	Assert(!(FindOrNull<T>(relativePathOrName)), ASSERT_MSG_NOT_NULL);
 
-	value->mRelativePath = relativePathOrName;
+	value->mRelativePathOrName = relativePathOrName;
 
 	constexpr eResourceType RES_TYPE = engine_resource_type<T>::type;
 	Dictionary& resources = mResourceMapArray[static_cast<UINT>(RES_TYPE)];

@@ -6,7 +6,10 @@
 #include "EnumShaderBindStage.h"
 #include "Shader.h"
 #include "EnumResource.h"
-
+#include "PathManager.h"
+#include <Helper\FileHelper.h>	
+#include "Texture.h"
+#include "ResourceManager.h"
 Material::Material()
 	: Resource(eResourceType::Material)
 	, mShader(nullptr)
@@ -28,10 +31,73 @@ Material::~Material()
 
 HRESULT Material::Load(const std::wstring& filePath)
 {
-	Assert(false, "");
+	FILE* file = nullptr;
+	_wfopen_s(&file, filePath.c_str(), L"rb");
 
-	(void)filePath;
+	//eRenderPriorityType
+	fread(&mRenderType, sizeof(UINT), 1, file);
+
+	std::wstring shaderPath;
+	LoadWString(&shaderPath, file);
+
+	if (!shaderPath.empty())
+	{
+		mShader = gResourceManager->FindAndLoad<Shader>(shaderPath);
+	}	
+
+	fread(&mData, sizeof(tMaterialData), 1, file);
+
+	// Texture
+	for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
+	{
+		std::wstring path;
+
+		LoadWString(&path, file);
+
+		if (path.empty())
+		{
+			continue;
+		}
+
+		Texture* texture = gResourceManager->FindAndLoadOrNull<Texture>(path);
+		mTextures[i] = texture;
+	}
+
+	fclose(file);
 	return E_NOTIMPL;
+}
+
+HRESULT Material::Save(const std::wstring& relativePath)
+{
+	std::wstring filePath = gPathManager->GetResourcePath() + relativePath;
+
+	FILE* file = nullptr;
+	_wfopen_s(&file, filePath.c_str(), L"wb");
+
+	//eRenderPriorityType
+	fwrite(&mRenderType, sizeof(UINT), 1, file);
+	
+	// Shader	
+	SaveWString(mShader->GetRelativePathorName(), file);
+
+	// Constant
+	fwrite(&mData, sizeof(tMaterialData), 1, file);
+
+	// Texture
+	for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
+	{
+		if (mTextures[i] != nullptr)
+		{
+			SaveWString(mTextures[i]->GetRelativePathorName(), file);
+		}		
+		else
+		{
+			SaveWString(L"", file);
+		}
+	}
+
+	fclose(file);
+	return S_OK;
 }
 
 void Material::UpdateData()

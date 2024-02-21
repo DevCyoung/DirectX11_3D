@@ -172,6 +172,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
     <ClInclude Include="ItemUI.h" />
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MaterialUI.h" />
+    <ClInclude Include="MeshDataUI.h" />
     <ClInclude Include="MeshUI.h" />
     <ClInclude Include="PanelUIManager.h" />
     <ClInclude Include="pch.h" />
@@ -214,6 +215,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
     <ClCompile Include="LineCollider2DUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MaterialUI.cpp" />
+    <ClCompile Include="MeshDataUI.cpp" />
     <ClCompile Include="MeshRendererUI.cpp" />
     <ClCompile Include="MeshUI.cpp" />
     <ClCompile Include="PanelUIManager.cpp" />

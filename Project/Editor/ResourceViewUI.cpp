@@ -74,6 +74,9 @@ std::string GetTypeName(eResourceType type)
 		break;
 	case eResourceType::End:
 		break;
+	case eResourceType::MeshData:
+		result = "MeshData";
+		break;
 	default:
 		Assert(false, ASSERT_MSG_INVALID);
 		break;
@@ -104,7 +107,7 @@ void ResourceViewUI::drawForm()
 			for (; citer != cend; ++citer)
 			{
 				std::string relativePath =
-					StringHelper::WStrToStr(citer->second->GetRelativePath());
+					StringHelper::WStrToStr(citer->second->GetRelativePathorName());
 				ImGui::Bullet();
 				ImGui::Selectable(relativePath.c_str(), false);
 				if (ImGui::IsItemClicked())

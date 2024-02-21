@@ -162,6 +162,9 @@
     <ClInclude Include="MeshUI.h">
       <Filter>Res</Filter>
     </ClInclude>
+    <ClInclude Include="MeshDataUI.h">
+      <Filter>Res</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Animator3DUI.cpp">
       <Filter>Component\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshDataUI.cpp">
+      <Filter>Res</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

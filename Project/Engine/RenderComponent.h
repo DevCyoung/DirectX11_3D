@@ -37,8 +37,7 @@ public:
 	//void SetVisible(const bool visible) { mbVisible = visible; }
 
 	void TurnOnVisiblelity() { mbVisible = true; }
-	void TurnOffVisiblelity() { mbVisible = false; }
-
+	void TurnOffVisiblelity() { mbVisible = false; }	
 
 	UINT GetMaterialCount() 
 	{ 

@@ -60,6 +60,9 @@
     <ClInclude Include="Color.h">
       <Filter>Source\Color</Filter>
     </ClInclude>
+    <ClInclude Include="FileHelper.h">
+      <Filter>Source\File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Source\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="FileHelper.cpp">
+      <Filter>Source\File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

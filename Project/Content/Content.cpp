@@ -143,7 +143,7 @@ Content::Content()
 		mainCamera->AddComponent<Camera>();
 		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);
 		mainCamera->AddComponent<CameraInputMoveMent>();
-
+		mainCamera->GetComponent<Transform>()->SetRotation(30, -11, 0.f);
 		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -3000.f);
 		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
 		mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
@@ -207,22 +207,22 @@ Content::Content()
 		//}
 
 		{
-			//MeshData* data =  FBXLoader::FbxInstantiate(L"\\Fbx\\Dragon.fbx");
-			//gResourceManager->Insert(L"\\MeshData\\black.mesh_data", data);		
-			//data->Save(L"black");
+			std::vector<MeshData*> datas =  FBXLoader::FbxInstantiate(L"\\Fbx\\hero.fbx");
 
-			MeshData* data = gResourceManager->Find<MeshData>(L"\\MeshData\\black.mesh_data");
+			for (int i = 0; i < datas.size(); ++i)
+			{
+				MeshData* meshData = datas[i];
+				GameObject* obj = meshData->Instantiate();
+				obj->GetComponent<Transform>()->SetPosition(100.f, 300.f, 0.f);
+				obj->SetName(L"Dragon");
+				Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();
+				obj->GetComponent<Transform>()->SetRotation(rotation);
+				obj->GetComponent<Transform>()->SetScale(100.f, 100.f, 100.f);
+				testScene->AddGameObject(obj, eLayerType::TileMap);
 
-			GameObject* obj =  data->Instantiate();
-			
-			obj->GetComponent<Transform>()->SetPosition(100.f, 1.f, 0.f);
-			obj->SetName(L"Dragon");
-			
-			Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();			
-			obj->GetComponent<Transform>()->SetRotation(rotation);
-			obj->GetComponent<Transform>()->SetScale(10.f, 10.f, 10.f);
-			testScene->AddGameObject(obj, eLayerType::TileMap);
-			
+			}
+
+
 			///obj->GetComponent<MeshRenderer>()->GetMesh()->Save(L"\\Mesh\\black.mesh");			
 		}
 

@@ -156,6 +156,7 @@
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_combo_filter.h" />
     <ClInclude Include="imgui_filter.h" />
+    <ClInclude Include="imgui_helper.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
     <ClInclude Include="imgui_internal.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_filter.cpp" />
+    <ClCompile Include="imgui_helper.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />

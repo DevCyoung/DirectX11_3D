@@ -11,28 +11,34 @@
 #include "GameObject.h"
 #include "StructuredBuffer.h"
 #include "TimeManager.h"
+
 Animator3D::Animator3D()
 	: Component(eComponentType::Animator3D)
-	, m_pVecBones(nullptr)
+	, mBones(nullptr)
 	, m_pVecClip(nullptr)
 	, m_vecClipUpdateTime()
 	, m_vecFinalBoneMat()
 	, m_iFrameCount(30)
 	, m_dCurTime(0)
 	, m_iCurClip(0)
-	, m_iFrameIdx(0)
-	, m_iNextFrameIdx(0)
-	, m_fRatio(0)
-	, m_pBoneFinalMatBuffer(nullptr)
+	, mFrameIdx(0)
+	, mNextFrameIdx(0)
+	, mRatio(0)
 	, m_bFinalMatUpdate(false)
+	, mSBBoneFinalBuffer(nullptr)
+	, mAnimMatrixCS(nullptr)
 {
-	//m_pBoneFinalMatBuffer = new StructuredBuffer(eSBType::BoneFinalBuffer, eSRVTpye::BoneFrameData, sizeof(Matrix),
-		//100, nullptr, gGraphicDevice->UnSafe_GetDevice());
+	mAnimMatrixCS = 
+		static_cast<Anim3DBuuferCopyCS*>(gResourceManager->Find<ComputeShader>(L"Animation3DCS"));
+	Assert(mAnimMatrixCS, ASSERT_MSG_NULL);
+
+	mSBBoneFinalBuffer =
+		new StructuredBuffer(16, 1, nullptr);
 }
 
 Animator3D::~Animator3D()
 {
-	delete m_pBoneFinalMatBuffer;
+	DELETE_POINTER(mSBBoneFinalBuffer);
 }
 
 Animator3D::Animator3D(const Animator3D& other)
@@ -42,46 +48,36 @@ Animator3D::Animator3D(const Animator3D& other)
 }
 
 void Animator3D::UpdateData()
-{
+{	
 	if (true)
-	{
-		// Animation3D Update Compute Shader
-		Anim3DBuuferCopyCS* pUpdateShader =
-			(Anim3DBuuferCopyCS*)gResourceManager->Find<ComputeShader>(L"Animation3DCS");
-	
-		// Bone Data
+	{		
 		Mesh* pMesh = GetComponent<MeshRenderer>()->GetMesh();
-
-		//reSize
-		check_mesh(pMesh);
+		
+		const UINT BONE_COUNT = GetBoneCount();
+		if (mSBBoneFinalBuffer->GetElementCount() != BONE_COUNT)
+		{
+			DELETE_POINTER(mSBBoneFinalBuffer);			
+			mSBBoneFinalBuffer = new StructuredBuffer( sizeof(Matrix), BONE_COUNT, nullptr);
+		}		
 	
-		pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
-		pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
-		pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);
-	
-		UINT iBoneCount = (UINT)m_pVecBones->size();
-		pUpdateShader->SetBoneCount(iBoneCount);
-		pUpdateShader->SetFrameIndex(m_iFrameIdx);
-		pUpdateShader->SetNextFrameIdx(m_iNextFrameIdx);
-		pUpdateShader->SetFrameRatio(m_fRatio);
-	
-		// 업데이트 쉐이더 실행	
-		//pUpdateShader->Execute();
-		//gGraphicDevice->Distpatch(pUpdateShader);
+		mAnimMatrixCS->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
+		mAnimMatrixCS->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
+		mAnimMatrixCS->SetOutputBuffer(mSBBoneFinalBuffer);
 
-		pUpdateShader->UpdateData();	
-		gGraphicDevice->BindCS(pUpdateShader);
-		gGraphicDevice->Distpatch(pUpdateShader);
-		pUpdateShader->Clear();
+		mAnimMatrixCS->SetBoneCount(BONE_COUNT);
+		mAnimMatrixCS->SetFrameIndex(mFrameIdx);
+		mAnimMatrixCS->SetNextFrameIdx(mNextFrameIdx);
+		mAnimMatrixCS->SetFrameRatio(mRatio);
+		mAnimMatrixCS->UpdateData();
 
-		//gGraphicDevice->BindSB()
-		m_bFinalMatUpdate = true;				
+		gGraphicDevice->BindCS(mAnimMatrixCS);
+		gGraphicDevice->Distpatch(mAnimMatrixCS);
+
+		mAnimMatrixCS->Clear();
+		m_bFinalMatUpdate = true;
 	}
 
-	// t30 레지스터에 최종행렬 데이터(구조버퍼) 바인딩			
-	// 	
-	gGraphicDevice->BindSB(30, m_pBoneFinalMatBuffer, eShaderBindType::VS);
-	//m_pBoneFinalMatBuffer->UpdateData(30, PIPELINE_STAGE::PS_VERTEX);
+	gGraphicDevice->BindSB(30, mSBBoneFinalBuffer, eShaderBindType::VS);	
 }
 
 void Animator3D::SetAnimClip(std::vector<tMTAnimClip>* _vecAnimClip)
@@ -124,29 +120,8 @@ void Animator3D::ClearData()
 
 }
 
-void Animator3D::check_mesh(Mesh* _pMesh)
-{
-	(void)_pMesh;
-	UINT iBoneCount = _pMesh->GetBoneCount();
-	if (m_pBoneFinalMatBuffer == nullptr || m_pBoneFinalMatBuffer->GetElementCount() != iBoneCount)
-	{
-		delete m_pBoneFinalMatBuffer;
-		m_pBoneFinalMatBuffer = new StructuredBuffer(eSBType::BoneFinalBuffer, 
-			eSRVTpye::BoneFrameData, 
-			sizeof(Matrix),
-			iBoneCount,
-			nullptr, 
-			gGraphicDevice->UnSafe_GetDevice());
-	}
-	//if (m_pBoneFinalMatBuffer->GetElementCount() != iBoneCount)
-	//{
-	//	m_pBoneFinalMatBuffer->Create(sizeof(Matrix), iBoneCount, SB_TYPE::READ_WRITE, false, nullptr);
-	//}
-}
-
 void Animator3D::update()
 {
-	//RenderComponent::update();
 }
 
 void Animator3D::lateUpdate()
@@ -164,22 +139,23 @@ void Animator3D::lateUpdate()
 
 	// 현재 프레임 인덱스 구하기
 	double dFrameIdx = m_dCurTime * (double)m_iFrameCount;
-	m_iFrameIdx = (int)(dFrameIdx);
+	mFrameIdx = (int)(dFrameIdx);
+
 
 	// 다음 프레임 인덱스
-	if (m_iFrameIdx >= m_pVecClip->at(0).iFrameLength - 1)
-		m_iNextFrameIdx = m_iFrameIdx;	// 끝이면 현재 인덱스를 유지
+	if (mFrameIdx >= m_pVecClip->at(m_iCurClip).iFrameLength - 1)
+	{
+		mNextFrameIdx = mFrameIdx;	// 끝이면 현재 인덱스를 유지
+	}		
 	else
-		m_iNextFrameIdx = m_iFrameIdx + 1;
+	{
+		mNextFrameIdx = mFrameIdx + 1;
+	}
+		
 
 	// 프레임간의 시간에 따른 비율을 구해준다.
-	m_fRatio = (float)(dFrameIdx - (double)m_iFrameIdx);
+	mRatio = (float)(dFrameIdx - (double)mFrameIdx);
 
 	// 컴퓨트 쉐이더 연산여부
 	m_bFinalMatUpdate = false;
 }
-
-//void Animator3D::render(const Camera* const camera)
-//{
-//	(void)camera;
-//}

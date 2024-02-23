@@ -57,7 +57,7 @@ Texture::Texture(UINT _Width, UINT _Height,
 	{
 		if (FAILED(device->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf())))
 		{
-			Assert(false, ASSERT_MSG_INVALID);
+			Assert(false, ASSERT_MSG_INVALID);	
 		}
 	}
 	else

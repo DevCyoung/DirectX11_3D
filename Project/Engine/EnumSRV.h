@@ -24,4 +24,5 @@ enum class eSRVTpye
 	Register20,
 	Register21,
 	End,
+	Custom,
 };

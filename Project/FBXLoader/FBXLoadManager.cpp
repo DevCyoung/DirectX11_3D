@@ -51,7 +51,7 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 
 		//animation names
 		fbxScene->FillAnimStackNameArray(m_arrAnimName);
-		
+
 		loadAnimationClip(fbxScene);
 		//
 		////삼각화
@@ -63,7 +63,6 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 		//loadTextrue();
 
 		imposter->Destroy();
-
 		fbxScene->Destroy();
 	}
 
@@ -72,7 +71,6 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 
 void FBXLoadManager::Release()
 {
-	
 	for (tBone* bone : m_vecBone)
 	{
 		delete bone;
@@ -95,28 +93,44 @@ void FBXLoadManager::Release()
 	m_arrAnimName.Clear();
 }
 
-void FBXLoadManager::triangulate(FbxNode* _pNode)
+void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbxNode)
 {
-	FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
-
-	if (pAttr &&
-		(pAttr->GetAttributeType() == FbxNodeAttribute::eMesh
-			|| pAttr->GetAttributeType() == FbxNodeAttribute::eNurbs
-			|| pAttr->GetAttributeType() == FbxNodeAttribute::eNurbsSurface))
+	// 노드의 메쉬정보 읽기
+	FbxNodeAttribute* pAttr = fbxNode->GetNodeAttribute();
+	if (pAttr)
 	{
-		FbxGeometryConverter converter(mFbxManager);
-		converter.Triangulate(pAttr, true);
+		FbxNodeAttribute::EType ATB_TYPE = pAttr->GetAttributeType();
+		if (FbxNodeAttribute::eMesh == ATB_TYPE)
+		{
+			FbxAMatrix matGlobal = fbxNode->EvaluateGlobalTransform();
+			matGlobal.GetR();
+
+			FbxMesh* pMesh = fbxNode->GetMesh();
+			Assert(pMesh, ASSERT_MSG_NULL);
+			lodeMesh(fbxScene, pMesh);
+		}
 	}
 
-	int iChildCount = _pNode->GetChildCount();
-
-	for (int i = 0; i < iChildCount; ++i)
+	// 해당 노드의 재질정보 읽기
+	const int MTRL_COUNT = fbxNode->GetMaterialCount();
+	for (int i = 0; i < MTRL_COUNT; ++i)
 	{
-		triangulate(_pNode->GetChild(i));
+		FbxSurfaceMaterial* pMtrlSur = fbxNode->GetMaterial(i);
+		Assert(pMtrlSur, ASSERT_MSG_NULL);
+		lodeMaterial(pMtrlSur);
+	}
+
+	// 자식 노드 정보 읽기
+	const int CHILD_COUNT = fbxNode->GetChildCount();
+	for (int i = 0; i < CHILD_COUNT; ++i)
+	{
+		loadMeshDataFromNode(fbxScene, fbxNode->GetChild(i));
 	}
 }
+
 void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
-{		
+{
+	Assert(fbxScene, ASSERT_MSG_NULL);
 	Assert(FbxMesh, ASSERT_MSG_NULL);
 
 	mVecContainer.push_back(tContainer{});
@@ -136,8 +150,8 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 		container.vecPos[i].y = static_cast<float>(P_VERTEX_POS_ARRAY[i].mData[2]);
 		container.vecPos[i].z = static_cast<float>(P_VERTEX_POS_ARRAY[i].mData[1]);
 	}
+
 	
-	const int POLY_COUNT = FbxMesh->GetPolygonCount();
 
 	// 재질의 개수 ( ==> SubSet 개수 ==> Index Buffer Count)
 	const int MTRL_COUNT = FbxMesh->GetNode()->GetMaterialCount();
@@ -152,10 +166,11 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	{
 		// Polygon 구성 정점이 3개가 아닌 경우
 		Assert(false, ASSERT_MSG_INVALID);
-	}		
+	}
 
-	UINT poly[3] = {0,};
+	UINT poly[3] = { 0, };
 	UINT IndexIdx = 0; // 폴리곤 순서로 접근하는 순번
+	const int POLY_COUNT = FbxMesh->GetPolygonCount();
 	for (int i = 0; i < POLY_COUNT; ++i)
 	{
 		for (int j = 0; j < POLY_SIZE; ++j)
@@ -171,6 +186,8 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 
 			++IndexIdx;
 		}
+
+
 		int iSubsetIdx = mtrl->GetIndexArray().GetAt(i);
 		container.vecIdx[iSubsetIdx].push_back(poly[0]);
 		container.vecIdx[iSubsetIdx].push_back(poly[2]);
@@ -178,6 +195,27 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	}
 
 	loadAnimationData(fbxScene, FbxMesh, &container);
+}
+
+void FBXLoadManager::triangulate(FbxNode* _pNode)
+{
+	FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
+
+	if (pAttr &&
+		(pAttr->GetAttributeType() == FbxNodeAttribute::eMesh
+			|| pAttr->GetAttributeType() == FbxNodeAttribute::eNurbs
+			|| pAttr->GetAttributeType() == FbxNodeAttribute::eNurbsSurface))
+	{
+		FbxGeometryConverter converter(mFbxManager);
+		converter.Triangulate(pAttr, true);
+	}
+
+	int iChildCount = _pNode->GetChildCount();
+
+	for (int i = 0; i < iChildCount; ++i)
+	{
+		triangulate(_pNode->GetChild(i));
+	}
 }
 
 Vector4 FBXLoadManager::GetMtrlData(FbxSurfaceMaterial* _pSurface,
@@ -222,11 +260,11 @@ std::wstring FBXLoadManager::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, c
 
 DWORD SecondThread(PVOID pvParam)
 {
-	BYTE*			pByte = reinterpret_cast<BYTE*>(pvParam);
-	FbxSkin*		pSkin = (FbxSkin*)*(unsigned long long*)(pByte);
+	BYTE* pByte = reinterpret_cast<BYTE*>(pvParam);
+	FbxSkin* pSkin = (FbxSkin*)*(unsigned long long*)(pByte);
 	FbxScene* const fbxScene = (FbxScene*)*(unsigned long long*)(pByte + 8);
-	FbxMesh*		_pMesh = (FbxMesh*)*(unsigned long long*)(pByte + 16);
-	tContainer*		_pContainer = (tContainer*)*(unsigned long long*)(pByte + 24);
+	FbxMesh* _pMesh = (FbxMesh*)*(unsigned long long*)(pByte + 16);
+	tContainer* _pContainer = (tContainer*)*(unsigned long long*)(pByte + 24);
 	FBXLoadManager* manager = (FBXLoadManager*)*(unsigned long long*)(pByte + 32);
 	int idx = *(int*)(pByte + 40);
 
@@ -328,18 +366,21 @@ void FBXLoadManager::loadSkeleton(FbxNode* rootNode)
 void FBXLoadManager::loadSkeletonRe(FbxNode* _pNode, int depth, int Idx, int parentIdx)
 {
 	FbxNodeAttribute* const attr = _pNode->GetNodeAttribute();
-
-	if (attr && attr->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+	if (attr)
 	{
-		tBone* const bone = new tBone;
+		const FbxNodeAttribute::EType AT_TYPE = attr->GetAttributeType();
+		if (AT_TYPE == FbxNodeAttribute::eSkeleton)
+		{
+			tBone* const bone = new tBone;
 
-		std::string boneName = _pNode->GetName();
+			std::string boneName = _pNode->GetName();
 
-		bone->boneName = std::wstring(boneName.begin(), boneName.end());
-		bone->depth = depth++;
-		bone->parentIdx = parentIdx;
+			bone->boneName = std::wstring(boneName.begin(), boneName.end());
+			bone->depth = depth++;
+			bone->parentIdx = parentIdx;
 
-		m_vecBone.push_back(bone);
+			m_vecBone.push_back(bone);
+		}
 	}
 
 	const int CHILD_COUNT = _pNode->GetChildCount();
@@ -353,7 +394,7 @@ void FBXLoadManager::loadAnimationClip(FbxScene* const fbxScene)
 {
 	int iAnimCount = m_arrAnimName.GetCount();
 
- 	for (int i = 0; i < iAnimCount; ++i)
+	for (int i = 0; i < iAnimCount; ++i)
 	{
 		FbxAnimStack* pAnimStack = fbxScene->FindMember<FbxAnimStack>(m_arrAnimName[i]->Buffer());
 
@@ -375,7 +416,7 @@ void FBXLoadManager::loadAnimationClip(FbxScene* const fbxScene)
 		pAnimClip->tEndTime = pTakeInfo->mLocalTimeSpan.GetStop();
 
 		pAnimClip->eMode = fbxScene->GetGlobalSettings().GetTimeMode();
-		pAnimClip->llTimeLength = pAnimClip->tEndTime.GetFrameCount(pAnimClip->eMode) - 
+		pAnimClip->llTimeLength = pAnimClip->tEndTime.GetFrameCount(pAnimClip->eMode) -
 			pAnimClip->tStartTime.GetFrameCount(pAnimClip->eMode);
 
 
@@ -389,45 +430,25 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 	// Animation Data 로드할 필요가 없음
 	int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
 	if (iSkinCount <= 0 || m_vecAnimClip.empty())
+	{
 		return;
-
+	}
 	_pContainer->bAnimation = true;
 
 	// Skin 개수만큼 반복을하며 읽는다.	
 	for (int i = 0; i < iSkinCount; ++i)
 	{
 		FbxSkin* pSkin = (FbxSkin*)_pMesh->GetDeformer(i, FbxDeformer::eSkin);
-
 		if (pSkin)
 		{
 			FbxSkin::EType eType = pSkin->GetSkinningType();
-			if (FbxSkin::eRigid == eType || FbxSkin::eLinear)
+			if (FbxSkin::eRigid == eType || FbxSkin::eLinear == eType)
 			{
 				// Cluster 를 얻어온다
 				// Cluster == Joint == 관절
 				int iClusterCount = pSkin->GetClusterCount();
-				//CreateThread(nullptr)
-
-				//HANDLE handles[10000] = { 0, };
-				//BYTE pbs[10000][44];
-
 				for (int j = 0; j < iClusterCount; ++j)
 				{
-					//BYTE* pb = pbs[j];
-					//
-					//*(unsigned long long*)(pb)      = (unsigned long long)pSkin;
-					//*(unsigned long long*)(pb + 8)  = (unsigned long long)fbxScene;
-					//*(unsigned long long*)(pb + 16) = (unsigned long long)_pMesh;
-					//*(unsigned long long*)(pb + 24) = (unsigned long long)_pContainer;
-					//*(unsigned long long*)(pb + 32) = (unsigned long long)this;
-					//*(int*)(pb + 40)				= j;
-					//
-					////SecondThread(pb);
-					//DWORD ThreadID;
-					//handles[j] = CreateThread(nullptr, 0, SecondThread, (PVOID)pb, 0, &ThreadID);
-
-					//ThreadFunc(pb);
-					//delete pb;
 					FbxCluster* pCluster = pSkin->GetCluster(j);
 
 					if (!pCluster->GetLink())
@@ -448,13 +469,8 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
 					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(fbxScene, _pMesh->GetNode(), 
+					LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
 						pCluster, matNodeTransform, iBoneIdx, _pContainer);
-				}
-
-				for (int i = 0; i < iClusterCount; ++i)
-				{
-					//WaitForSingleObject(handles[i], INFINITE);
 				}
 			}
 		}
@@ -471,10 +487,10 @@ int FBXLoadManager::FindBoneIndex(std::string _strBoneName)
 		if (m_vecBone[i]->boneName == strBoneName)
 		{
 			return i;
-		}			
+		}
 	}
 
-	return -1;	
+	return -1;
 }
 
 void FBXLoadManager::LoadWeightsAndIndices(const FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer)
@@ -495,9 +511,9 @@ void FBXLoadManager::LoadWeightsAndIndices(const FbxCluster* _pCluster, int _iBo
 	}
 }
 
-void FBXLoadManager::LoadOffsetMatrix(FbxCluster* _pCluster, 
-	const FbxAMatrix& _matNodeTransform, 
-	int _iBoneIdx, 
+void FBXLoadManager::LoadOffsetMatrix(FbxCluster* _pCluster,
+	const FbxAMatrix& _matNodeTransform,
+	int _iBoneIdx,
 	tContainer* _pContainer)
 {
 	FbxAMatrix matClusterTrans;
@@ -527,9 +543,9 @@ void FBXLoadManager::LoadOffsetMatrix(FbxCluster* _pCluster,
 
 void FBXLoadManager::LoadKeyframeTransform(FbxScene* const fbxScene,
 	FbxNode* _pNode,
-	FbxCluster* _pCluster, 
-	const FbxAMatrix& _matNodeTransform, 
-	int _iBoneIdx, 
+	FbxCluster* _pCluster,
+	const FbxAMatrix& _matNodeTransform,
+	int _iBoneIdx,
 	tContainer* _pContainer)
 {
 	if (m_vecAnimClip.empty())
@@ -644,40 +660,6 @@ FbxAMatrix FBXLoadManager::GetTransform(FbxNode* _pNode)
 	return FbxAMatrix(vT, vR, vS);
 }
 
-void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbxNode)
-{
-	// 노드의 메쉬정보 읽기
-	FbxNodeAttribute* pAttr = fbxNode->GetNodeAttribute();
-
-	if (pAttr && FbxNodeAttribute::eMesh == pAttr->GetAttributeType())
-	{
-		FbxAMatrix matGlobal = fbxNode->EvaluateGlobalTransform();
-		matGlobal.GetR();
-
-		FbxMesh* pMesh = fbxNode->GetMesh();
-		if (NULL != pMesh)
-		{
-			lodeMesh(fbxScene, pMesh);
-		}			
-	}
-
-	// 해당 노드의 재질정보 읽기
-	const int MTRL_COUNT = fbxNode->GetMaterialCount();
-	for (int i = 0; i < MTRL_COUNT; ++i)
-	{
-		FbxSurfaceMaterial* pMtrlSur = fbxNode->GetMaterial(i);
-		lodeMaterial(pMtrlSur);
-	}
-
-	// 자식 노드 정보 읽기
-	const int CHILD_COUNT = fbxNode->GetChildCount();
-	for (int i = 0; i < CHILD_COUNT; ++i)
-	{
-		loadMeshDataFromNode(fbxScene, fbxNode->GetChild(i));
-	}
-}
-
-
 void FBXLoadManager::GetTangent(FbxMesh* _pMesh
 	, tContainer* _pContainer
 	, int _iIdx		 /*해당 정점의 인덱스*/
@@ -791,6 +773,11 @@ void FBXLoadManager::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iI
 void FBXLoadManager::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
 {
 	FbxGeometryElementUV* pUV = _pMesh->GetElementUV();
+
+	if (nullptr == pUV)
+	{
+		return;
+	}
 
 	UINT iUVIdx = 0;
 	if (pUV->GetReferenceMode() == FbxGeometryElement::eDirect)

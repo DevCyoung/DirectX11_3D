@@ -34,7 +34,7 @@ void FBXLoader::LoadFBX(const std::wstring& relativePath)
 }
 
 void FBXLoader::CreateMeshFromFBX()
-{	
+{
 }
 
 Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
@@ -50,238 +50,233 @@ Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
 	return mat;
 }
 
-MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
+std::vector<MeshData*> FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 {
-	MeshData* resultMeshData = new MeshData;
+	std::vector<MeshData*> retMeshDatas;
 
 	std::wstring filePath = PathManager::GetInstance()->GetResourcePath();
 	filePath += relativePath;
-	FBXLoadManager::GetInstance()->Load(filePath);
-
-	//GameObject* obj = new GameObject();
-
-	//obj->AddComponent<MeshRenderer>();
-
 	FBXLoadManager* const fbxLoadManager = FBXLoadManager::GetInstance();
+	fbxLoadManager->Load(filePath);
 
-	const tContainer& container = fbxLoadManager->GetContainer(0);
-	const UINT VERTEX_COUNT = (UINT)container.vecPos.size();
+	Shader* const shader = gResourceManager->FindAndLoad<Shader>(L"Std3D");
 
-	std::vector<tVertex> vertexBuffer;
-	std::vector<size_t> sizes;
-	std::vector<UINT> indexBuffers;
-
-	Assert(!container.vecPos.empty(), ASSERT_MSG_INVALID);
-	Assert(!container.vecIdx.empty(), ASSERT_MSG_INVALID);
-
-	vertexBuffer.resize(VERTEX_COUNT);
-	for (UINT i = 0; i < VERTEX_COUNT; ++i)
+	for (UINT i = 0; i < fbxLoadManager->GetContainerCount(); ++i)
 	{
-		vertexBuffer[i].Position = container.vecPos[i];
-		vertexBuffer[i].UV = container.vecUV[i];
-		vertexBuffer[i].Color = Vector4(1.f, 0.f, 1.f, 1.f);
-		vertexBuffer[i].Normal = container.vecNormal[i];
-		vertexBuffer[i].Tangent = container.vecTangent[i];
-		vertexBuffer[i].Binormal = container.vecBinormal[i];
-		vertexBuffer[i].vWeights = container.vecWeights[i];
-		vertexBuffer[i].vIndices = container.vecIndices[i];
-	}
+		MeshData* meshData = new MeshData;
+		const tContainer& container = fbxLoadManager->GetContainer(i);
+		const UINT VERTEX_COUNT = (UINT)container.vecPos.size();
 
-	indexBuffers.reserve(VERTEX_COUNT);
-	for (const std::vector<UINT>& indexeBuffer : container.vecIdx)
-	{
-		for (UINT index : indexeBuffer)
+
+		std::vector<tVertex> vertexBuffer;
+		std::vector<size_t> sizes;
+		std::vector<UINT> indexBuffers;
+
+		Assert(!container.vecPos.empty(), ASSERT_MSG_INVALID);
+		Assert(!container.vecIdx.empty(), ASSERT_MSG_INVALID);
+
+		retMeshDatas.push_back(meshData);
+
+		vertexBuffer.resize(VERTEX_COUNT);
+		for (UINT j = 0; j < VERTEX_COUNT; ++j)
 		{
-			indexBuffers.push_back(index);
+			vertexBuffer[j].Position = container.vecPos[j];
+			vertexBuffer[j].UV = container.vecUV[j];
+			vertexBuffer[j].Color = Vector4(1.f, 0.f, 1.f, 1.f);
+			vertexBuffer[j].Normal = container.vecNormal[j];
+			vertexBuffer[j].Tangent = container.vecTangent[j];
+			vertexBuffer[j].Binormal = container.vecBinormal[j];
+			vertexBuffer[j].vWeights = container.vecWeights[j];
+			vertexBuffer[j].vIndices = container.vecIndices[j];
 		}
-	}
 
-	sizes.reserve(container.vecIdx.size());
-	for (const std::vector<UINT>& indexeBuffer : container.vecIdx)
-	{
-		sizes.push_back(indexeBuffer.size());
-	}
+		indexBuffers.reserve(VERTEX_COUNT);
+		for (const std::vector<UINT>& indexeBuffer : container.vecIdx)
+		{
+			for (UINT index : indexeBuffer)
+			{
+				indexBuffers.push_back(index);
+			}
+		}
 
-	Mesh* mesh = new Mesh(vertexBuffer.data(),
-		VERTEX_COUNT,
-		sizeof(tVertex),
-		indexBuffers.data(),
-		sizes.data(),
-		container.vecIdx.size(),
-		sizeof(UINT));
+		sizes.reserve(container.vecIdx.size());
+		for (const std::vector<UINT>& indexeBuffer : container.vecIdx)
+		{
+			sizes.push_back(indexeBuffer.size());
+		}
 
-	resultMeshData->SetMesh(mesh);
+		Mesh* const mesh = new Mesh(vertexBuffer.data(),
+			VERTEX_COUNT,
+			sizeof(tVertex),
+			indexBuffers.data(),
+			sizes.data(),
+			container.vecIdx.size(),
+			sizeof(UINT));
 
-	//std::wstring meshPath = relativePath;
-	//meshPath += L"Mesh";
-	//gResourceManager->Insert(meshPath, mesh);
-	//obj->GetComponent<MeshRenderer>()->SetMesh(mesh);
+		meshData->SetMesh(mesh);
 
-	Shader* shader = gResourceManager->FindAndLoad<Shader>(L"Std3D");
+		std::vector<Material*> materials;
+		for (UINT j = 0; j < container.vecMtrl.size(); ++j)
+		{
+			//FIXME
+			if (mesh->GetIndexBufferCount() <= j)
+			{
+				continue;
+			}
 
-	std::vector<Material*> materials;
-	for (UINT i = 0; i < container.vecMtrl.size(); ++i)
-	{
-		//FIXME
-		if (mesh->GetIndexBufferCount() <= i)
+			Material* material = new Material();
+			material->SetShader(shader);
+
+			const std::wstring& resourcePath = gPathManager->GetResourcePath();
+
+			std::vector<std::wstring> paths;
+
+			paths.push_back(container.vecMtrl[j].strDiff);
+			paths.push_back(container.vecMtrl[j].strNormal);
+			paths.push_back(container.vecMtrl[j].strSpec);
+			paths.push_back(container.vecMtrl[j].strEmis);
+
+			for (int k = 0; k < paths.size(); ++k)
+			{
+				if (paths[k].empty())
+				{
+					continue;
+				}
+				else if (paths[k].size() <= resourcePath.size())
+				{
+					continue;
+				}
+
+				std::wstring texRelativePath = paths[k].substr(resourcePath.size());
+				if (std::wstring::npos ==  paths[k].find(resourcePath))
+				{
+					continue;
+				}
+				if (texRelativePath.empty())
+				{
+					continue;
+				}
+
+				LPCWSTR lpcwstr = paths[k].c_str();				
+				if (!PathFileExistsW(lpcwstr))
+				{
+					continue;
+				}
+				else if (!PathFileExistsW(paths[k].c_str()))
+				{
+					continue;
+				}
+				else
+				{
+					Texture* tex = gResourceManager->FindAndLoadOrNull<Texture>(texRelativePath);
+					material->SetTexture(TEX_PARAM(TEX_0 + k), tex);
+				}
+			}
+
+			materials.push_back(material);
+		}
+		meshData->SetMaterial(materials);
+
+		if (!container.bAnimation)
 		{
 			continue;
 		}
 
-		Material* material = new Material();
-		material->SetShader(shader);
-
-		const std::wstring& resourcePath = gPathManager->GetResourcePath();
-
-		std::vector<std::wstring> paths;
-
-		paths.push_back(container.vecMtrl[i].strDiff);
-		paths.push_back(container.vecMtrl[i].strNormal);
-		paths.push_back(container.vecMtrl[i].strSpec);
-		paths.push_back(container.vecMtrl[i].strEmis);
-
-		for (int j = 0; j < paths.size(); ++j)
+		std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();
+		UINT iFrameCount = 0;
+		for (UINT j = 0; j < vecBone.size(); ++j)
 		{
-			if (paths[j].empty())
+			tMTBone bone = {};
+			bone.iDepth = vecBone[j]->depth;
+			bone.iParentIndx = vecBone[j]->parentIdx;
+			bone.matBone = GetMatrixFromFbxMatrix(vecBone[j]->matBone);
+			bone.matOffset = GetMatrixFromFbxMatrix(vecBone[j]->matOffset);
+			bone.strBoneName = vecBone[j]->boneName;
+
+			for (UINT k = 0; k < vecBone[j]->vecKeyFrame.size(); ++k)
 			{
-				continue;
+				tMTKeyFrame tKeyframe = {};
+				tKeyframe.dTime = vecBone[j]->vecKeyFrame[k].dTime;
+				tKeyframe.iFrame = k;
+				tKeyframe.vTranslate.x = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetT().mData[0];
+				tKeyframe.vTranslate.y = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetT().mData[1];
+				tKeyframe.vTranslate.z = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetT().mData[2];
+
+				tKeyframe.vScale.x = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetS().mData[0];
+				tKeyframe.vScale.y = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetS().mData[1];
+				tKeyframe.vScale.z = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetS().mData[2];
+
+				tKeyframe.qRot.x = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetQ().mData[0];
+				tKeyframe.qRot.y = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetQ().mData[1];
+				tKeyframe.qRot.z = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetQ().mData[2];
+				tKeyframe.qRot.w = (float)vecBone[j]->vecKeyFrame[k].matTransform.GetQ().mData[3];
+
+				bone.vecKeyFrame.push_back(tKeyframe);
 			}
 
-			std::wstring texRelativePath = paths[j].substr(resourcePath.size());
-			if (texRelativePath.empty())
-			{
-				continue;
-			}
+			iFrameCount = max(iFrameCount, (UINT)bone.vecKeyFrame.size());
 
-			LPCWSTR lpcwstr = paths[j].c_str();
-			if (!PathFileExistsW(lpcwstr))
-			{
-				continue;
-			}
-			else
-			{
-				Texture* tex = gResourceManager->FindAndLoadOrNull<Texture>(texRelativePath);
-				material->SetTexture(TEX_PARAM(TEX_0 + j), tex);
-			}			
-		}
-			
-		//std::wstring materialPath = relativePath;
-		//materialPath += L"Material_";
-		//materialPath += std::to_wstring(i);
-
-		materials.push_back(material);
-		//gResourceManager->Insert(materialPath, material);
-		//obj->GetComponent<MeshRenderer>()->SetMaterial(material, i);
-	}
-	resultMeshData->SetMaterial(materials);
-
-	// Animation3D
-	if (!container.bAnimation)
-	{
-		FBXLoadManager::GetInstance()->Release();
-		return resultMeshData;
-	}		
-
-	//obj->AddComponent<Animator3D>();
-
-	std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();
-	UINT iFrameCount = 0;
-	for (UINT i = 0; i < vecBone.size(); ++i)
-	{
-		tMTBone bone = {};
-		bone.iDepth = vecBone[i]->depth;
-		bone.iParentIndx = vecBone[i]->parentIdx;
-		bone.matBone = GetMatrixFromFbxMatrix(vecBone[i]->matBone);
-		bone.matOffset = GetMatrixFromFbxMatrix(vecBone[i]->matOffset);
-		bone.strBoneName = vecBone[i]->boneName;
-			
-		for (UINT j = 0; j < vecBone[i]->vecKeyFrame.size(); ++j)
-		{
-			tMTKeyFrame tKeyframe = {};
-			tKeyframe.dTime = vecBone[i]->vecKeyFrame[j].dTime;
-			tKeyframe.iFrame = j;
-			tKeyframe.vTranslate.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[0];
-			tKeyframe.vTranslate.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[1];
-			tKeyframe.vTranslate.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[2];
-
-			tKeyframe.vScale.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[0];
-			tKeyframe.vScale.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[1];
-			tKeyframe.vScale.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[2];
-
-			tKeyframe.qRot.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[0];
-			tKeyframe.qRot.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[1];
-			tKeyframe.qRot.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[2];
-			tKeyframe.qRot.w = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[3];
-
-			bone.vecKeyFrame.push_back(tKeyframe);
+			mesh->m_vecBones.push_back(bone);
 		}
 
-		iFrameCount = max(iFrameCount, (UINT)bone.vecKeyFrame.size());
-
-		mesh->m_vecBones.push_back(bone);
-	}
-
-	std::vector<tAnimClip*>& vecAnimClip = fbxLoadManager->GetAnimationClips();
-
-	for (UINT i = 0; i < vecAnimClip.size(); ++i)
-	{
-		tMTAnimClip tClip = {};
-
-		tClip.strAnimName = vecAnimClip[i]->strName;
-		tClip.dStartTime = vecAnimClip[i]->tStartTime.GetSecondDouble();
-		tClip.dEndTime = vecAnimClip[i]->tEndTime.GetSecondDouble();
-		tClip.dTimeLength = tClip.dEndTime - tClip.dStartTime;
-
-		tClip.iStartFrame = (int)vecAnimClip[i]->tStartTime.GetFrameCount(vecAnimClip[i]->eMode);
-		tClip.iEndFrame = (int)vecAnimClip[i]->tEndTime.GetFrameCount(vecAnimClip[i]->eMode);
-		tClip.iFrameLength = tClip.iEndFrame - tClip.iStartFrame;
-		tClip.eMode = vecAnimClip[i]->eMode;
-
-		mesh->m_vecAnimClip.push_back(tClip);
-	}
-
-	// Animation 이 있는 Mesh 경우 structuredbuffer 만들어두기
-	if (mesh->IsAnimMesh())
-	{
-		// BoneOffet 행렬
-		std::vector<Matrix> vecOffset;
-		std::vector<tFrameTrans> vecFrameTrans;
-		vecFrameTrans.resize((UINT)mesh->m_vecBones.size() * iFrameCount);
-
-		for (size_t i = 0; i < mesh->m_vecBones.size(); ++i)
+		std::vector<tAnimClip*>& vecAnimClip = fbxLoadManager->GetAnimationClips();
+		for (UINT j = 0; j < vecAnimClip.size(); ++j)
 		{
-			vecOffset.push_back(mesh->m_vecBones[i].matOffset);
+			tMTAnimClip tClip = {};
 
-			for (size_t j = 0; j < mesh->m_vecBones[i].vecKeyFrame.size(); ++j)
-			{
-				vecFrameTrans[(UINT)mesh->m_vecBones.size() * j + i]
-					= tFrameTrans{ Vector4(mesh->m_vecBones[i].vecKeyFrame[j].vTranslate.x,
-										   mesh->m_vecBones[i].vecKeyFrame[j].vTranslate.y,
-										   mesh->m_vecBones[i].vecKeyFrame[j].vTranslate.z, 0.f),
-								   Vector4(mesh->m_vecBones[i].vecKeyFrame[j].vScale.x,
-										   mesh->m_vecBones[i].vecKeyFrame[j].vScale.y,
-										   mesh->m_vecBones[i].vecKeyFrame[j].vScale.z, 0.f)
-					, mesh->m_vecBones[i].vecKeyFrame[j].qRot };
-			}
+			tClip.strAnimName = vecAnimClip[j]->strName;
+			tClip.dStartTime = vecAnimClip[j]->tStartTime.GetSecondDouble();
+			tClip.dEndTime = vecAnimClip[j]->tEndTime.GetSecondDouble();
+			tClip.dTimeLength = tClip.dEndTime - tClip.dStartTime;
+
+			tClip.iStartFrame = (int)vecAnimClip[j]->tStartTime.GetFrameCount(vecAnimClip[j]->eMode);
+			tClip.iEndFrame = (int)vecAnimClip[j]->tEndTime.GetFrameCount(vecAnimClip[j]->eMode);
+			tClip.iFrameLength = tClip.iEndFrame - tClip.iStartFrame;
+			tClip.eMode = vecAnimClip[j]->eMode;
+
+			mesh->m_vecAnimClip.push_back(tClip);
 		}
 
-		mesh->m_pBoneOffset = new StructuredBuffer(eSBType::BoneOffset, 
-			eSRVTpye::BoneOffset,
-			sizeof(Matrix), 
-			(UINT)vecOffset.size(),
-			vecOffset.data(), 
-			gGraphicDevice->UnSafe_GetDevice());
-		
-		mesh->m_pBoneFrameData = new StructuredBuffer(eSBType::BoneFrameData,
-			eSRVTpye::BoneFrameData,
-			sizeof(tFrameTrans),
-			(UINT)vecOffset.size() * iFrameCount,
-			vecFrameTrans.data(),
-			gGraphicDevice->UnSafe_GetDevice());
-	}
+		// Animation 이 있는 Mesh 경우 structuredbuffer 만들어두기
+		if (mesh->IsAnimMesh())
+		{
+			// BoneOffet 행렬
+			std::vector<Matrix> vecOffset;
+			std::vector<tFrameTrans> vecFrameTrans;
+			vecFrameTrans.resize((UINT)mesh->m_vecBones.size() * iFrameCount);
 
-	//obj->GetComponent<Animator3D>()->SetBones(mesh->GetBones());
-	//obj->GetComponent<Animator3D>()->SetAnimClip(mesh->GetAnimClip());
+			for (size_t j = 0; j < mesh->m_vecBones.size(); ++j)
+			{
+				vecOffset.push_back(mesh->m_vecBones[j].matOffset);
+
+				for (size_t k = 0; k < mesh->m_vecBones[k].vecKeyFrame.size(); ++k)
+				{
+					vecFrameTrans[(UINT)mesh->m_vecBones.size() * k + k]
+						= tFrameTrans{ Vector4(mesh->m_vecBones[k].vecKeyFrame[k].vTranslate.x,
+											   mesh->m_vecBones[k].vecKeyFrame[k].vTranslate.y,
+											   mesh->m_vecBones[k].vecKeyFrame[k].vTranslate.z, 0.f),
+									   Vector4(mesh->m_vecBones[k].vecKeyFrame[k].vScale.x,
+											   mesh->m_vecBones[k].vecKeyFrame[k].vScale.y,
+											   mesh->m_vecBones[k].vecKeyFrame[k].vScale.z, 0.f)
+						, mesh->m_vecBones[k].vecKeyFrame[k].qRot };
+				}
+			}
+
+			mesh->m_pBoneOffset = new StructuredBuffer(eSBType::BoneOffset,
+				eSRVTpye::BoneOffset,
+				sizeof(Matrix),
+				(UINT)vecOffset.size(),
+				vecOffset.data(),
+				gGraphicDevice->UnSafe_GetDevice());
+
+			mesh->m_pBoneFrameData = new StructuredBuffer(eSBType::BoneFrameData,
+				eSRVTpye::BoneFrameData,
+				sizeof(tFrameTrans),
+				(UINT)vecOffset.size() * iFrameCount,
+				vecFrameTrans.data(),
+				gGraphicDevice->UnSafe_GetDevice());
+		}
+	}
 	FBXLoadManager::GetInstance()->Release();
-	return resultMeshData;
+	return retMeshDatas;
 }

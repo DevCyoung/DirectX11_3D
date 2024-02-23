@@ -433,7 +433,7 @@ void GraphicDeviceDX11::PassSB(const eSBType SBType,
 
 	Assert(SB, ASSERT_MSG_NULL);
 
-	if (SB->mSize * SB->mStride < dataSize * stride)
+	if (SB->mElementSize * SB->mElementCount < dataSize * stride)
 	{
 		mSBCollection->ReSizeStructuredBuffer(SBType, SB->mSRVType, dataSize, stride, data, mDevice.Get());
 		SB = mSBCollection->GetStructuredBuffer(SBType);		

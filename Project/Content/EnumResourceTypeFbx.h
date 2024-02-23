@@ -20,16 +20,23 @@ enum class eResFbx
 	monster.fbm_CH_NPC_MOB_Anashar_Weapon_A01_D_KGW,
 	monster.fbm_CH_NPC_MOB_Anashar_Weapon_A01_N_KGW,
 	monster.fbm_CH_NPC_MOB_Anashar_Weapon_A01_SP_KGW,
+	Twilighr.fbm_TwilightNormalSkin_Twilight_BaseColor,
 	black,
 	c7100,
 	c9990,
+	coba,
 	Dragon,
+	hero,
 	house,
 	monster,
+	night,
+	Room,
 	sphere,
 	Spider,
 	Spider_2,
 	Spider_3,
+	Twilighr,
+	Twilight_Walk,
 	End
 };
 

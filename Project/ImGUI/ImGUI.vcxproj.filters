@@ -42,6 +42,9 @@
     <ClInclude Include="imgui_combo_filter.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_helper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui_combo_filter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_helper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

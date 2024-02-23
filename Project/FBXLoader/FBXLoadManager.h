@@ -120,6 +120,7 @@ public:
 	std::wstring GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
 	
 	const tContainer& GetContainer(const int idx) const { return mVecContainer[idx]; }
+	const UINT GetContainerCount() { return static_cast<UINT>(mVecContainer.size()); }
 
 	std::vector<tBone*>& GetBones() { return m_vecBone; }
 	std::vector<tAnimClip*>& GetAnimationClips() { return m_vecAnimClip; }
@@ -129,6 +130,7 @@ public:
 	// Animation
 	std::vector<tBone*>					m_vecBone;
 	FbxArray<FbxString*>				m_arrAnimName;
+
 	std::vector<tAnimClip*>				m_vecAnimClip;
 
 	fbxsdk::FbxManager* mFbxManager;

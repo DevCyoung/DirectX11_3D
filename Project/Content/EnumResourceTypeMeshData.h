@@ -3,6 +3,11 @@
 enum class eResMeshData
 {
 	black,
+	coba,
+	hero,
+	monster,
+	Room,
+	Spider_3,
 	End
 };
 

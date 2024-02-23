@@ -63,6 +63,6 @@ class FBXLoader
 public:
 	static void LoadFBX(const std::wstring& relativePath);
 	static void CreateMeshFromFBX();
-	static MeshData* FbxInstantiate(const std::wstring& relativePath);
+	static std::vector<MeshData*> FbxInstantiate(const std::wstring& relativePath);
 };
 

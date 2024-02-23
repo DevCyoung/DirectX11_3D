@@ -74,6 +74,11 @@ HRESULT Material::Save(const std::wstring& relativePath)
 	FILE* file = nullptr;
 	_wfopen_s(&file, filePath.c_str(), L"wb");
 
+	if (nullptr == file)
+	{
+		return S_OK;
+	}
+
 	//eRenderPriorityType
 	fwrite(&mRenderType, sizeof(UINT), 1, file);
 	

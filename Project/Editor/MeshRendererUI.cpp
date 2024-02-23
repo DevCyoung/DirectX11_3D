@@ -14,6 +14,12 @@ void MeshRendererUI(MeshRenderer* component)
 	{
 		Material* material = component->GetMaterial(i);
 		std::string name = StringHelper::WStrToStr(material->GetRelativePathorName());
+
+		if (name.length() <= 1)
+		{
+			name = "NONE";
+		}
+
 		name += "##";
 		name += std::to_string(component->GetID());
 		name += "_";

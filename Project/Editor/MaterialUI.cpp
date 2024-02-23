@@ -61,23 +61,24 @@ void MaterialUI(Material* material)
 
 	}
 
+	bool bChange = false;
 	if (ImGui::BeginPopupModal("Stacked 111", NULL, ImGuiWindowFlags_MenuBar))
-	{
-
+	{		
 		if (ImGui::Button("revert##Material"))
 		{
-			material->SetTexture(TEX_PARAM(selectIdx), prevTexOrNull);
+			material->SetTexture(TEX_PARAM(selectIdx), prevTexOrNull);			
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("close##Material"))
 		{
 			ImGui::CloseCurrentPopup();
+			bChange = true;
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("remove##Material"))
 		{
 			prevTexOrNull = nullptr;
-			material->SetTexture(TEX_PARAM(selectIdx), nullptr);
+			material->SetTexture(TEX_PARAM(selectIdx), nullptr);			
 		}
 
 		int texOrder = 0;
@@ -88,7 +89,7 @@ void MaterialUI(Material* material)
 
 			if (ImGui::ImageButton(tex->GetSRVOrNull(), ImVec2(100.f, 100.f)))
 			{
-				material->SetTexture(TEX_PARAM(selectIdx), tex);
+				material->SetTexture(TEX_PARAM(selectIdx), tex);				
 			}
 
 			++texOrder;
@@ -99,9 +100,13 @@ void MaterialUI(Material* material)
 				ImGui::SameLine();
 			}
 
-		}
-
+		}		
 		ImGui::EndPopup();
 	}
 
+
+	if (bChange)
+	{
+		material->Save(material->GetRelativePathorName());
+	}
 }

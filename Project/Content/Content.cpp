@@ -41,20 +41,15 @@ Content::Content()
 
 	//MeshData Object
 	{
-		std::vector<MeshData*> datas = FBXLoader::FbxInstantiate(L"\\Fbx\\monster.fbx");
+		MeshData* meshData = FBXLoader::FbxInstantiate(L"\\Fbx\\monster.fbx");
 
-		for (int i = 0; i < datas.size(); ++i)
-		{
-			MeshData* meshData = datas[i];
-			GameObject* obj = meshData->Instantiate();
-			obj->GetComponent<Transform>()->SetPosition(100.f, 300.f, 0.f);
-			obj->SetName(L"Dragon");
-			Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();
-			obj->GetComponent<Transform>()->SetRotation(rotation);
-			obj->GetComponent<Transform>()->SetScale(3.f, 3.f, 3.f);
-			testScene->AddGameObject(obj, eLayerType::TileMap);
-
-		}
+		GameObject* obj = meshData->Instantiate();
+		obj->GetComponent<Transform>()->SetPosition(100.f, 300.f, 0.f);
+		obj->SetName(L"Dragon");
+		Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();
+		obj->GetComponent<Transform>()->SetRotation(rotation);
+		obj->GetComponent<Transform>()->SetScale(10.f, 10.f, 10.f);
+		testScene->AddGameObject(obj, eLayerType::TileMap);
 	}
 
 	//Light3D

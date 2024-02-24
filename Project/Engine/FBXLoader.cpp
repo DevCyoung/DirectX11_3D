@@ -131,8 +131,7 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 
 	// Animation3D
 	if (!container.bAnimation)
-	{
-		FBXLoadManager::GetInstance()->Release();
+	{		
 		return resultMeshData;
 	}	
 	std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();

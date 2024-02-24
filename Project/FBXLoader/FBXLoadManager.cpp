@@ -108,10 +108,7 @@ void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbx
 			FbxMesh* pMesh = fbxNode->GetMesh();
 			Assert(pMesh, ASSERT_MSG_NULL);
 			std::string debug_name = pMesh->GetName();
-			if (debug_name != "baoshi")
-			{
-				lodeMesh(fbxScene, pMesh);
-			}			
+			lodeMesh(fbxScene, pMesh);			
 		}
 	}
 

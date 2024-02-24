@@ -41,7 +41,7 @@ Content::Content()
 
 	//MeshData Object
 	{
-		std::vector<MeshData*> meshDatas = FBXLoader::FbxInstantiate(L"\\Fbx\\hero.fbx");
+		std::vector<MeshData*> meshDatas = FBXLoader::FbxInstantiate(L"\\Fbx\\coba.fbx");
 
 		for (int i = 0; i < meshDatas.size(); ++i)
 		{

@@ -28,6 +28,7 @@ static constexpr const wchar_t* eResFbxPath[static_cast<UINT>(eResFbx::End)]
 	L"\\Fbx\\coba.fbx",
 	L"\\Fbx\\Dragon.fbx",
 	L"\\Fbx\\hero.fbx",
+	L"\\Fbx\\hero2.fbx",
 	L"\\Fbx\\house.fbx",
 	L"\\Fbx\\monster.fbx",
 	L"\\Fbx\\night.fbx",

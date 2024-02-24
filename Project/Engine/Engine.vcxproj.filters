@@ -115,9 +115,6 @@
     <Filter Include="Source\05. Scene\TestScene">
       <UniqueIdentifier>{1bdced3a-2ec9-4e93-a046-e10250202f05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\00. Engine\02. Loader">
-      <UniqueIdentifier>{9a462464-9aa2-4de2-b5b8-02b586551f88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\08. CollideManagement">
       <UniqueIdentifier>{b92eb5c8-881e-4b6b-a705-a1f8d05a1935}</UniqueIdentifier>
     </Filter>
@@ -222,6 +219,9 @@
     </Filter>
     <Filter Include="Source\06. Resource\09. MeshData">
       <UniqueIdentifier>{4bd7408e-c4dd-4f33-a7b6-cf26fed7c882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Loader">
+      <UniqueIdentifier>{9a462464-9aa2-4de2-b5b8-02b586551f88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -358,7 +358,7 @@
       <Filter>Source\05. Scene\TestScene</Filter>
     </ClInclude>
     <ClInclude Include="EngineResourceLoader.h">
-      <Filter>Source\00. Engine\02. Loader</Filter>
+      <Filter>Source\Loader</Filter>
     </ClInclude>
     <ClInclude Include="Collider2D.h">
       <Filter>Source\03. Component\04. Collision</Filter>
@@ -568,7 +568,7 @@
       <Filter>Source\05. Scene\TestScene</Filter>
     </ClCompile>
     <ClCompile Include="EngineResourceLoader.cpp">
-      <Filter>Source\00. Engine\02. Loader</Filter>
+      <Filter>Source\Loader</Filter>
     </ClCompile>
     <ClCompile Include="Collider2D.cpp">
       <Filter>Source\03. Component\04. Collision</Filter>

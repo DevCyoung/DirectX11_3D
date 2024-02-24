@@ -6,4 +6,6 @@
 #include <Engine/Shader.h>
 #include <Engine/ComputeShader.h>
 #include <Engine/Prefab.h>
+#include <Engine/MeshData.h>
+#include <Engine/Mesh.h>
 #include <Engine/ResourceManager.h>

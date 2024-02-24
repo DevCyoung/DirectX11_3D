@@ -27,6 +27,7 @@ enum class eResFbx
 	coba,
 	Dragon,
 	hero,
+	hero2,
 	house,
 	monster,
 	night,

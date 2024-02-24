@@ -76,6 +76,9 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{1b424573-3fd1-4d5f-83e1-0137135e62f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Loader">
+      <UniqueIdentifier>{73d3bedd-f328-4ad4-8dda-bc8b1295b3b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -123,9 +126,6 @@
     <ClInclude Include="EditorViewUI.h">
       <Filter>Source\View\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="EditorResourceLoader.h">
-      <Filter>Source\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="AlphaHelper.h">
       <Filter>Source\AlphaHelper</Filter>
     </ClInclude>
@@ -167,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="FolderViewUI.h">
       <Filter>Source\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorResourceLoader.h">
+      <Filter>Source\Loader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +214,6 @@
     </ClCompile>
     <ClCompile Include="EditorViewUI.cpp">
       <Filter>Source\View\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorResourceLoader.cpp">
-      <Filter>Source\Editor</Filter>
     </ClCompile>
     <ClCompile Include="AlphaHelper.cpp">
       <Filter>Source\AlphaHelper</Filter>
@@ -322,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="FolderViewUI.cpp">
       <Filter>Source\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorResourceLoader.cpp">
+      <Filter>Source\Loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

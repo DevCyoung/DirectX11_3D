@@ -176,6 +176,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       </SubType>
     </ClInclude>
     <ClInclude Include="Content.h" />
+    <ClInclude Include="ContentResourceLoader.h" />
     <ClInclude Include="CursorMovement.h">
       <SubType>
       </SubType>
@@ -193,6 +194,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       </SubType>
     </ClCompile>
     <ClCompile Include="Content.cpp" />
+    <ClCompile Include="ContentResourceLoader.cpp" />
     <ClCompile Include="CursorMovement.cpp">
       <SubType>
       </SubType>

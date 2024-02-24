@@ -4,6 +4,7 @@
 class Mesh;
 class GameObject;
 class MeshData;
+//class tContainer;
 
 #ifdef _DEBUG
 #pragma comment(lib, "FBXLoader/Debug/FBXLoader_d")
@@ -61,8 +62,9 @@ struct tMTBone
 class FBXLoader
 {
 public:
+	static MeshData* loadContainer(const tContainer& container);
 	static void LoadFBX(const std::wstring& relativePath);
 	static void CreateMeshFromFBX();
-	static MeshData* FbxInstantiate(const std::wstring& relativePath);
+	static std::vector<MeshData*> FbxInstantiate(const std::wstring& relativePath);
 };
 

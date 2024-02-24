@@ -19,24 +19,6 @@
 #include "Animator3D.h"
 #include "MeshData.h"
 
-//Shlwapi.lib
-
-void FBXLoader::LoadFBX(const std::wstring& relativePath)
-{
-	std::wstring filePath = PathManager::GetInstance()->GetResourcePath();
-	filePath += relativePath;
-
-	FBXLoadManager::GetInstance()->Load(filePath);
-	//FbxInstantiate(relativePath);
-
-	//CreateMeshFromFBX();
-	//FBXLoader::FbxInstantiate(relativePath);
-}
-
-void FBXLoader::CreateMeshFromFBX()
-{	
-}
-
 Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
 {
 	Matrix mat;
@@ -50,22 +32,12 @@ Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
 	return mat;
 }
 
-MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
+MeshData* FBXLoader::loadContainer(const tContainer& container)
 {
-	MeshData* resultMeshData = new MeshData;
-
-	std::wstring filePath = PathManager::GetInstance()->GetResourcePath();
-	filePath += relativePath;
-	FBXLoadManager::GetInstance()->Load(filePath);
-
-	//GameObject* obj = new GameObject();
-
-	//obj->AddComponent<MeshRenderer>();
-
+	MeshData* const resultMeshData = new MeshData;
 	FBXLoadManager* const fbxLoadManager = FBXLoadManager::GetInstance();
-
-	const tContainer& container = fbxLoadManager->GetContainer(0);
 	const UINT VERTEX_COUNT = (UINT)container.vecPos.size();
+	Shader* shader = gResourceManager->FindAndLoad<Shader>(L"Std3D");
 
 	std::vector<tVertex> vertexBuffer;
 	std::vector<size_t> sizes;
@@ -112,13 +84,6 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 
 	resultMeshData->SetMesh(mesh);
 
-	//std::wstring meshPath = relativePath;
-	//meshPath += L"Mesh";
-	//gResourceManager->Insert(meshPath, mesh);
-	//obj->GetComponent<MeshRenderer>()->SetMesh(mesh);
-
-	Shader* shader = gResourceManager->FindAndLoad<Shader>(L"Std3D");
-
 	std::vector<Material*> materials;
 	for (UINT i = 0; i < container.vecMtrl.size(); ++i)
 	{
@@ -145,33 +110,22 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 			if (paths[j].empty())
 			{
 				continue;
+			}			
+			else if (std::wstring::npos == paths[j].find(resourcePath))
+			{
+				continue;
+			}
+			else if (!PathFileExistsW(paths[j].c_str()))
+			{
+				continue;
 			}
 
 			std::wstring texRelativePath = paths[j].substr(resourcePath.size());
-			if (texRelativePath.empty())
-			{
-				continue;
-			}
-
-			LPCWSTR lpcwstr = paths[j].c_str();
-			if (!PathFileExistsW(lpcwstr))
-			{
-				continue;
-			}
-			else
-			{
-				Texture* tex = gResourceManager->FindAndLoadOrNull<Texture>(texRelativePath);
-				material->SetTexture(TEX_PARAM(TEX_0 + j), tex);
-			}			
-		}
+			Texture* tex = gResourceManager->FindAndLoadOrNull<Texture>(texRelativePath);
+			material->SetTexture(TEX_PARAM(TEX_0 + j), tex);
 			
-		//std::wstring materialPath = relativePath;
-		//materialPath += L"Material_";
-		//materialPath += std::to_wstring(i);
-
-		materials.push_back(material);
-		//gResourceManager->Insert(materialPath, material);
-		//obj->GetComponent<MeshRenderer>()->SetMaterial(material, i);
+		}
+		materials.push_back(material);		
 	}
 	resultMeshData->SetMaterial(materials);
 
@@ -180,10 +134,7 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 	{
 		FBXLoadManager::GetInstance()->Release();
 		return resultMeshData;
-	}		
-
-	//obj->AddComponent<Animator3D>();
-
+	}	
 	std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();
 	UINT iFrameCount = 0;
 	for (UINT i = 0; i < vecBone.size(); ++i)
@@ -194,7 +145,7 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 		bone.matBone = GetMatrixFromFbxMatrix(vecBone[i]->matBone);
 		bone.matOffset = GetMatrixFromFbxMatrix(vecBone[i]->matOffset);
 		bone.strBoneName = vecBone[i]->boneName;
-			
+
 		for (UINT j = 0; j < vecBone[i]->vecKeyFrame.size(); ++j)
 		{
 			tMTKeyFrame tKeyframe = {};
@@ -265,13 +216,13 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 			}
 		}
 
-		mesh->m_pBoneOffset = new StructuredBuffer(eSBType::BoneOffset, 
+		mesh->m_pBoneOffset = new StructuredBuffer(eSBType::BoneOffset,
 			eSRVTpye::BoneOffset,
-			sizeof(Matrix), 
+			sizeof(Matrix),
 			(UINT)vecOffset.size(),
-			vecOffset.data(), 
+			vecOffset.data(),
 			gGraphicDevice->UnSafe_GetDevice());
-		
+
 		mesh->m_pBoneFrameData = new StructuredBuffer(eSBType::BoneFrameData,
 			eSRVTpye::BoneFrameData,
 			sizeof(tFrameTrans),
@@ -280,8 +231,38 @@ MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 			gGraphicDevice->UnSafe_GetDevice());
 	}
 
-	//obj->GetComponent<Animator3D>()->SetBones(mesh->GetBones());
-	//obj->GetComponent<Animator3D>()->SetAnimClip(mesh->GetAnimClip());
-	FBXLoadManager::GetInstance()->Release();
 	return resultMeshData;
+}
+
+void FBXLoader::LoadFBX(const std::wstring& relativePath)
+{
+	std::wstring filePath = PathManager::GetInstance()->GetResourcePath();
+	filePath += relativePath;
+
+	FBXLoadManager::GetInstance()->Load(filePath);
+	//FbxInstantiate(relativePath);
+
+	//CreateMeshFromFBX();
+	//FBXLoader::FbxInstantiate(relativePath);
+}
+
+
+std::vector<MeshData*> FBXLoader::FbxInstantiate(const std::wstring& relativePath)
+{	
+	std::vector<MeshData*> meshdatas;
+	const std::wstring FILE_PATH = PathManager::GetInstance()->GetResourcePath() + relativePath;	
+	FBXLoadManager* const fbxLoadManager = FBXLoadManager::GetInstance();
+	fbxLoadManager->Load(FILE_PATH);
+
+	//const tContainer& container = fbxLoadManager->GetContainer(0);
+	const UINT CONTAINER_COUNT = fbxLoadManager->GetContainerCount();
+	meshdatas.reserve(CONTAINER_COUNT);
+	for (UINT i = 0; i < CONTAINER_COUNT; ++i)
+	{
+		const tContainer& container = fbxLoadManager->GetContainer(i);
+		MeshData* meshdata = loadContainer(container);
+		meshdatas.push_back(meshdata);
+	}
+	FBXLoadManager::GetInstance()->Release();
+	return meshdatas;
 }

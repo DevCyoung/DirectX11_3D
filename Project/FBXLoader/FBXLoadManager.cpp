@@ -107,7 +107,11 @@ void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbx
 
 			FbxMesh* pMesh = fbxNode->GetMesh();
 			Assert(pMesh, ASSERT_MSG_NULL);
-			lodeMesh(fbxScene, pMesh);
+			std::string debug_name = pMesh->GetName();
+			if (debug_name != "baoshi")
+			{
+				lodeMesh(fbxScene, pMesh);
+			}			
 		}
 	}
 
@@ -117,7 +121,8 @@ void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbx
 	{
 		FbxSurfaceMaterial* pMtrlSur = fbxNode->GetMaterial(i);
 		Assert(pMtrlSur, ASSERT_MSG_NULL);
-		lodeMaterial(pMtrlSur);
+		if (!mVecContainer.empty())
+			lodeMaterial(pMtrlSur);
 	}
 
 	// 자식 노드 정보 읽기
@@ -134,8 +139,7 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	Assert(FbxMesh, ASSERT_MSG_NULL);
 
 	mVecContainer.push_back(tContainer{});
-	tContainer& container = mVecContainer[mVecContainer.size() - 1];
-
+	tContainer& container = mVecContainer[mVecContainer.size() - 1];	
 	const std::string& MESH_NAME = FbxMesh->GetName();
 	container.strName = std::wstring(MESH_NAME.begin(), MESH_NAME.end());
 

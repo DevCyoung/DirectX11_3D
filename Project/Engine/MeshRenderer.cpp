@@ -48,9 +48,10 @@ void MeshRenderer::render(const Camera* const camera)
 	//shader, Texture
 	//GetMaterial()->UpdateData();
 
-	if (GetComponentOrNull<Animator3D>())
+	Animator3D* const animator3D = GetComponentOrNull<Animator3D>();
+	if (animator3D)
 	{
-		GetComponent<Animator3D>()->UpdateData();
+		animator3D->UpdateData();
 
 		for (UINT i = 0; i < mMaterials.size(); ++i)
 		{
@@ -59,7 +60,7 @@ void MeshRenderer::render(const Camera* const camera)
 				continue;
 			}
 
-			UINT boneCount = GetComponent<Animator3D>()->GetBoneCount();
+			UINT boneCount = animator3D->GetBoneCount();
 
 			GetMaterial(i)->SetAnim3D(true); // Animation Mesh ¾Ë¸®±â			
 			GetMaterial(i)->SetBoneCount(boneCount);
@@ -74,9 +75,9 @@ void MeshRenderer::render(const Camera* const camera)
 		gGraphicDevice->Draw(mMesh, i);
 	}
 
-	if (GetComponentOrNull<Animator3D>())
+	if (animator3D)
 	{
-		GetComponent<Animator3D>()->ClearData();
+		animator3D->ClearData();
 	}
 
 }

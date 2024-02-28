@@ -24,6 +24,7 @@ Mesh::Mesh(
 	, mIndexesData(nullptr)
 	, mIndexCounts(nullptr)
 	, mIndexesCount(0)
+	, mMeshName(L"None")
 	, m_pBoneFrameData(nullptr)
 	, m_pBoneOffset(nullptr)
 {	
@@ -53,6 +54,7 @@ Mesh::Mesh(const void* const vertexs,
 	, mIndexesData(nullptr)
 	, mIndexCounts(nullptr)
 	, mIndexesCount(indexesCount)
+	, mMeshName(L"None")
 	, m_pBoneFrameData(nullptr)
 	, m_pBoneOffset(nullptr)
 {

@@ -12,6 +12,30 @@ StringHelper::~StringHelper()
 {
 }
 
+std::vector<std::wstring> StringHelper::VecToWVec(const std::vector<std::string>& vec)
+{
+	std::vector<std::wstring> result;
+	result.reserve(vec.size());
+
+	for (const std::string& str : vec)
+	{
+		result.push_back(std::wstring(str.begin(), str.end()));
+	}
+	return result;
+}
+
+std::vector<std::string> StringHelper::WVecToVec(const std::vector<std::wstring>& wvec)
+{
+	std::vector<std::string> result;
+	result.reserve(wvec.size());
+
+	for (const std::wstring& wstr : wvec)
+	{
+		result.push_back(std::string(wstr.begin(), wstr.end()));
+	}
+	return result;
+}
+
 //현재핵으로 하였음 추후에 정확히 사용법을 익힐것
 std::wstring StringHelper::StrToWStr(const std::string& str)
 {

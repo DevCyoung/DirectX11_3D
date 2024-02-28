@@ -133,35 +133,36 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 	if (!container.bAnimation)
 	{		
 		return resultMeshData;
-	}	
-	std::vector<tBone*>& vecBone = fbxLoadManager->GetBones();
+	}
+
+	std::vector<tBone> vecBone = container.vecBone;
 	UINT iFrameCount = 0;
 	for (UINT i = 0; i < vecBone.size(); ++i)
 	{
 		tMTBone bone = {};
-		bone.iDepth = vecBone[i]->depth;
-		bone.iParentIndx = vecBone[i]->parentIdx;
-		bone.matBone = GetMatrixFromFbxMatrix(vecBone[i]->matBone);
-		bone.matOffset = GetMatrixFromFbxMatrix(vecBone[i]->matOffset);
-		bone.strBoneName = vecBone[i]->boneName;
+		bone.iDepth = vecBone[i].depth;
+		bone.iParentIndx = vecBone[i].parentIdx;
+		bone.matBone = GetMatrixFromFbxMatrix(vecBone[i].matBone);
+		bone.matOffset = GetMatrixFromFbxMatrix(vecBone[i].matOffset);
+		bone.strBoneName = vecBone[i].boneName;
 
-		for (UINT j = 0; j < vecBone[i]->vecKeyFrame.size(); ++j)
+		for (UINT j = 0; j < vecBone[i].vecKeyFrame.size(); ++j)
 		{
 			tMTKeyFrame tKeyframe = {};
-			tKeyframe.dTime = vecBone[i]->vecKeyFrame[j].dTime;
+			tKeyframe.dTime = vecBone[i].vecKeyFrame[j].dTime;
 			tKeyframe.iFrame = j;
-			tKeyframe.vTranslate.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[0];
-			tKeyframe.vTranslate.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[1];
-			tKeyframe.vTranslate.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetT().mData[2];
+			tKeyframe.vTranslate.x = (float)vecBone[i].vecKeyFrame[j].matTransform.GetT().mData[0];
+			tKeyframe.vTranslate.y = (float)vecBone[i].vecKeyFrame[j].matTransform.GetT().mData[1];
+			tKeyframe.vTranslate.z = (float)vecBone[i].vecKeyFrame[j].matTransform.GetT().mData[2];
 
-			tKeyframe.vScale.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[0];
-			tKeyframe.vScale.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[1];
-			tKeyframe.vScale.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetS().mData[2];
+			tKeyframe.vScale.x = (float)vecBone[i].vecKeyFrame[j].matTransform.GetS().mData[0];
+			tKeyframe.vScale.y = (float)vecBone[i].vecKeyFrame[j].matTransform.GetS().mData[1];
+			tKeyframe.vScale.z = (float)vecBone[i].vecKeyFrame[j].matTransform.GetS().mData[2];
 
-			tKeyframe.qRot.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[0];
-			tKeyframe.qRot.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[1];
-			tKeyframe.qRot.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[2];
-			tKeyframe.qRot.w = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[3];
+			tKeyframe.qRot.x = (float)vecBone[i].vecKeyFrame[j].matTransform.GetQ().mData[0];
+			tKeyframe.qRot.y = (float)vecBone[i].vecKeyFrame[j].matTransform.GetQ().mData[1];
+			tKeyframe.qRot.z = (float)vecBone[i].vecKeyFrame[j].matTransform.GetQ().mData[2];
+			tKeyframe.qRot.w = (float)vecBone[i].vecKeyFrame[j].matTransform.GetQ().mData[3];
 
 			bone.vecKeyFrame.push_back(tKeyframe);
 		}
@@ -171,7 +172,7 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 		mesh->m_vecBones.push_back(bone);
 	}
 
-	std::vector<tAnimClip*>& vecAnimClip = fbxLoadManager->GetAnimationClips();
+	const std::vector<tAnimClip*>& vecAnimClip = fbxLoadManager->GetAnimationClips();
 
 	for (UINT i = 0; i < vecAnimClip.size(); ++i)
 	{

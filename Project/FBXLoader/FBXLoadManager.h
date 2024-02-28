@@ -62,7 +62,7 @@ struct tContainer
 	// Animation 관련 정보
 	bool											bAnimation;
 	std::vector<std::vector<tWeightsAndIndices>>	vecWI;
-	std::vector<tBone*>								vecBones;
+	std::vector<tBone>								vecBone;
 
 
 	void Resize(UINT _iSize)
@@ -99,22 +99,22 @@ public:
 	void loadAnimationClip(FbxScene* const fbxScene);
 	void loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh, tContainer* _pContainer);
 
-	int FindBoneIndex(std::string _strBoneName);
-	void LoadWeightsAndIndices(const FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer);
-	void LoadOffsetMatrix(FbxCluster* _pCluster, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tContainer* _pContainer);
-	void LoadKeyframeTransform(FbxScene* const fbxScene,
+	int findBoneIndex(const std::string& _strBoneName, tContainer* _pContainer);
+	void loadWeightsAndIndices(const FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer);
+	void loadOffsetMatrix(FbxCluster* _pCluster, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tContainer* _pContainer);
+	void loadKeyframeTransform(FbxScene* const fbxScene,
 		FbxNode* _pNode, 
 		FbxCluster* _pCluster, 
 		const FbxAMatrix& _matNodeTransform
 		, int _iBoneIdx, tContainer* _pContainer);
-	void CheckWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer);
+	void checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer);
 
-	FbxAMatrix GetTransform(FbxNode* _pNode);
+	FbxAMatrix getTransform(FbxNode* _pNode);
 
-	void GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-	void GetTangent(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-	void GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-	void GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
+	void getBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
+	void getTangent(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
+	void getNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
+	void getUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
 	Vector4 GetMtrlData(FbxSurfaceMaterial* _pSurface, 
 		const char* _pMtrlName,
 		const char* _pMtrlFactorName);
@@ -122,15 +122,13 @@ public:
 	std::wstring GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
 	
 	const tContainer& GetContainer(const int idx) const { return mVecContainer[idx]; }
-	const UINT GetContainerCount() { return static_cast<UINT>(mVecContainer.size()); }
-
-	std::vector<tBone*>& GetBones() { return m_vecBone; }
+	const UINT GetContainerCount() { return static_cast<UINT>(mVecContainer.size()); }	
 	std::vector<tAnimClip*>& GetAnimationClips() { return m_vecAnimClip; }
 
 	//int ThreadFunc(PVOID pvoid);
 
 	// Animation
-	std::vector<tBone*>					m_vecBone;
+	std::vector<tBone>					m_vecOffsetBone;
 	FbxArray<FbxString*>				m_arrAnimName;
 
 	std::vector<tAnimClip*>				m_vecAnimClip;

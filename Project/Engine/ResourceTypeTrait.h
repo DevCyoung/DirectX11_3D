@@ -30,6 +30,7 @@ ENGINE_RESOURCE_TYPE(Prefab);
 ENGINE_RESOURCE_TYPE(ComputeShader);
 ENGINE_RESOURCE_TYPE(AudioClip);
 ENGINE_RESOURCE_TYPE(MeshData);
+//ENGINE_RESOURCE_TYPE(FBX);
 
 template <typename T>
 struct is_engine_resource

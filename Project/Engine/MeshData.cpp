@@ -28,6 +28,7 @@
 MeshData::MeshData()
 	: Resource(eResourceType::MeshData)
 	, mMesh(nullptr)
+	, mMeshDataName(L"None")
 	, mChildMeshDatas()
 	, mMaterials()
 
@@ -35,6 +36,30 @@ MeshData::MeshData()
 }
 MeshData::~MeshData()
 {
+}
+
+#include <iostream>
+#include <windows.h>
+
+static bool CreateFoldersRecursive(const wchar_t* folderPath) {
+	// 디렉토리가 이미 존재하면 성공으로 간주
+	if (CreateDirectory(folderPath, NULL) || GetLastError() == ERROR_ALREADY_EXISTS) {
+		return true;
+	}
+
+	// 디렉토리가 존재하지 않는 경우, 상위 디렉토리를 먼저 만듭니다.
+	std::wstring pathStr(folderPath);
+	size_t pos = pathStr.find_last_of(L"/\\");
+	if (pos != std::wstring::npos) {
+		// 상위 디렉토리를 먼저 만들기 위해 재귀 호출
+		bool success = CreateFoldersRecursive(pathStr.substr(0, pos).c_str());
+		if (!success) {
+			return false; // 상위 디렉토리 생성 실패
+		}
+	}
+
+	// 마지막 폴더를 생성
+	return (CreateDirectory(folderPath, NULL) || GetLastError() == ERROR_ALREADY_EXISTS);
 }
 
 HRESULT MeshData::Load(const std::wstring& filePath)
@@ -46,9 +71,17 @@ HRESULT MeshData::Load(const std::wstring& filePath)
 	//Assert(err, ASSERT_MSG_INVALID);
 	Assert(file, ASSERT_MSG_NULL);
 
+	LoadWString(&mMeshDataName, file);
+
 	std::wstring meshPath;
 	LoadWString(&meshPath, file);
-	mMesh = gResourceManager->FindAndLoadOrNull<Mesh>(meshPath);
+
+	UINT bMesh;
+	fread(&bMesh, sizeof(UINT), 1, file);
+	if (bMesh)
+	{
+		mMesh = gResourceManager->FindAndLoadOrNull<Mesh>(meshPath);
+	}	
 
 	UINT size;
 	fread(&size, sizeof(UINT), 1, file);
@@ -62,28 +95,42 @@ HRESULT MeshData::Load(const std::wstring& filePath)
 		mMaterials.push_back(mat);
 	}
 
+	UINT childSize;
+	fread(&childSize, sizeof(UINT), 1, file);
+
+	for (UINT i = 0; i < childSize; ++i)
+	{
+		std::wstring matPath;
+		LoadWString(&matPath, file);
+		MeshData* mat = gResourceManager->FindAndLoadOrNull<MeshData>(matPath);
+		mChildMeshDatas.push_back(mat);
+	}
+
 	fclose(file);
 	return E_NOTIMPL;
 }
 
-HRESULT MeshData::Save(const std::wstring& name)
+HRESULT MeshData::Save(const std::wstring& relativePath)
 {
-	std::wstring meshDataPath = gPathManager->GetResourcePath();
-	meshDataPath += L"\\MeshData\\";
-	meshDataPath += name;
-	meshDataPath += L".mesh_data";
+	std::wstring resPath = gPathManager->GetResourcePath();
+	const std::wstring& meshDataFilePath = resPath + L"\\MeshData" + relativePath + L".mesh_data";
 
 	FILE* file = nullptr;
-	errno_t err = _wfopen_s(&file, meshDataPath.c_str(), L"wb");
+	//CreateFoldersRecursive(meshDataFilePath.c_str);
+	errno_t err = _wfopen_s(&file, meshDataFilePath.c_str(), L"wb");
 	(void)err;
 
 	Assert(file, ASSERT_MSG_NULL);
-	std::wstring meshPath = L"\\Mesh\\";
-	meshPath += name;
-	meshPath += L".mesh";
 
+	SaveWString(mMeshDataName, file);
+
+	std::wstring meshPath = L"\\Mesh";
+	meshPath += relativePath;
+	meshPath += L".mesh";
 	SaveWString(meshPath, file);
 
+	UINT bMesh = !(mMesh == nullptr);
+	fwrite(&bMesh, sizeof(UINT), 1, file);
 	if (mMesh)
 	{
 		mMesh->Save(meshPath);
@@ -91,17 +138,30 @@ HRESULT MeshData::Save(const std::wstring& name)
 
 	UINT size = static_cast<UINT>(mMaterials.size());
 	fwrite(&size, sizeof(UINT), 1, file);
-
 	for (int i = 0; i < mMaterials.size(); ++i)
 	{
-		std::wstring matPath = L"\\Material\\";
-		matPath += name;
+		std::wstring matPath = L"\\Material";
+		matPath += relativePath;
 		matPath += L"_";
 		matPath += std::to_wstring(i);
 		matPath += L".mat";
 
 		SaveWString(matPath, file);
 		mMaterials[i]->Save(matPath);
+	}
+
+	//자식들저장
+	UINT msize = static_cast<UINT>(mChildMeshDatas.size());
+	fwrite(&msize, sizeof(UINT), 1, file);
+
+	for (UINT i = 0; i < msize; ++i)
+	{
+		std::wstring cnildMeshDataPath = L"\\MeshData" + relativePath + L"_child_" + std::to_wstring(i) + L".mesh_data";
+		SaveWString(cnildMeshDataPath, file);
+
+		cnildMeshDataPath = relativePath + L"_child_" + std::to_wstring(i);
+		mChildMeshDatas[i]->Save(cnildMeshDataPath);
+
 	}
 
 	fclose(file);

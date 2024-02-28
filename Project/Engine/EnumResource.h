@@ -14,5 +14,6 @@ enum class eResourceType
 	ComputeShader,
 	AudioClip,
 	MeshData,
+	FBX,
 	End
 };

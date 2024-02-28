@@ -5,11 +5,25 @@
 #include <Engine\ResourceManager.h>
 #include <Engine\EnumResource.h>
 #include <Engine\Material.h>
-
+#include <Engine\FBXLoader.h>
+#include <Engine\MeshData.h>
+#include <Engine\SceneManager.h>
+#include <Engine\EnumLayer.h>
+#include <Engine\GameObject.h>
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
+#include <Shlwapi.h> // PathFindFileName 함수가 정의된 헤더 파일
 
+#pragma comment(lib, "Shlwapi.lib") // Shlwapi 라이브러리 링크
 namespace fs = std::filesystem;
+
+std::wstring GetFileNameWithoutExtension(const std::wstring& filePath) {
+	wchar_t fileName[MAX_PATH];
+	wcscpy_s(fileName, MAX_PATH, PathFindFileName(filePath.c_str()));
+	PathRemoveExtension(fileName);
+	return fileName;
+}
+
 
 static std::vector<std::wstring> GetDirectoryNames(const std::wstring& path)
 {
@@ -32,7 +46,7 @@ static eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 	wchar_t szExt[50] = {};
 	_wsplitpath_s(_relativepath.c_str(), 0, 0, 0, 0, 0, 0, szExt, 50);
 	std::wstring strExt = szExt;
-	
+
 	if (L".pref" == strExt)
 		return eResourceType::Prefab;
 	else if (L".mesh" == strExt)
@@ -48,13 +62,15 @@ static eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 	else if (L".mesh_data" == strExt)
 		return eResourceType::MeshData;
 	else if (L".anim" == strExt)
-		return eResourceType::MeshData;
+		return eResourceType::Animation;
 	else if (L".font" == strExt)
 		return eResourceType::Font;
 	else if (L".scene" == strExt)
 		return eResourceType::Scene;
 	else if (L".hlsl" == strExt || L".fxh" == strExt)
 		return eResourceType::Shader;
+	else if (L".fbx" == strExt || L".FBX" == strExt)
+		return eResourceType::FBX;
 	else
 		return eResourceType::End;
 }
@@ -76,6 +92,98 @@ static std::vector<std::wstring> GetFileNames(const std::wstring& path)
 	return result;
 }
 
+const Texture* GetFileUITexture(eResourceType resType)
+{
+#pragma region UI_TEXTURE
+
+
+	static const Texture* const meshTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const shaderTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\HlslUI.png");
+
+	static const Texture* const animationTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const fontTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const soundTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const sceneTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const preFabTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const computeShdaerTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const audioClipTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const dummyTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const  materialTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const meshDataTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+
+	static const Texture* const fbxDataTex =
+		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
+#pragma endregion
+	const Texture* fileUI = dummyTex;
+	switch (resType)
+	{
+	/*case eResourceType::Texture:
+		break;*/
+	case eResourceType::Mesh:
+		fileUI = meshTex;
+		break;
+	case eResourceType::Material:
+		fileUI = materialTex;
+		break;
+	case eResourceType::Shader:
+		fileUI = shaderTex;
+		break;
+	case eResourceType::Animation:
+		fileUI = animationTex;
+		break;
+	case eResourceType::Font:
+		fileUI = fontTex;
+		break;
+	case eResourceType::Sound:
+		fileUI = soundTex;
+		break;
+	case eResourceType::Scene:
+		fileUI = sceneTex;
+		break;
+	case eResourceType::Prefab:
+		fileUI = preFabTex;
+		break;
+	case eResourceType::ComputeShader:
+		fileUI = computeShdaerTex;
+		break;
+	case eResourceType::AudioClip:
+		fileUI = audioClipTex;
+		break;
+	case eResourceType::MeshData:
+		fileUI = meshDataTex;
+		break;
+	case eResourceType::FBX:
+		fileUI = fbxDataTex;
+		break;
+	case eResourceType::End:
+		break;
+	default:
+		break;
+	}
+	return fileUI;
+}
 FolderViewUI::FolderViewUI()
 	: mCD()
 {
@@ -110,9 +218,10 @@ void FolderViewUI::drawForm()
 {
 	static float wrap_width = 70.f;
 	static float icon_width = 70.0f;
+	static const Texture* const folderTex = gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\folder.png");
 	ImVec2 renderTargetSize = ImVec2(icon_width, icon_width);
 
-	ImGui::Begin("FolderViewUI");	
+	ImGui::Begin("FolderViewUI");
 	ImGui::Text(StringHelper::WStrToStr(mCD.top()).c_str());
 	if (ImGui::Button("Revert"))
 	{
@@ -124,56 +233,18 @@ void FolderViewUI::drawForm()
 	ImGui::Separator();
 
 	const std::wstring& curPath = mCD.top();
-	std::vector<std::wstring> directorys = GetDirectoryNames(curPath);	
+	std::vector<std::wstring> directorys = GetDirectoryNames(curPath);
 	const std::wstring& resourcePath = gPathManager->GetResourcePath();
 
 	static InspectorUI* inspectorUI =
 		static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"));
-#pragma region UI_TEXTURE
-	static Texture* folderTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\folder.png");
 
-	static Texture* meshTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
 
-	static Texture* shaderTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\HlslUI.png");
-
-	static Texture* animationTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* fontTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* soundTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* sceneTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* preFabTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* computeShdaerTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* audioClipTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* dummyTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* materialTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-
-	static Texture* meshDataTex =
-		gResourceManager->Find<Texture>(L"\\Texture\\ImGUI\\MaterialUI.jpg");
-#pragma endregion
-	
 
 	int idx = 0;
 	ImGui::SliderFloat("Icon width##FolderViewUI", &icon_width, -20, 100, "%.0f");
 	ImGui::SliderFloat("Wrap width##FolderViewUI", &wrap_width, -20, 100, "%.0f");
+	
 
 	for (std::wstring& directory : directorys)
 	{
@@ -184,6 +255,7 @@ void FolderViewUI::drawForm()
 		{
 			mCD.push(directory);
 		}
+
 		std::wstring name = StringHelper::GetDirectoryNameFromPath(directory);
 		std::string strName = StringHelper::WStrToStr(name);
 		ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + wrap_width);
@@ -200,15 +272,19 @@ void FolderViewUI::drawForm()
 		}
 		++idx;
 	}
+	static ImGuiTextFilter filter;
 
 	std::vector<std::wstring> files = GetFileNames(curPath);
+
 	for (std::wstring file : files)
 	{
-		std::wstring name = StringHelper::GetFileNameFromPath(file);
+		std::wstring name = GetFileNameWithoutExtension(file);
 		std::string strName = StringHelper::WStrToStr(name);
 		eResourceType type = GetResTypeByExt(file);
 		std::wstring relativePath = file.substr(resourcePath.size());
 		ImGui::BeginGroup();
+
+		const Texture* resFileUI = GetFileUITexture(type);
 
 		switch (type)
 		{
@@ -224,107 +300,151 @@ void FolderViewUI::drawForm()
 		break;
 		case eResourceType::Mesh:
 		{
-			if (ImGui::ImageButton(strName.c_str(), meshTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Mesh* mat = gResourceManager->Find<Mesh>(relativePath);
 				//inspectorUI->Register(mat);
 			}
 		}
 		break;
-			break;
+		break;
 		case eResourceType::Material:
-		{			
-			if (ImGui::ImageButton(strName.c_str(), materialTex->GetSRV(), renderTargetSize))
+		{
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				Material* mat = gResourceManager->Find<Material>(relativePath);
 				inspectorUI->Register(mat);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Shader:
 		{
-			if (ImGui::ImageButton(strName.c_str(), shaderTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Shader* shader = gResourceManager->Find<Shader>(relativePath);
 				//inspectorUI->Register(shader);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Animation:
 		{
-			if (ImGui::ImageButton(strName.c_str(), animationTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Animation* anim = gResourceManager->Find<Animation>(relativePath);
 				//inspectorUI->Register(anim);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Font:
 		{
-			if (ImGui::ImageButton(strName.c_str(), fontTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Font* font = gResourceManager->Find<Font>(relativePath);
 				//inspectorUI->Register(font);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Sound:
 		{
-			if (ImGui::ImageButton(strName.c_str(), soundTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Sound* sound = gResourceManager->Find<Sound>(relativePath);
 				//inspectorUI->Register(sound);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Scene:
 		{
-			if (ImGui::ImageButton(strName.c_str(), sceneTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Scene* scene = gResourceManager->Find<Scene>(relativePath);
 				//inspectorUI->Register(scene);
 			}
 		}
-			break;
+		break;
 		case eResourceType::Prefab:
 		{
-			if (ImGui::ImageButton(strName.c_str(), preFabTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//Prefab* prefab = gResourceManager->Find<Prefab>(relativePath);
 				//inspectorUI->Register(prefab);
 			}
 		}
-			break;
+		break;
 		case eResourceType::ComputeShader:
 		{
-			if (ImGui::ImageButton(strName.c_str(), computeShdaerTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//ComputeShader* csahder = gResourceManager->Find<ComputeShader>(relativePath);
 				//inspectorUI->Register(csahder);
 			}
 		}
-			break;
+		break;
 		case eResourceType::AudioClip:
 		{
-			if (ImGui::ImageButton(strName.c_str(), audioClipTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//AudioClip* audioClip = gResourceManager->Find<AudioClip>(relativePath);
 				//inspectorUI->Register(audioClip);
 			}
 		}
-			break;
+		break;
 		case eResourceType::MeshData:
 		{
-			if (ImGui::ImageButton(strName.c_str(), meshDataTex->GetSRV(), renderTargetSize))
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
 			{
 				//MeshData* meshData = gResourceManager->Find<MeshData>(relativePath);
 				//inspectorUI->Register(meshData);
 			}
+
+			MeshData* meshData = gResourceManager->FindAndLoadOrNull<MeshData>(relativePath);
+
+ 			if (meshData && ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::Button("Instantiate"))
+				{					
+					GameObject* obj = meshData->Instantiate();
+					obj->SetName(name);
+					SceneManager::GetInstance()->GetCurrentScene()->
+						RegisterEventAddGameObject(obj, eLayerType::Default);
+					
+				}
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
 		}
-			break;
+		break;
+		case eResourceType::FBX:
+		{
+			if (ImGui::ImageButton(strName.c_str(), resFileUI->GetSRV(), renderTargetSize))
+			{
+				//MeshData* meshData = gResourceManager->Find<MeshData>(relativePath);
+				//inspectorUI->Register(meshData);
+			}
+			//gResourceManager->Find<Texture>(relativePath)
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::Button("Load"))
+				{
+					MeshData* meshData = FBXLoader::FbxInstantiate(relativePath);					
+					meshData->Save(L"\\" + GetFileNameWithoutExtension(relativePath));
+					delete meshData;
+					//gResourceManager->Find<Texture>(relativePath)
+				}					
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
+			ImGui::SetItemTooltip("Right-click to open popup");
+		}
+		break;
 		default:
 			break;
 		}
+
+
+
 		ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + wrap_width);
 		ImGui::Text(strName.c_str());
 		ImGui::PopTextWrapPos();

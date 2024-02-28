@@ -19,9 +19,10 @@ public:
     void UpdateData();
 
 public:
-    void SetBones(std::vector<tMTBone>* _vecBones) 
+    void SetBones(std::vector<tMTBone>*_vecBones) 
     { 
-        mBones = _vecBones; m_vecFinalBoneMat.resize(mBones->size()); 
+        mBones = _vecBones; 
+        m_vecFinalBoneMat.resize(mBones->size()); 
     }
     StructuredBuffer* GetFinalBoneMat() { return mSBBoneFinalBuffer; }
     UINT GetBoneCount() { return static_cast<UINT>(mBones->size()); }

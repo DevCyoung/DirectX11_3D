@@ -10,6 +10,9 @@ private:
 	StringHelper& operator=(const StringHelper&) = delete;
 
 public:
+	static std::vector<std::wstring> VecToWVec(const std::vector<std::string>& vec);
+	static std::vector<std::string>  WVecToVec(const std::vector<std::wstring>& wvec);
+
 	static std::wstring StrToWStr(const std::string& str);
 	static std::string WStrToStr(const std::wstring& wstr);
 	static std::wstring SplitFilePathExtension(const std::wstring& filePath);

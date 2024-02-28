@@ -70,10 +70,7 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 }
 
 void FBXLoadManager::Release()
-{
-
-	m_vecBone.clear();
-
+{	
 	for (tAnimClip* clip : m_vecAnimClip)
 	{
 		delete clip;
@@ -135,6 +132,7 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	tContainer& container = mVecContainer[mVecContainer.size() - 1];
 	const std::string& MESH_NAME = FbxMesh->GetName();
 	container.strName = std::wstring(MESH_NAME.begin(), MESH_NAME.end());
+	container.vecBone = m_vecOffsetBone;
 
 	const int VERTEX_COUNT = FbxMesh->GetControlPointsCount();
 	container.Resize(VERTEX_COUNT);
@@ -176,10 +174,10 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 			const int VERTEX_IDX = FbxMesh->GetPolygonVertex(i, j);
 			poly[j] = VERTEX_IDX;
 
-			GetTangent(FbxMesh, &container, VERTEX_IDX, IndexIdx);
-			GetBinormal(FbxMesh, &container, VERTEX_IDX, IndexIdx);
-			GetNormal(FbxMesh, &container, VERTEX_IDX, IndexIdx);
-			GetUV(FbxMesh, &container, VERTEX_IDX, FbxMesh->GetTextureUVIndex(i, j));
+			getTangent(FbxMesh, &container, VERTEX_IDX, IndexIdx);
+			getBinormal(FbxMesh, &container, VERTEX_IDX, IndexIdx);
+			getNormal(FbxMesh, &container, VERTEX_IDX, IndexIdx);
+			getUV(FbxMesh, &container, VERTEX_IDX, FbxMesh->GetTextureUVIndex(i, j));
 
 			++IndexIdx;
 		}
@@ -274,20 +272,20 @@ DWORD SecondThread(PVOID pvParam)
 
 	// 현재 본 인덱스를 얻어온다.
 	std::string boneName = pCluster->GetLink()->GetName();
-	int iBoneIdx = manager->FindBoneIndex(boneName);
+	int iBoneIdx = manager->findBoneIndex(boneName, _pContainer);
 	if (-1 == iBoneIdx)
 		assert(NULL);
 
-	FbxAMatrix matNodeTransform = manager->GetTransform(_pMesh->GetNode());
+	FbxAMatrix matNodeTransform = manager->getTransform(_pMesh->GetNode());
 
 	// Weights And Indices 정보를 읽는다.
-	manager->LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
+	manager->loadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
 
 	// Bone 의 OffSet 행렬 구한다.
-	manager->LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+	manager->loadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
 	// Bone KeyFrame 별 행렬을 구한다.
-	manager->LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+	manager->loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
 		pCluster, matNodeTransform, iBoneIdx, _pContainer);
 	return 0;
 }
@@ -368,22 +366,22 @@ void FBXLoadManager::loadSkeletonRe(FbxNode* _pNode, int depth, int Idx, int par
 		const FbxNodeAttribute::EType AT_TYPE = attr->GetAttributeType();
 		if (AT_TYPE == FbxNodeAttribute::eSkeleton)
 		{
-			tBone* const bone = new tBone;
+			tBone bone = {};
 
 			std::string boneName = _pNode->GetName();
 
-			bone->boneName = std::wstring(boneName.begin(), boneName.end());
-			bone->depth = depth++;
-			bone->parentIdx = parentIdx;
+			bone.boneName = std::wstring(boneName.begin(), boneName.end());
+			bone.depth = depth++;
+			bone.parentIdx = parentIdx;
 
-			m_vecBone.push_back(bone);
+			m_vecOffsetBone.push_back(bone);
 		}
 	}
 
 	const int CHILD_COUNT = _pNode->GetChildCount();
 	for (int i = 0; i < CHILD_COUNT; ++i)
 	{
-		loadSkeletonRe(_pNode->GetChild(i), depth, (int)m_vecBone.size(), Idx);
+		loadSkeletonRe(_pNode->GetChild(i), depth, (int)m_vecOffsetBone.size(), Idx);
 	}
 }
 
@@ -460,35 +458,35 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 						(void)boneName;
 						boneName = "Bip002 Pelvis";
 					}
-					int iBoneIdx = FindBoneIndex(boneName);
+					int iBoneIdx = findBoneIndex(boneName, _pContainer);
 					if (-1 == iBoneIdx)
 						assert(NULL);
 
-					FbxAMatrix matNodeTransform = GetTransform(_pMesh->GetNode());
+					FbxAMatrix matNodeTransform = getTransform(_pMesh->GetNode());
 
 					// Weights And Indices 정보를 읽는다.
-					LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
+					loadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
 
 					// Bone 의 OffSet 행렬 구한다.
-					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					loadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
 					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+					loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
 						pCluster, matNodeTransform, iBoneIdx, _pContainer);
 				}
 			}
 		}
 	}
-	CheckWeightAndIndices(_pMesh, _pContainer);
+	checkWeightAndIndices(_pMesh, _pContainer);
 }
 
-int FBXLoadManager::FindBoneIndex(std::string _strBoneName)
+int FBXLoadManager::findBoneIndex(const std::string& _strBoneName, tContainer* _pContainer)
 {
 	std::wstring strBoneName = std::wstring(_strBoneName.begin(), _strBoneName.end());
 
-	for (UINT i = 0; i < m_vecBone.size(); ++i)
+	for (UINT i = 0; i < _pContainer->vecBone.size(); ++i)
 	{
-		if (m_vecBone[i]->boneName == strBoneName)
+		if (_pContainer->vecBone[i].boneName == strBoneName)
 		{
 			return i;
 		}
@@ -497,7 +495,7 @@ int FBXLoadManager::FindBoneIndex(std::string _strBoneName)
 	return -1;
 }
 
-void FBXLoadManager::LoadWeightsAndIndices(const FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer)
+void FBXLoadManager::loadWeightsAndIndices(const FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer)
 {
 	int iIndicesCount = _pCluster->GetControlPointIndicesCount();
 
@@ -515,7 +513,7 @@ void FBXLoadManager::LoadWeightsAndIndices(const FbxCluster* _pCluster, int _iBo
 	}
 }
 
-void FBXLoadManager::LoadOffsetMatrix(FbxCluster* _pCluster,
+void FBXLoadManager::loadOffsetMatrix(FbxCluster* _pCluster,
 	const FbxAMatrix& _matNodeTransform,
 	int _iBoneIdx,
 	tContainer* _pContainer)
@@ -541,11 +539,11 @@ void FBXLoadManager::LoadOffsetMatrix(FbxCluster* _pCluster,
 	FbxAMatrix matOffset;
 	matOffset = matClusterLinkTrans.Inverse() * matClusterTrans * _matNodeTransform;
 	matOffset = matReflect * matOffset * matReflect;
-
-	m_vecBone[_iBoneIdx]->matOffset = matOffset;
+	
+	_pContainer->vecBone[_iBoneIdx].matOffset = matOffset;
 }
 
-void FBXLoadManager::LoadKeyframeTransform(FbxScene* const fbxScene,
+void FBXLoadManager::loadKeyframeTransform(FbxScene* const fbxScene,
 	FbxNode* _pNode,
 	FbxCluster* _pCluster,
 	const FbxAMatrix& _matNodeTransform,
@@ -565,7 +563,7 @@ void FBXLoadManager::LoadKeyframeTransform(FbxScene* const fbxScene,
 	matReflect.mData[2] = v3;
 	matReflect.mData[3] = v4;
 
-	m_vecBone[_iBoneIdx]->matBone = _matNodeTransform;
+	_pContainer->vecBone[_iBoneIdx].matBone = _matNodeTransform;
 
 	FbxTime::EMode eTimeMode = fbxScene->GetGlobalSettings().GetTimeMode();
 
@@ -598,12 +596,12 @@ void FBXLoadManager::LoadKeyframeTransform(FbxScene* const fbxScene,
 			tFrame.dTime = tTime.GetSecondDouble();
 			tFrame.matTransform = matCurTrans;
 
-			m_vecBone[_iBoneIdx]->vecKeyFrame.push_back(tFrame);
+			_pContainer->vecBone[_iBoneIdx].vecKeyFrame.push_back(tFrame);
 		}
 	}
 }
 
-void FBXLoadManager::CheckWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer)
+void FBXLoadManager::checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer)
 {
 	std::vector<std::vector<tWeightsAndIndices>>::iterator iter = _pContainer->vecWI.begin();
 
@@ -655,7 +653,7 @@ void FBXLoadManager::CheckWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContai
 	}
 }
 
-FbxAMatrix FBXLoadManager::GetTransform(FbxNode* _pNode)
+FbxAMatrix FBXLoadManager::getTransform(FbxNode* _pNode)
 {
 	const FbxVector4 vT = _pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
 	const FbxVector4 vR = _pNode->GetGeometricRotation(FbxNode::eSourcePivot);
@@ -664,7 +662,7 @@ FbxAMatrix FBXLoadManager::GetTransform(FbxNode* _pNode)
 	return FbxAMatrix(vT, vR, vS);
 }
 
-void FBXLoadManager::GetTangent(FbxMesh* _pMesh
+void FBXLoadManager::getTangent(FbxMesh* _pMesh
 	, tContainer* _pContainer
 	, int _iIdx		 /*해당 정점의 인덱스*/
 	, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
@@ -705,7 +703,7 @@ void FBXLoadManager::GetTangent(FbxMesh* _pMesh
 	_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
 }
 
-void FBXLoadManager::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+void FBXLoadManager::getBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
 {
 	int iBinormalCnt = _pMesh->GetElementBinormalCount();
 	if (1 > iBinormalCnt)
@@ -742,7 +740,7 @@ void FBXLoadManager::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _
 	_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[1];
 }
 
-void FBXLoadManager::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+void FBXLoadManager::getNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
 {
 	int iNormalCnt = _pMesh->GetElementNormalCount();
 	if (1 != iNormalCnt)
@@ -774,7 +772,7 @@ void FBXLoadManager::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iI
 	_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
 }
 
-void FBXLoadManager::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
+void FBXLoadManager::getUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
 {
 	FbxGeometryElementUV* pUV = _pMesh->GetElementUV();
 

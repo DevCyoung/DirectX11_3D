@@ -77,6 +77,8 @@ std::string GetTypeName(eResourceType type)
 	case eResourceType::MeshData:
 		result = "MeshData";
 		break;
+	case eResourceType::FBX:
+		break;
 	default:
 		Assert(false, ASSERT_MSG_INVALID);
 		break;

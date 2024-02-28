@@ -9,7 +9,7 @@ public:
 
 	void Pop();
 	void Enter(const std::string& enter);
-
+	
 
 private:
 	std::stack<std::wstring> mCD;

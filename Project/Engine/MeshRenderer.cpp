@@ -28,13 +28,14 @@ void MeshRenderer::render(const Camera* const camera)
 	Assert(mMesh, ASSERT_MSG_NULL);
 	//Assert(mMaterial, ASSERT_MSG_NULL);
 	Assert(camera, ASSERT_MSG_NULL);
-
+	
 	tCBTransform CBTransform = {};
 	{
 		const Vector3& SCALE = Vector3(1, 1, 1.f);
 		const Matrix& SCALE_MATRIX = Matrix::CreateScale(SCALE);
 
-		CBTransform.World = SCALE_MATRIX * GetOwner()->GetComponent<Transform>()->GetWorldMatrix();
+		const Matrix& WORD_MATRIX = GetComponent<Transform>()->GetWorldMatrix();
+		CBTransform.World = SCALE_MATRIX * WORD_MATRIX;
 		CBTransform.View = camera->GetView();
 		CBTransform.Proj = camera->GetProjection();
 

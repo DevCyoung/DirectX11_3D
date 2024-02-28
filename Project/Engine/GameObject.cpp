@@ -70,6 +70,12 @@ void GameObject::initialize()
 	{
 		script->initialize();
 	}
+
+	for (GameObject* childObj : mChildObjects)
+	{
+		childObj->mGameSystem = mGameSystem;
+		childObj->initialize();
+	}
 }
 
 void GameObject::update()
@@ -210,6 +216,7 @@ void GameObject::SetChild(GameObject* const childObj)
 {	
 	Assert(!FindChidOrNull(childObj), ASSERT_MSG_NOT_NULL);
 	mChildObjects.push_back(childObj);
+	childObj->mParent = this;
 }
 
 void GameObject::AddComponent(ScriptComponent* const scriptComponent)

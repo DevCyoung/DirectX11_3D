@@ -62,6 +62,8 @@ struct tContainer
 	// Animation 관련 정보
 	bool											bAnimation;
 	std::vector<std::vector<tWeightsAndIndices>>	vecWI;
+	std::vector<tBone*>								vecBones;
+
 
 	void Resize(UINT _iSize)
 	{

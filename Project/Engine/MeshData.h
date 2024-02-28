@@ -20,9 +20,15 @@ public:
 
 	void SetMesh(Mesh* mesh) { mMesh = mesh; }
 	void SetMaterial(std::vector<Material*> materials) { mMaterials = materials;  }
+	void SetMeshDataName(std::wstring meshDataName) { mMeshDataName = meshDataName; }
+	void AddChildMeshData(MeshData* meshData) { mChildMeshDatas.push_back(meshData); }
+
+	const std::wstring& GetMeshDataName() { return mMeshDataName; }
 
 private:
 	Mesh* mMesh;
+	std::wstring mMeshDataName;
+	std::vector<MeshData*> mChildMeshDatas;
 	std::vector<Material*>	mMaterials;
 };
 

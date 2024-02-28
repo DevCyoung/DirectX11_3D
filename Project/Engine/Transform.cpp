@@ -30,11 +30,11 @@ void Transform::lateUpdate()
 {
 	mWorld = CreateWorldMatrix(mPosition, mRotation, mScale);
 
-	GameObject* const parent = GetOwner()->GetParentOrNull();
+	GameObject* const parentOrNull = GetOwner()->GetParentOrNull();
 
-	if (parent)
+	if (parentOrNull)
 	{
-		const Transform* const transform = parent->GetComponent<Transform>();
+		const Transform* const transform = parentOrNull->GetComponent<Transform>();
 		mWorld *= transform->mWorld;
 	}
 

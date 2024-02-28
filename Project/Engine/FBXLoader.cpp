@@ -246,22 +246,23 @@ void FBXLoader::LoadFBX(const std::wstring& relativePath)
 }
 
 
-std::vector<MeshData*> FBXLoader::FbxInstantiate(const std::wstring& relativePath)
+MeshData* FBXLoader::FbxInstantiate(const std::wstring& relativePath)
 {	
-	std::vector<MeshData*> meshdatas;
+	MeshData* rootMeshData = new MeshData;
 	const std::wstring FILE_PATH = PathManager::GetInstance()->GetResourcePath() + relativePath;	
 	FBXLoadManager* const fbxLoadManager = FBXLoadManager::GetInstance();
 	fbxLoadManager->Load(FILE_PATH);
 
 	//const tContainer& container = fbxLoadManager->GetContainer(0);
 	const UINT CONTAINER_COUNT = fbxLoadManager->GetContainerCount();
-	meshdatas.reserve(CONTAINER_COUNT);
+	//meshData.reserve(CONTAINER_COUNT);
 	for (UINT i = 0; i < CONTAINER_COUNT; ++i)
 	{
 		const tContainer& container = fbxLoadManager->GetContainer(i);
-		MeshData* meshdata = loadContainer(container);
-		meshdatas.push_back(meshdata);
+		MeshData* childMeshData = loadContainer(container);
+		childMeshData->SetMeshDataName(container.strName);
+		rootMeshData->AddChildMeshData(childMeshData);
 	}
 	FBXLoadManager::GetInstance()->Release();
-	return meshdatas;
+	return rootMeshData;
 }

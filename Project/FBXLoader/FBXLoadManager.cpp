@@ -49,11 +49,6 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 		//bon
 		loadSkeleton(fbxScene->GetRootNode());
 
-		if (!m_vecBone.empty())
-		{
-
-		}
-
 		//animation names
 		fbxScene->FillAnimStackNameArray(m_arrAnimName);
 
@@ -76,10 +71,7 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 
 void FBXLoadManager::Release()
 {
-	for (tBone* bone : m_vecBone)
-	{
-		delete bone;
-	}
+
 	m_vecBone.clear();
 
 	for (tAnimClip* clip : m_vecAnimClip)
@@ -110,7 +102,7 @@ void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbx
 			FbxAMatrix matGlobal = fbxNode->EvaluateGlobalTransform();
 			matGlobal.GetR();
 
-			FbxMesh* pMesh = fbxNode->GetMesh();			
+			FbxMesh* pMesh = fbxNode->GetMesh();
 			std::string debug_name = pMesh->GetName();
 			lodeMesh(fbxScene, pMesh);
 		}
@@ -140,7 +132,7 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	Assert(FbxMesh, ASSERT_MSG_NULL);
 
 	mVecContainer.push_back(tContainer{});
-	tContainer& container = mVecContainer[mVecContainer.size() - 1];	
+	tContainer& container = mVecContainer[mVecContainer.size() - 1];
 	const std::string& MESH_NAME = FbxMesh->GetName();
 	container.strName = std::wstring(MESH_NAME.begin(), MESH_NAME.end());
 
@@ -156,7 +148,7 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 		container.vecPos[i].z = static_cast<float>(P_VERTEX_POS_ARRAY[i].mData[1]);
 	}
 
-	
+
 
 	// 재질의 개수 ( ==> SubSet 개수 ==> Index Buffer Count)
 	const int MTRL_COUNT = FbxMesh->GetNode()->GetMaterialCount();
@@ -440,7 +432,8 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 	}
 	_pContainer->bAnimation = true;
 
-	// Skin 개수만큼 반복을하며 읽는다.	
+	// Skin 개수만큼 반복을하며 읽는다.
+	// 바인드포즈는 메쉬마다 다르다.
 	for (int i = 0; i < iSkinCount; ++i)
 	{
 		FbxSkin* pSkin = (FbxSkin*)_pMesh->GetDeformer(i, FbxDeformer::eSkin);
@@ -478,13 +471,10 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 
 					// Bone 의 OffSet 행렬 구한다.
 					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
-					if (iClusterCount != 3)
-					{
-					}					
 
-						// Bone KeyFrame 별 행렬을 구한다.
-						LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
-							pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					// Bone KeyFrame 별 행렬을 구한다.
+					LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+						pCluster, matNodeTransform, iBoneIdx, _pContainer);
 				}
 			}
 		}

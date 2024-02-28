@@ -59,13 +59,13 @@ void RenderTargetRenderer::registerRenderComponent(RenderComponent* const render
 
 	if (eRenderPriorityType::PostProcess == renderComponent->GetMaterial(0)->GetRenderType())
 	{
-		mPostProcessComponents.push_back(renderComponent);		
+		mPostProcessComponents.push_back(renderComponent);
 	}
 	else
-	{		
+	{
 		mRenderComponentsArray[static_cast<UINT>(RENDER_PRIORITY_TYPE)].push_back(renderComponent);
 	}
-	
+
 }
 
 void RenderTargetRenderer::registerLightInfo(const tLightInfo& light2DInfo)
@@ -111,7 +111,7 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 	globalInfo.Deltatime = gDeltaTime;
 	globalInfo.Light2DCount = static_cast<UINT>(mLight2DInfos.size());
 	globalInfo.GlobalTime = gGlobalTime;
-		
+
 	gGraphicDevice->PassCB(eCBType::GlobalInfo, sizeof(globalInfo), &globalInfo);
 	gGraphicDevice->BindCB(eCBType::GlobalInfo, eShaderBindType::VS);
 	gGraphicDevice->BindCB(eCBType::GlobalInfo, eShaderBindType::PS);
@@ -149,30 +149,33 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 
 	//PostProcess
 	const Camera* const P_MAIN_CAMERA = mCameras[static_cast<UINT>(eCameraPriorityType::Main)];
-	Texture* const copyTexture = gResourceManager->Find<Texture>(L"CopyRenderTargetTexture");
-
-	//다음에 고치러 오시오
-	//해상도마다 복사본 텍스처 사이즈가 달라짐
-	//FIXME
-	(void)copyTexture;
-	for (RenderComponent* const postProcessComponent : mPostProcessComponents)
-	{				
-		//FIXME참조카운팅
-		ID3D11Resource* renderTargetTexture = nullptr;
-		(*ppRenderTargetView)->GetResource(&renderTargetTexture);
-		Assert(renderTargetTexture, ASSERT_MSG_NULL);
-
-		gGraphicDevice->CopyResource(copyTexture->GetID3D11Texture2D(), renderTargetTexture);
-		gGraphicDevice->BindSRV(eShaderBindType::PS, 10, copyTexture);
-		postProcessComponent->render(P_MAIN_CAMERA);
-
-		renderTargetTexture->Release();
-		renderTargetTexture = nullptr;
-	}
-	
-	if (mbDebugRender)
+	if (P_MAIN_CAMERA)
 	{
-		mDebugRenderer->render(P_MAIN_CAMERA);
+		Texture* const copyTexture = gResourceManager->Find<Texture>(L"CopyRenderTargetTexture");
+
+		//다음에 고치러 오시오
+		//해상도마다 복사본 텍스처 사이즈가 달라짐
+		//FIXME
+		(void)copyTexture;
+		for (RenderComponent* const postProcessComponent : mPostProcessComponents)
+		{
+			//FIXME참조카운팅
+			ID3D11Resource* renderTargetTexture = nullptr;
+			(*ppRenderTargetView)->GetResource(&renderTargetTexture);
+			Assert(renderTargetTexture, ASSERT_MSG_NULL);
+
+			gGraphicDevice->CopyResource(copyTexture->GetID3D11Texture2D(), renderTargetTexture);
+			gGraphicDevice->BindSRV(eShaderBindType::PS, 10, copyTexture);
+			postProcessComponent->render(P_MAIN_CAMERA);
+
+			renderTargetTexture->Release();
+			renderTargetTexture = nullptr;
+		}
+
+		if (mbDebugRender)
+		{
+			mDebugRenderer->render(P_MAIN_CAMERA);
+		}
 	}
 }
 

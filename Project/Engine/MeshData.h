@@ -26,9 +26,9 @@ public:
 	const std::wstring& GetMeshDataName() { return mMeshDataName; }
 
 private:
-	Mesh* mMesh;
-	std::wstring mMeshDataName;
-	std::vector<MeshData*> mChildMeshDatas;
-	std::vector<Material*>	mMaterials;
+	Mesh*						mMesh;
+	std::wstring				mMeshDataName;
+	std::vector<MeshData*>		mChildMeshDatas;
+	std::vector<Material*>		mMaterials;
 };
 

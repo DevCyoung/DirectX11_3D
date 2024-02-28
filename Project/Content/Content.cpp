@@ -19,7 +19,7 @@
 
 Content::Content()
 {
-	LoadAllResourceFiles(gPathManager->GetResourcePath());
+	//LoadAllResourceFiles(gPathManager->GetResourcePath());
 	Scene* testScene = new Scene;
 
 	//main Camera

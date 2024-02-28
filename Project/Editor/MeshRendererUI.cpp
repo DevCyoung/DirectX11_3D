@@ -1,7 +1,9 @@
 ﻿# include "pch.h"
 #include <Engine/MeshRenderer.h>
 #include "MaterialUI.h"
-#include <Engine\Material.h>
+#include <Engine/Material.h>
+#include <Engine\Mesh.h>
+
 class RenderComponent;
 void RenderComponentUI(RenderComponent* component);
 
@@ -10,6 +12,7 @@ void MeshRendererUI(MeshRenderer* component)
 {
 	RenderComponentUI(component);
 
+	//Material
 	for (int i = 0; i < component->GetMaterialCount(); ++i)
 	{
 		Material* material = component->GetMaterial(i);
@@ -29,6 +32,24 @@ void MeshRendererUI(MeshRenderer* component)
 		{
 			MaterialUI(component->GetMaterial(i));
 		}		
+	}
+
+	//Mesh
+	Mesh* mesh = component->GetMesh();
+	std::vector<tMTBone>* bones = mesh->GetBones();
+
+	if (ImGui::CollapsingHeader("BonData"))
+	{
+		for (int i = 0; i < bones->size(); ++i)
+		{
+			const tMTBone& bone = bones->at(i);
+			std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
+			if (ImGui::TreeNode(bonName.c_str()))
+			{				
+				ImGui::TreePop();
+			}
+
+		}
 	}
 }
 	

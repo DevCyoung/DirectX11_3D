@@ -81,7 +81,7 @@ HRESULT MeshData::Load(const std::wstring& filePath)
 	if (bMesh)
 	{
 		mMesh = gResourceManager->FindAndLoadOrNull<Mesh>(meshPath);
-	}	
+	}
 
 	UINT size;
 	fread(&size, sizeof(UINT), 1, file);
@@ -170,31 +170,44 @@ HRESULT MeshData::Save(const std::wstring& relativePath)
 
 GameObject* MeshData::Instantiate()
 {
-	GameObject* rootObj = new GameObject();
-
-	for (MeshData* childMeshData : mChildMeshDatas)
+	GameObject* root = new GameObject();
 	{
-		GameObject* childObj = childMeshData->Instantiate();
-		childObj->SetName(childMeshData->GetMeshDataName());
-		childObj->AddComponent<MeshRenderer>();
+		//GameObject* meshRoot = new GameObject();
+		//std::vector<tMTBone>* bones = mMesh->GetBones();
 
-		childObj->GetComponent<MeshRenderer>()->SetMesh(childMeshData->mMesh);
-
-		for (int i = 0; i < childMeshData->mMaterials.size(); ++i)
-		{
-			childObj->GetComponent<MeshRenderer>()->SetMaterial(childMeshData->mMaterials[i], i);
-		}
-
-		if (childMeshData->mMesh->IsAnimMesh())
-		{
-			childObj->AddComponent<Animator3D>();
-
-			childObj->GetComponent<Animator3D>()->SetBones(childMeshData->mMesh->GetBones());
-			childObj->GetComponent<Animator3D>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
-		}
-
-		rootObj->SetChild(childObj);
 	}
 
-	return rootObj;
+	{
+		GameObject* meshRoot = new GameObject();
+		meshRoot->SetName(L"MeshRoot");
+
+		for (MeshData* childMeshData : mChildMeshDatas)
+		{
+			GameObject* childObj = new GameObject();
+			childObj->SetName(childMeshData->GetMeshDataName());
+			childObj->AddComponent<MeshRenderer>();
+
+			childObj->GetComponent<MeshRenderer>()->SetMesh(childMeshData->mMesh);
+
+			for (int i = 0; i < childMeshData->mMaterials.size(); ++i)
+			{
+				childObj->GetComponent<MeshRenderer>()->SetMaterial(childMeshData->mMaterials[i], i);
+			}
+
+			if (childMeshData->mMesh->IsAnimMesh())
+			{
+				childObj->AddComponent<Animator3D>();
+
+				childObj->GetComponent<Animator3D>()->SetBones(childMeshData->mMesh->GetBones());
+				childObj->GetComponent<Animator3D>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
+			}
+
+			meshRoot->SetChild(childObj);
+		}
+
+		root->SetChild(meshRoot);
+	}
+
+
+	return root;
 }

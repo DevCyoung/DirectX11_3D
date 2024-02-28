@@ -114,7 +114,7 @@ void Engine::render()
 				mRenderTargetHeight,
 				mGraphicDevice->GetRenderTargetViewAddressOf(),
 				mGraphicDevice->GetDepthStencilView());		
-
+	
 	//FLOAT backgroundColor[4] = { 1.0f, 0.0f, 1.0f, 0.1f };
 	//gGraphicDevice->ClearRenderTarget(
 	//	mGraphicDevice->GetRenderTargetViewAddressOf(),

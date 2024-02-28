@@ -133,8 +133,8 @@ public:
 
 	std::vector<tAnimClip*>				m_vecAnimClip;
 
-	fbxsdk::FbxManager* mFbxManager;
-	fbxsdk::FbxIOSettings* mIos;
+	fbxsdk::FbxManager*					mFbxManager;
+	fbxsdk::FbxIOSettings*				mIos;
 	//fbxsdk::FbxImporter* mImpoter;
 
 	std::vector<tContainer>				mVecContainer;

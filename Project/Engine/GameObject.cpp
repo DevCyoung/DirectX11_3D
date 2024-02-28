@@ -10,6 +10,7 @@ GameObject::GameObject()
 	, mLayerType(eLayerType::Default)
 	, mState(eState::Active)
 	, mParent(nullptr)
+	, mChildObjects()
 	, mGameSystem(nullptr)
 {
 	AddComponent<Transform>();
@@ -19,6 +20,7 @@ GameObject::~GameObject()
 {
 	mem::del::DeleteVectorElements(&mScriptComponents);
 	mem::del::DeletePointerArrayElements(&mEngineComponents);
+	mem::del::DeleteVectorElements(&mChildObjects);
 }
 
 GameObject::GameObject(const GameObject& other)
@@ -27,9 +29,16 @@ GameObject::GameObject(const GameObject& other)
 	, mLayerType(other.mLayerType)
 	, mState(other.mState)
 	, mParent(other.mParent)
+	, mChildObjects()
 	, mGameSystem(other.mGameSystem)
 {
 	//AddComponent<Transform>();
+
+	for (const GameObject* obj : other.mChildObjects)
+	{
+		GameObject* copyObject = new GameObject(*obj);
+		mChildObjects.push_back(copyObject);
+	}
 
 	for (UINT i = 0; i < static_cast<UINT>(eComponentType::End); i++)
 	{
@@ -77,6 +86,11 @@ void GameObject::update()
 	{
 		script->update();
 	}
+
+	for (GameObject* childobj : mChildObjects)
+	{
+		childobj->update();
+	}
 }
 
 void GameObject::fixedUpdate()
@@ -92,6 +106,11 @@ void GameObject::fixedUpdate()
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->fixedUpdate();
+	}
+
+	for (GameObject* childobj : mChildObjects)
+	{
+		childobj->fixedUpdate();
 	}
 }
 
@@ -110,6 +129,11 @@ void GameObject::lateUpdate()
 	{
 		script->lateUpdate();
 	}
+
+	for (GameObject* childobj : mChildObjects)
+	{
+		childobj->lateUpdate();
+	}
 }
 
 
@@ -127,6 +151,65 @@ void GameObject::lastUpdate()
 	{
 		script->lastUpdate();
 	}
+
+	for (GameObject* childobj : mChildObjects)
+	{
+		childobj->lastUpdate();
+	}
+}
+
+GameObject* GameObject::FindChidOrNull(const std::wstring& name)
+{
+	GameObject* obj = nullptr;
+
+	for (GameObject* child : mChildObjects)
+	{
+		if (child->GetName() == name)
+		{
+			obj = child;			
+		}
+		else
+		{
+			obj = obj->FindChidOrNull(name);
+		}
+
+		if (obj)
+		{
+			break;
+		}
+	}
+
+	return obj;
+}
+
+GameObject* GameObject::FindChidOrNull(GameObject* childObj)
+{
+	GameObject* obj = nullptr;
+
+	for (GameObject* child : mChildObjects)
+	{
+		if (child == childObj)
+		{
+			obj = child;
+		}
+		else
+		{
+			obj = child->FindChidOrNull(childObj);
+		}
+
+		if (obj)
+		{
+			break;
+		}
+	}
+
+	return obj;
+}
+
+void GameObject::SetChild(GameObject* const childObj)
+{	
+	Assert(!FindChidOrNull(childObj), ASSERT_MSG_NOT_NULL);
+	mChildObjects.push_back(childObj);
 }
 
 void GameObject::AddComponent(ScriptComponent* const scriptComponent)

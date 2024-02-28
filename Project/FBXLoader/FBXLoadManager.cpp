@@ -49,6 +49,11 @@ void FBXLoadManager::Load(const std::wstring& wFilePath)
 		//bon
 		loadSkeleton(fbxScene->GetRootNode());
 
+		if (!m_vecBone.empty())
+		{
+
+		}
+
 		//animation names
 		fbxScene->FillAnimStackNameArray(m_arrAnimName);
 
@@ -105,10 +110,9 @@ void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbx
 			FbxAMatrix matGlobal = fbxNode->EvaluateGlobalTransform();
 			matGlobal.GetR();
 
-			FbxMesh* pMesh = fbxNode->GetMesh();
-			Assert(pMesh, ASSERT_MSG_NULL);
+			FbxMesh* pMesh = fbxNode->GetMesh();			
 			std::string debug_name = pMesh->GetName();
-			lodeMesh(fbxScene, pMesh);			
+			lodeMesh(fbxScene, pMesh);
 		}
 	}
 
@@ -457,6 +461,12 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 
 					// 현재 본 인덱스를 얻어온다.
 					std::string boneName = pCluster->GetLink()->GetName();
+					bool bBonName = boneName == "Bip002 Pelvis";
+					if (bBonName)
+					{
+						(void)boneName;
+						boneName = "Bip002 Pelvis";
+					}
 					int iBoneIdx = FindBoneIndex(boneName);
 					if (-1 == iBoneIdx)
 						assert(NULL);
@@ -468,10 +478,13 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 
 					// Bone 의 OffSet 행렬 구한다.
 					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					if (iClusterCount != 3)
+					{
+					}					
 
-					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
-						pCluster, matNodeTransform, iBoneIdx, _pContainer);
+						// Bone KeyFrame 별 행렬을 구한다.
+						LoadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+							pCluster, matNodeTransform, iBoneIdx, _pContainer);
 				}
 			}
 		}

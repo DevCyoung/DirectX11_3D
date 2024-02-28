@@ -49,8 +49,15 @@ public:
 	GameObject* GetParentOrNull() const { return mParent; }
 	GameSystem* GetGameSystem() const { return mGameSystem; }
 
+	GameObject* FindChidOrNull(const std::wstring& name);
+	GameObject* FindChidOrNull(GameObject* childObj);
+
+	const std::vector<GameObject*>& GetChildObjects() const { return mChildObjects; }
+
 	//FIXME:
-	void SetParent(GameObject* const parent) { mParent = parent; }
+	//void SetParent(GameObject* const parent) { mParent = parent; }
+
+	void SetChild(GameObject* const childObj);
 
 	template<typename T>
 		requires (is_component<T>::value)
@@ -75,6 +82,7 @@ private:
 	eLayerType mLayerType;
 	eState mState;
 	GameObject* mParent;
+	std::vector<GameObject*> mChildObjects;
 	GameSystem* mGameSystem;
 };
 

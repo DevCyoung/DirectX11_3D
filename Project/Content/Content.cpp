@@ -41,12 +41,12 @@ Content::Content()
 
 	//MeshData Object
 	{
-		std::vector<MeshData*> meshDatas = FBXLoader::FbxInstantiate(L"\\Fbx\\coba.fbx");
+		std::vector<MeshData*> meshDatas = FBXLoader::FbxInstantiate(L"\\Fbx\\hero.fbx");
 
 		for (int i = 0; i < meshDatas.size(); ++i)
 		{
 			GameObject* obj = meshDatas[i]->Instantiate();
-			obj->GetComponent<Transform>()->SetPosition(100.f, 300.f, 0.f);
+			obj->GetComponent<Transform>()->SetPosition(0.f, 0.f, 0.f);
 			obj->SetName(L"Dragon");
 			Vector3 rotation = obj->GetComponent<Transform>()->GetRotation();
 			obj->GetComponent<Transform>()->SetRotation(rotation);
@@ -62,6 +62,52 @@ Content::Content()
 		obj->SetName(L"Light3D");
 
 		testScene->AddGameObject(obj, eLayerType::Light);
+	}
+
+	//Hirearchy Test
+	{
+		GameObject* parent = new GameObject();
+		parent->SetName(L"parent");
+
+		{
+			GameObject* obj = new GameObject();
+			//obj->AddComponent<Light3D>();
+			obj->SetName(L"Test");
+			{
+				GameObject* childObj = new GameObject();
+				childObj->SetName(L"childObj1");
+				obj->SetChild(childObj);
+			}
+
+			{
+				GameObject* childObj = new GameObject();
+				childObj->SetName(L"childObj2");
+				obj->SetChild(childObj);
+			}
+
+			parent->SetChild(obj);
+		}
+
+		{
+			GameObject* obj = new GameObject();
+			//obj->AddComponent<Light3D>();
+			obj->SetName(L"Test");
+			{
+				GameObject* childObj = new GameObject();
+				childObj->SetName(L"childObj1");
+				obj->SetChild(childObj);
+			}
+
+			{
+				GameObject* childObj = new GameObject();
+				childObj->SetName(L"childObj2");
+				obj->SetChild(childObj);
+			}
+
+			parent->SetChild(obj);
+		}
+
+		testScene->AddGameObject(parent, eLayerType::Default);
 	}
 
 	SceneManager::GetInstance()->LoadScene(testScene);

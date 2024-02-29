@@ -18,127 +18,97 @@ FBXLoadManager::~FBXLoadManager()
 	mIos->Destroy();
 
 	mFbxManager->Destroy();
-
-	//for (tAnimClip* m_vecAnimClip)
 }
 
 void FBXLoadManager::Load(const std::wstring& wFilePath)
 {
-	//장면가져오기
-	{
-		const std::string& FILE_PATH = std::string(wFilePath.cbegin(), wFilePath.cend()).c_str();
+	const std::string& FILE_PATH = std::string(wFilePath.cbegin(), wFilePath.cend());
+	FbxImporter* const imposter = FbxImporter::Create(mFbxManager, "");
+	Assert(imposter, ASSERT_MSG_NULL);
 
-		FbxImporter* const imposter = FbxImporter::Create(mFbxManager, "");
-		Assert(imposter, ASSERT_MSG_NULL);
+	bool bImportStatus = imposter->Initialize(FILE_PATH.c_str(), -1, mFbxManager->GetIOSettings());
+	Assert(bImportStatus, ASSERT_MSG_INVALID);
 
-		// Initialize the importer.
-		bool lImportStatus = imposter->Initialize(FILE_PATH.c_str(), -1, mFbxManager->GetIOSettings());
-		Assert(lImportStatus, ASSERT_MSG_INVALID);
+	FbxScene* const fbxScene = FbxScene::Create(mFbxManager, "");
+	Assert(fbxScene, ASSERT_MSG_NULL);
+	imposter->Import(fbxScene);
+	fbxScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
-		//장면 가져오기		
-		FbxScene* const fbxScene = FbxScene::Create(mFbxManager, "");
-		Assert(fbxScene, ASSERT_MSG_NULL);
-		imposter->Import(fbxScene);
+	mVecContainer.clear();
 
-		fbxScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
+	loadSkeleton(fbxScene->GetRootNode());
+	fbxScene->FillAnimStackNameArray(m_arrAnimName);
+	loadAnimationClip(fbxScene);
 
-		mVecContainer.clear();
+	//FbxPose* pose = 
 
-		//if (m_Animc)
+	triangulate(fbxScene->GetRootNode());
 
-		//bon
-		loadSkeleton(fbxScene->GetRootNode());
+	loadMeshDataFromNode(fbxScene, fbxScene->GetRootNode());
 
-		//animation names
-		fbxScene->FillAnimStackNameArray(m_arrAnimName);
-
-		loadAnimationClip(fbxScene);
-		//
-		////삼각화
-		triangulate(fbxScene->GetRootNode());
-		//
-		//// 메쉬 데이터 얻기
-		loadMeshDataFromNode(fbxScene, fbxScene->GetRootNode());
-		//
-		//loadTextrue();
-
-		imposter->Destroy();
-		fbxScene->Destroy();
-	}
-
-
+	imposter->Destroy();
+	fbxScene->Destroy();
 }
 
 void FBXLoadManager::Release()
-{	
-	for (tAnimClip* clip : m_vecAnimClip)
-	{
-		delete clip;
-	}
-
-	m_vecAnimClip.clear();
+{
+	mem::del::DeleteVectorElements(&m_vecAnimClip);
 
 	for (int i = 0; i < m_arrAnimName.GetCount(); ++i)
 	{
 		FbxString* takeName = m_arrAnimName.GetAt(i);
-		delete takeName;
+		DELETE_POINTER(takeName);
 	}
-
 	m_arrAnimName.Clear();
 }
 
 void FBXLoadManager::loadMeshDataFromNode(FbxScene* const fbxScene, FbxNode* fbxNode)
 {
 	// 노드의 메쉬정보 읽기
-	FbxNodeAttribute* pAttr = fbxNode->GetNodeAttribute();
-	if (pAttr)
+	FbxNodeAttribute* attribute = fbxNode->GetNodeAttribute();
+	if (attribute)
 	{
-		FbxNodeAttribute::EType ATB_TYPE = pAttr->GetAttributeType();
-		if (FbxNodeAttribute::eMesh == ATB_TYPE)
+		FbxNodeAttribute::EType ATTRIBUTE_TYPE = attribute->GetAttributeType();
+		if (FbxNodeAttribute::eMesh == ATTRIBUTE_TYPE)
 		{
 			FbxAMatrix matGlobal = fbxNode->EvaluateGlobalTransform();
 			matGlobal.GetR();
 
-			FbxMesh* pMesh = fbxNode->GetMesh();
-			std::string debug_name = pMesh->GetName();
-			lodeMesh(fbxScene, pMesh);
+			FbxMesh* fbxMesh = fbxNode->GetMesh();			
+			lodeMesh(fbxScene, fbxMesh);
 		}
 	}
 
 	// 해당 노드의 재질정보 읽기
-	const int MTRL_COUNT = fbxNode->GetMaterialCount();
-	for (int i = 0; i < MTRL_COUNT; ++i)
+	const int MATERIAL_COUNT = fbxNode->GetMaterialCount();
+	for (int i = 0; i < MATERIAL_COUNT; ++i)
 	{
-		FbxSurfaceMaterial* pMtrlSur = fbxNode->GetMaterial(i);
-		Assert(pMtrlSur, ASSERT_MSG_NULL);
-		if (!mVecContainer.empty())
+		FbxSurfaceMaterial* pMtrlSur = fbxNode->GetMaterial(i);		
+		if (!mVecContainer.empty()) 
+		{
 			lodeMaterial(pMtrlSur);
+		}			
 	}
 
 	// 자식 노드 정보 읽기
-	const int CHILD_COUNT = fbxNode->GetChildCount();
-	for (int i = 0; i < CHILD_COUNT; ++i)
+	const int CHILD_NODE_COUNT = fbxNode->GetChildCount();
+	for (int i = 0; i < CHILD_NODE_COUNT; ++i)
 	{
 		loadMeshDataFromNode(fbxScene, fbxNode->GetChild(i));
 	}
 }
 
 void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
-{
-	Assert(fbxScene, ASSERT_MSG_NULL);
-	Assert(FbxMesh, ASSERT_MSG_NULL);
-
+{	
 	mVecContainer.push_back(tContainer{});
 	tContainer& container = mVecContainer[mVecContainer.size() - 1];
 	const std::string& MESH_NAME = FbxMesh->GetName();
+
 	container.strName = std::wstring(MESH_NAME.begin(), MESH_NAME.end());
 	container.vecBone = m_vecOffsetBone;
-
 	const int VERTEX_COUNT = FbxMesh->GetControlPointsCount();
 	container.Resize(VERTEX_COUNT);
-
 	const FbxVector4* const P_VERTEX_POS_ARRAY = FbxMesh->GetControlPoints();
-
 	for (int i = 0; i < VERTEX_COUNT; ++i)
 	{
 		container.vecPos[i].x = static_cast<float>(P_VERTEX_POS_ARRAY[i].mData[0]);
@@ -146,20 +116,17 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 		container.vecPos[i].z = static_cast<float>(P_VERTEX_POS_ARRAY[i].mData[1]);
 	}
 
-
-
 	// 재질의 개수 ( ==> SubSet 개수 ==> Index Buffer Count)
-	const int MTRL_COUNT = FbxMesh->GetNode()->GetMaterialCount();
-	container.vecIdx.resize(MTRL_COUNT);
+	const int MATERIAL_COUNT = FbxMesh->GetNode()->GetMaterialCount();
+	container.vecIdx.resize(MATERIAL_COUNT);
 
 	// 정점 정보가 속한 subset 을 알기위해서...
-	FbxGeometryElementMaterial* mtrl = FbxMesh->GetElementMaterial();
+	FbxGeometryElementMaterial* GEMaterial = FbxMesh->GetElementMaterial();
 
 	// 폴리곤을 구성하는 정점 개수
 	const int POLY_SIZE = FbxMesh->GetPolygonSize(0);
 	if (3 != POLY_SIZE)
-	{
-		// Polygon 구성 정점이 3개가 아닌 경우
+	{		
 		Assert(false, ASSERT_MSG_INVALID);
 	}
 
@@ -182,13 +149,11 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 			++IndexIdx;
 		}
 
-
-		int iSubsetIdx = mtrl->GetIndexArray().GetAt(i);
-		container.vecIdx[iSubsetIdx].push_back(poly[0]);
-		container.vecIdx[iSubsetIdx].push_back(poly[2]);
-		container.vecIdx[iSubsetIdx].push_back(poly[1]);
+		const int SUB_SUB_IDX = GEMaterial->GetIndexArray().GetAt(i);
+		container.vecIdx[SUB_SUB_IDX].push_back(poly[0]);
+		container.vecIdx[SUB_SUB_IDX].push_back(poly[2]);
+		container.vecIdx[SUB_SUB_IDX].push_back(poly[1]);
 	}
-
 	loadAnimationData(fbxScene, FbxMesh, &container);
 }
 
@@ -251,43 +216,6 @@ std::wstring FBXLoadManager::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, c
 	}
 
 	return std::wstring(strName.begin(), strName.end());
-}
-
-DWORD SecondThread(PVOID pvParam)
-{
-	BYTE* pByte = reinterpret_cast<BYTE*>(pvParam);
-	FbxSkin* pSkin = (FbxSkin*)*(unsigned long long*)(pByte);
-	FbxScene* const fbxScene = (FbxScene*)*(unsigned long long*)(pByte + 8);
-	FbxMesh* _pMesh = (FbxMesh*)*(unsigned long long*)(pByte + 16);
-	tContainer* _pContainer = (tContainer*)*(unsigned long long*)(pByte + 24);
-	FBXLoadManager* manager = (FBXLoadManager*)*(unsigned long long*)(pByte + 32);
-	int idx = *(int*)(pByte + 40);
-
-
-	//FbxSkin* pSkin, FbxScene* const fbxScene, FbxMesh* _pMesh, tContainer* _pContainer, int idx
-	FbxCluster* pCluster = pSkin->GetCluster(idx);
-
-	if (!pCluster->GetLink())
-		return 0;
-
-	// 현재 본 인덱스를 얻어온다.
-	std::string boneName = pCluster->GetLink()->GetName();
-	int iBoneIdx = manager->findBoneIndex(boneName, _pContainer);
-	if (-1 == iBoneIdx)
-		assert(NULL);
-
-	FbxAMatrix matNodeTransform = manager->getTransform(_pMesh->GetNode());
-
-	// Weights And Indices 정보를 읽는다.
-	manager->loadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
-
-	// Bone 의 OffSet 행렬 구한다.
-	manager->loadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
-
-	// Bone KeyFrame 별 행렬을 구한다.
-	manager->loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
-		pCluster, matNodeTransform, iBoneIdx, _pContainer);
-	return 0;
 }
 
 void FBXLoadManager::lodeMaterial(FbxSurfaceMaterial* _pMtrlSur)
@@ -367,13 +295,10 @@ void FBXLoadManager::loadSkeletonRe(FbxNode* _pNode, int depth, int Idx, int par
 		if (AT_TYPE == FbxNodeAttribute::eSkeleton)
 		{
 			tBone bone = {};
-
-			std::string boneName = _pNode->GetName();
-
-			bone.boneName = std::wstring(boneName.begin(), boneName.end());
+			const std::string& BONE_NAME = _pNode->GetName();
+			bone.boneName = std::wstring(BONE_NAME.begin(), BONE_NAME.end());
 			bone.depth = depth++;
 			bone.parentIdx = parentIdx;
-
 			m_vecOffsetBone.push_back(bone);
 		}
 	}
@@ -399,7 +324,9 @@ void FBXLoadManager::loadAnimationClip(FbxScene* const fbxScene)
 
 
 		if (!pAnimStack)
+		{
 			continue;
+		}
 
 		tAnimClip* pAnimClip = new tAnimClip;
 
@@ -423,57 +350,90 @@ void FBXLoadManager::loadAnimationClip(FbxScene* const fbxScene)
 void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh, tContainer* _pContainer)
 {
 	// Animation Data 로드할 필요가 없음
-	int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
-	if (iSkinCount <= 0 || m_vecAnimClip.empty())
+	const int SKIN_COUNT = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
+	if (SKIN_COUNT <= 0 || m_vecAnimClip.empty())
 	{
 		return;
 	}
 	_pContainer->bAnimation = true;
+	FbxAMatrix geometryTransform = getGeometryTransformation(_pMesh->GetNode());
+
 
 	// Skin 개수만큼 반복을하며 읽는다.
 	// 바인드포즈는 메쉬마다 다르다.
-	for (int i = 0; i < iSkinCount; ++i)
+	// 보통 메쉬당 Deformer는 하나이다.
+	// cluster 가 joint 라고 생각할수있으나 진짜 joint 는 cluster에서 Link 를통해 정보들을 얻어온다.
+	for (int i = 0; i < SKIN_COUNT; ++i)
 	{
-		FbxSkin* pSkin = (FbxSkin*)_pMesh->GetDeformer(i, FbxDeformer::eSkin);
-		if (pSkin)
+		FbxSkin* const fbxSkin = (FbxSkin*)_pMesh->GetDeformer(i, FbxDeformer::eSkin);
+		Assert(fbxSkin, ASSERT_MSG_NULL);
+		const FbxSkin::EType FBX_SKIN_TYPE = fbxSkin->GetSkinningType();
+		if (FbxSkin::eRigid == FBX_SKIN_TYPE || FbxSkin::eLinear == FBX_SKIN_TYPE)
 		{
-			FbxSkin::EType eType = pSkin->GetSkinningType();
-			if (FbxSkin::eRigid == eType || FbxSkin::eLinear == eType)
+			// Cluster 를 얻어온다 Cluster == Joint == 관절			
+			const int CLUSTER_COUNT = fbxSkin->GetClusterCount();
+			for (int j = 0; j < CLUSTER_COUNT; ++j)
 			{
-				// Cluster 를 얻어온다
-				// Cluster == Joint == 관절
-				int iClusterCount = pSkin->GetClusterCount();
-				for (int j = 0; j < iClusterCount; ++j)
+				FbxCluster* const fbxCluster = fbxSkin->GetCluster(j);				
+				if (nullptr == fbxCluster) //클러스터가없는경우
 				{
-					FbxCluster* pCluster = pSkin->GetCluster(j);
-
-					if (!pCluster->GetLink())
-						continue;
-
-					// 현재 본 인덱스를 얻어온다.
-					std::string boneName = pCluster->GetLink()->GetName();
-					bool bBonName = boneName == "Bip002 Pelvis";
-					if (bBonName)
-					{
-						(void)boneName;
-						boneName = "Bip002 Pelvis";
-					}
-					int iBoneIdx = findBoneIndex(boneName, _pContainer);
-					if (-1 == iBoneIdx)
-						assert(NULL);
-
-					FbxAMatrix matNodeTransform = getTransform(_pMesh->GetNode());
-
-					// Weights And Indices 정보를 읽는다.
-					loadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
-
-					// Bone 의 OffSet 행렬 구한다.
-					loadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
-
-					// Bone KeyFrame 별 행렬을 구한다.
-					loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
-						pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					continue;
 				}
+				const std::string& BONE_NAME = fbxCluster->GetLink()->GetName();
+				const int BOND_IDX = findBoneIndex(BONE_NAME, _pContainer);
+				Assert(-1 != BOND_IDX, ASSERT_MSG_INVALID);
+
+				
+				{
+					FbxAMatrix transformMatrix;
+					FbxAMatrix transformLinkMatrix;
+					FbxAMatrix globalBindposeInverseMatrix;
+
+					fbxCluster->GetTransformMatrix(transformMatrix); // The transformation of the mesh at binding time
+					// The transformation of the cluster(joint) at binding time //from joint space to world space
+					fbxCluster->GetTransformLinkMatrix(transformLinkMatrix);					
+					globalBindposeInverseMatrix = transformLinkMatrix.Inverse() * transformMatrix * geometryTransform;
+
+					// Update the information in mSkeleton 
+					static std::set<int> idxes;
+					if (idxes.find(BOND_IDX) != idxes.end())
+					{
+						Assert(m_vecOffsetBone[BOND_IDX].globalBindposeInverse == globalBindposeInverseMatrix, ASSERT_MSG_INVALID);
+					}					
+					idxes.insert(BOND_IDX);
+
+					m_vecOffsetBone[BOND_IDX].globalBindposeInverse = globalBindposeInverseMatrix;
+					m_vecOffsetBone[BOND_IDX].node					= fbxCluster->GetLink();
+					//
+					//// Associate each joint with the control points it affects
+					//const int INDICES_COUNT = fbxCluster->GetControlPointIndicesCount();
+					//
+					//for (int i = 0; i < INDICES_COUNT; ++i)
+					//{
+					//	tWeightsAndIndices tWI = {};						 
+					//	tWI.iBoneIdx = BOND_IDX;
+					//	tWI.dWeight = fbxCluster->GetControlPointWeights()[i];
+					//	const int VERTEX_IDX = fbxCluster->GetControlPointIndices()[i];
+					//	_pContainer->vecWI[VERTEX_IDX].push_back(tWI);
+					//}
+				}
+						
+
+
+
+
+
+				FbxAMatrix matrixNodeTransform = getGeometryTransformation(_pMesh->GetNode());
+
+				// Weights And Indices 정보를 읽는다.
+				loadWeightsAndIndices(fbxCluster, BOND_IDX, _pContainer);
+
+				// Bone 의 OffSet 행렬 구한다.
+				loadOffsetMatrix(fbxCluster, matrixNodeTransform, BOND_IDX, _pContainer);
+
+				// Bone KeyFrame 별 행렬을 구한다.
+				loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+					fbxCluster, matrixNodeTransform, BOND_IDX, _pContainer);
 			}
 		}
 	}
@@ -539,7 +499,7 @@ void FBXLoadManager::loadOffsetMatrix(FbxCluster* _pCluster,
 	FbxAMatrix matOffset;
 	matOffset = matClusterLinkTrans.Inverse() * matClusterTrans * _matNodeTransform;
 	matOffset = matReflect * matOffset * matReflect;
-	
+
 	_pContainer->vecBone[_iBoneIdx].matOffset = matOffset;
 }
 
@@ -653,13 +613,13 @@ void FBXLoadManager::checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContai
 	}
 }
 
-FbxAMatrix FBXLoadManager::getTransform(FbxNode* _pNode)
+FbxAMatrix FBXLoadManager::getGeometryTransformation(FbxNode* _pNode)
 {
-	const FbxVector4 vT = _pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-	const FbxVector4 vR = _pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-	const FbxVector4 vS = _pNode->GetGeometricScaling(FbxNode::eSourcePivot);
+	const FbxVector4 T = _pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+	const FbxVector4 R = _pNode->GetGeometricRotation(FbxNode::eSourcePivot);
+	const FbxVector4 S = _pNode->GetGeometricScaling(FbxNode::eSourcePivot);
 
-	return FbxAMatrix(vT, vR, vS);
+	return FbxAMatrix(T, R, S);
 }
 
 void FBXLoadManager::getTangent(FbxMesh* _pMesh
@@ -792,3 +752,43 @@ void FBXLoadManager::getUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, 
 	_pContainer->vecUV[_iIdx].x = (float)vUV.mData[0];
 	_pContainer->vecUV[_iIdx].y = 1.f - (float)vUV.mData[1]; // fbx uv 좌표계는 좌하단이 0,0
 }
+#pragma region  SecondTread
+
+//DWORD SecondThread(PVOID pvParam)
+//{
+//	BYTE* pByte = reinterpret_cast<BYTE*>(pvParam);
+//	FbxSkin* pSkin = (FbxSkin*)*(unsigned long long*)(pByte);
+//	FbxScene* const fbxScene = (FbxScene*)*(unsigned long long*)(pByte + 8);
+//	FbxMesh* _pMesh = (FbxMesh*)*(unsigned long long*)(pByte + 16);
+//	tContainer* _pContainer = (tContainer*)*(unsigned long long*)(pByte + 24);
+//	FBXLoadManager* manager = (FBXLoadManager*)*(unsigned long long*)(pByte + 32);
+//	int idx = *(int*)(pByte + 40);
+//
+//
+//	//FbxSkin* pSkin, FbxScene* const fbxScene, FbxMesh* _pMesh, tContainer* _pContainer, int idx
+//	FbxCluster* pCluster = pSkin->GetCluster(idx);
+//
+//	if (!pCluster->GetLink())
+//		return 0;
+//
+//	// 현재 본 인덱스를 얻어온다.
+//	std::string boneName = pCluster->GetLink()->GetName();
+//	int iBoneIdx = manager->findBoneIndex(boneName, _pContainer);
+//	if (-1 == iBoneIdx)
+//		assert(NULL);
+//
+//	FbxAMatrix matNodeTransform = manager->getTransform(_pMesh->GetNode());
+//
+//	// Weights And Indices 정보를 읽는다.
+//	manager->loadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
+//
+//	// Bone 의 OffSet 행렬 구한다.
+//	manager->loadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+//
+//	// Bone KeyFrame 별 행렬을 구한다.
+//	manager->loadKeyframeTransform(fbxScene, _pMesh->GetNode(),
+//		pCluster, matNodeTransform, iBoneIdx, _pContainer);
+//	return 0;
+//}
+
+#pragma endregion

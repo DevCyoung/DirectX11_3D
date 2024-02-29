@@ -27,6 +27,8 @@ struct tBone
 	int						parentIdx;		// ºÎ¸ð Bone ÀÇ ÀÎµ¦½º
 	FbxAMatrix				matOffset;		// Offset Çà·Ä( -> »Ñ¸® -> Local)
 	FbxAMatrix				matBone;
+	FbxAMatrix				globalBindposeInverse;//±Û·Î¹ú ¿ªÇà·Ä
+	FbxNode*				node;
 	std::vector<tKeyFrame>	vecKeyFrame;
 };
 
@@ -109,7 +111,7 @@ public:
 		, int _iBoneIdx, tContainer* _pContainer);
 	void checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer);
 
-	FbxAMatrix getTransform(FbxNode* _pNode);
+	FbxAMatrix getGeometryTransformation(FbxNode* _pNode);
 
 	void getBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
 	void getTangent(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);

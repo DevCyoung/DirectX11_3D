@@ -223,6 +223,9 @@
     <Filter Include="Source\Loader">
       <UniqueIdentifier>{9a462464-9aa2-4de2-b5b8-02b586551f88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\03. Component\03. Render\Animation3DController">
+      <UniqueIdentifier>{ad53f6fb-6646-4235-833f-4e9dd1530ae2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -457,6 +460,9 @@
     <ClInclude Include="MeshData.h">
       <Filter>Source\06. Resource\09. MeshData</Filter>
     </ClInclude>
+    <ClInclude Include="Animation3DController.h">
+      <Filter>Source\03. Component\03. Render\Animation3DController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -660,6 +666,9 @@
     </ClCompile>
     <ClCompile Include="MeshData.cpp">
       <Filter>Source\06. Resource\09. MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3DController.cpp">
+      <Filter>Source\03. Component\03. Render\Animation3DController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

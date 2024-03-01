@@ -167,6 +167,7 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
   <ItemGroup>
     <ClInclude Include="Anim3DBuuferCopyCS.h" />
     <ClInclude Include="Animation2D.h" />
+    <ClInclude Include="Animation3DController.h" />
     <ClInclude Include="Animator2D.h">
       <SubType>
       </SubType>
@@ -289,6 +290,7 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
   <ItemGroup>
     <ClCompile Include="Anim3DBuuferCopyCS.cpp" />
     <ClCompile Include="Animation2D.cpp" />
+    <ClCompile Include="Animation3DController.cpp" />
     <ClCompile Include="Animator2D.cpp">
       <SubType>
       </SubType>

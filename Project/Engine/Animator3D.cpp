@@ -30,10 +30,7 @@ Animator3D::Animator3D()
 {
 	mAnimMatrixCS = 
 		static_cast<Anim3DBuuferCopyCS*>(gResourceManager->Find<ComputeShader>(L"Animation3DCS"));
-	Assert(mAnimMatrixCS, ASSERT_MSG_NULL);
-
-	mSBBoneFinalBuffer =
-		new StructuredBuffer(16, 1, nullptr);
+	mSBBoneFinalBuffer = new StructuredBuffer(16, 1, nullptr);
 }
 
 Animator3D::~Animator3D()
@@ -117,7 +114,6 @@ void Animator3D::ClearData()
 		pMtrl->SetAnim3D(false); // Animation Mesh 알리기
 		pMtrl->SetBoneCount(0);
 	}
-
 }
 
 void Animator3D::update()
@@ -127,6 +123,7 @@ void Animator3D::update()
 void Animator3D::lateUpdate()
 {
 	m_dCurTime = 0.f;
+
 	// 현재 재생중인 Clip 의 시간을 진행한다.
 	m_vecClipUpdateTime[m_iCurClip] += gDeltaTime;
 
@@ -158,4 +155,9 @@ void Animator3D::lateUpdate()
 
 	// 컴퓨트 쉐이더 연산여부
 	m_bFinalMatUpdate = false;
+}
+
+void Animator3D::Play(const std::wstring& animationName)
+{
+	(void)animationName;
 }

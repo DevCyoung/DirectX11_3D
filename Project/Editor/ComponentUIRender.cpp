@@ -5,6 +5,8 @@
 #include <Content/EnumScriptComponent.h>
 class Component;
 void ComponentUI(Component* component);
+class Animation3DController;
+void Animation3DControllerUI(Animation3DController* component);
 class Animator3D;
 void Animator3DUI(Animator3D* component);
 class AudioListener;
@@ -46,6 +48,9 @@ void ComponentUIRender(Component* component)
 {
 	switch (component->GetType())
 	{
+	case eComponentType::Animation3DController:
+		Animation3DControllerUI((Animation3DController*)component);
+		break;
 	case eComponentType::Animator3D:
 		Animator3DUI((Animator3D*)component);
 		break;

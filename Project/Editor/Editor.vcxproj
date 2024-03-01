@@ -124,6 +124,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -146,6 +147,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -189,6 +191,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AlphaHelper.cpp" />
+    <ClCompile Include="Animation3DControllerUI.cpp" />
     <ClCompile Include="Animator2DUI.cpp" />
     <ClCompile Include="Animator3DUI.cpp" />
     <ClCompile Include="AudioListenerUI.cpp" />

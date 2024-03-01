@@ -326,5 +326,8 @@
     <ClCompile Include="EditorResourceLoader.cpp">
       <Filter>Source\Loader</Filter>
     </ClCompile>
+    <ClCompile Include="Animation3DControllerUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

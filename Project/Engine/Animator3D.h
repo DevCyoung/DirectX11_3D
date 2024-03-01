@@ -42,7 +42,9 @@ public:
 
     void ClearData();
     virtual void update() override;
-    virtual void lateUpdate() override;    
+    virtual void lateUpdate() override;
+
+    void Play(const std::wstring& animationName);
 
 public:
     std::vector<tMTBone>*           mBones;

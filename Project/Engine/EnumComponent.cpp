@@ -2,6 +2,7 @@
 #include "EnumComponent.h"
 
 #include "Transform.h"
+#include "Animation3DController.h"
 #include "Animator2D.h"
 #include "Animator3D.h"
 #include "AudioListener.h"
@@ -22,6 +23,7 @@
 static constexpr const wchar_t* const ComponentNames[static_cast<UINT>(eComponentType::End)]
 {
 	L"Transform",
+	L"Animation3DController",
 	L"Animator2D",
 	L"Animator3D",
 	L"AudioListener",
@@ -52,6 +54,8 @@ Component* CreateComponentByName(const std::wstring& componentName)
 
 	if (L"Transform" == componentName)
 		component = new Transform;
+	else if (L"Animation3DController" == componentName)
+		component = new Animation3DController;
 	else if (L"Animator2D" == componentName)
 		component = new Animator2D;
 	else if (L"Animator3D" == componentName)
@@ -97,6 +101,9 @@ Component* CreateComponentByEnum(const eComponentType type)
 	{
 	case eComponentType::Transform:
 		component = new Transform;
+		break;
+	case eComponentType::Animation3DController:
+		component = new Animation3DController;
 		break;
 	case eComponentType::Animator2D:
 		component = new Animator2D;

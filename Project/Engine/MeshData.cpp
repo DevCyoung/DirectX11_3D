@@ -25,6 +25,7 @@
 #include "GameObject.h"
 #include "PathManager.h"
 #include  <Helper\FileHelper.h>
+#include "Animation3DController.h"
 MeshData::MeshData()
 	: Resource(eResourceType::MeshData)
 	, mMesh(nullptr)
@@ -171,10 +172,8 @@ HRESULT MeshData::Save(const std::wstring& relativePath)
 GameObject* MeshData::Instantiate()
 {
 	GameObject* root = new GameObject();
-	{
-		//GameObject* meshRoot = new GameObject();
-		//std::vector<tMTBone>* bones = mMesh->GetBones();
 
+	{		
 	}
 
 	{
@@ -188,7 +187,6 @@ GameObject* MeshData::Instantiate()
 			childObj->AddComponent<MeshRenderer>();
 
 			childObj->GetComponent<MeshRenderer>()->SetMesh(childMeshData->mMesh);
-
 			for (int i = 0; i < childMeshData->mMaterials.size(); ++i)
 			{
 				childObj->GetComponent<MeshRenderer>()->SetMaterial(childMeshData->mMaterials[i], i);
@@ -196,10 +194,16 @@ GameObject* MeshData::Instantiate()
 
 			if (childMeshData->mMesh->IsAnimMesh())
 			{
-				childObj->AddComponent<Animator3D>();
+				if (!root->GetComponentOrNull<Animation3DController>())
+				{					
+					root->AddComponent<Animation3DController>();
+				}
 
+				childObj->AddComponent<Animator3D>();
 				childObj->GetComponent<Animator3D>()->SetBones(childMeshData->mMesh->GetBones());
 				childObj->GetComponent<Animator3D>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
+
+				root->GetComponent<Animation3DController>()->AddAnimator3D(childObj->GetComponent<Animator3D>());
 			}
 
 			meshRoot->SetChild(childObj);

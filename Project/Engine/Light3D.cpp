@@ -4,6 +4,11 @@
 #include "Engine.h"
 #include "GraphicDeviceDx11.h"
 #include  "Transform.h"
+#include "SceneManager.h"
+#include "GameSystem.h"
+#include "RenderTargetRenderer.h"
+#include "DebugRenderer2D.h"
+
 Light3D::Light3D()
 	: Component(eComponentType::Light3D)
 	, mLightInfo{}
@@ -26,7 +31,7 @@ void Light3D::initialize()
 }
 
 void Light3D::update()
-{
+{	
 }
 
 void Light3D::lateUpdate()
@@ -38,4 +43,7 @@ void Light3D::lateUpdate()
 
 	gGraphicDevice->PassCB(eCBType::Light3D, sizeof(mLightInfo), &mLightInfo);
 	gGraphicDevice->BindCBAllShader(eCBType::Light3D);
+
+	Matrix word = GetComponent<Transform>()->GetWorldMatrix();
+	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D( word, 0 );
 }

@@ -82,9 +82,9 @@ private:
 
 	std::vector<tIndexInfo> mIndexBuffers;
 
-	UINT*		mIndexesData;
-	size_t*		mIndexCounts;
-	size_t		mIndexesCount;
+	UINT*						mIndexesData;
+	size_t*						mIndexCounts;
+	size_t						mIndexesCount;
 
 
 public:

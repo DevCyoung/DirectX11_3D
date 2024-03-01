@@ -21,6 +21,7 @@
 #include <Engine/AudioSource.h>
 #include <Engine/AudioListener.h>
 #include <Engine/AudioClip.h>
+#include <Engine/MeshRenderer.h>
 
 
 //Script Component

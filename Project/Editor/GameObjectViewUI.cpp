@@ -33,27 +33,41 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 		{
 			if (ImGui::IsItemClicked())
 			{
-				ImGui::SetMouseCursor(0);
-				mSelectedGameObject = gameObject;				
+				//ImGui::SetMouseCursor(0);
+				mSelectedGameObject = gameObject;
 			}
 
 			for (GameObject* childObj : childObjects)
 			{
 				popUpView(childObj);
 			}
+
+			popEvent(gameObject);
 			ImGui::TreePop();
 		}
-
-
 	}	
 	else
 	{
 		ImGui::Bullet();
 		if (ImGui::Selectable(itemName.c_str(), false))
 		{
-			ImGui::SetMouseCursor(0);
+			//ImGui::SetMouseCursor(0);			
 			mSelectedGameObject = gameObject;
 		}
+
+		popEvent(gameObject);
+	}
+
+	//popEvent(gameObject);
+}
+
+void GameObjectViewUI::popEvent(GameObject* gameObject)
+{	
+	std::string name = std::string(gameObject->GetName().begin(), gameObject->GetName().end());
+	
+	if (!ImGui::IsItemHovered())
+	{
+		return;
 	}
 
 	if (ImGui::BeginPopupContextItem())
@@ -64,8 +78,8 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 		if (ImGui::Button("Close"))
 			ImGui::CloseCurrentPopup();
 		ImGui::EndPopup();
-	}
-	ImGui::SetItemTooltip(itemName.c_str());
+	}	
+	ImGui::SetItemTooltip(name.c_str());
 }
 
 void GameObjectViewUI::drawForm()

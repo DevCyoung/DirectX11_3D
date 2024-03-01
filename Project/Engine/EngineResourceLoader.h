@@ -11,7 +11,7 @@ private:
 	EngineResourceLoader& operator=(const EngineResourceLoader&) = delete;
 
 	static void loadResource();
-
+	static void loadMaterial();
 	static void loadShader();
 	static void loadComputeShader();
 	static void loadMesh();

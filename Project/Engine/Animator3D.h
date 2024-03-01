@@ -46,6 +46,9 @@ public:
 
     void Play(const std::wstring& animationName);
 
+    int GetCurFrameIdx() { return mFrameIdx; }
+
+    const std::vector<tMTBone>* GetBones() { return mBones; }
 public:
     std::vector<tMTBone>*           mBones;
     std::vector<tMTAnimClip>*       m_pVecClip;
@@ -54,13 +57,13 @@ public:
     std::vector<Matrix>				m_vecFinalBoneMat;      // 텍스쳐에 전달할 최종 행렬정보
     int							    m_iFrameCount;          // 30
     int							    m_iCurClip;             // 클립 인덱스	
-    int							    mFrameIdx;            // 클립의 현재 프레임
-    int							    mNextFrameIdx;        // 클립의 다음 프레임
-    float						    mRatio;	            // 프레임 사이 비율
+    int							    mFrameIdx;              // 클립의 현재 프레임
+    int							    mNextFrameIdx;          // 클립의 다음 프레임
+    float						    mRatio;	                // 프레임 사이 비율
     double						    m_dCurTime;
     bool						    m_bFinalMatUpdate;      // 최종행렬 연산 수행여부
 
-    StructuredBuffer*               mSBBoneFinalBuffer;  // 특정 프레임의 최종 행렬
+    StructuredBuffer*               mSBBoneFinalBuffer;     // 특정 프레임의 최종 행렬
     Anim3DBuuferCopyCS*             mAnimMatrixCS;
 };
 

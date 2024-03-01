@@ -177,12 +177,13 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 
 			renderTargetTexture->Release();
 			renderTargetTexture = nullptr;
-		}
+		}		
+	}
 
-		if (mbDebugRender)
-		{
-			mDebugRenderer->render(P_MAIN_CAMERA);
-		}
+	const Camera* const P_EDITOR_CAMERA = mCameras[static_cast<UINT>(eCameraPriorityType::Editor)];
+	if (mCameras[static_cast<UINT>(eCameraPriorityType::Editor)] && mbDebugRender)
+	{
+		mDebugRenderer->render(P_EDITOR_CAMERA);
 	}
 }
 

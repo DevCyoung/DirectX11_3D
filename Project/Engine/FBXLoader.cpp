@@ -135,6 +135,7 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 		return resultMeshData;
 	}
 
+	//뼈마다 n초뒤에 자신의 절대위치를 전부 담고있다
 	std::vector<tBone> vecBone = container.vecBone;
 	UINT iFrameCount = 0;
 	for (UINT i = 0; i < vecBone.size(); ++i)
@@ -201,8 +202,10 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 
 		for (size_t i = 0; i < mesh->m_vecBones.size(); ++i)
 		{
+			//Bind Pose Matrix
 			vecOffset.push_back(mesh->m_vecBones[i].matOffset);
 
+			//해당 Bone의 모든 0~끝까지 모든 프레임에서의 글로벌위치
 			for (size_t j = 0; j < mesh->m_vecBones[i].vecKeyFrame.size(); ++j)
 			{
 				vecFrameTrans[(UINT)mesh->m_vecBones.size() * j + i]
@@ -215,7 +218,7 @@ MeshData* FBXLoader::loadContainer(const tContainer& container)
 					, mesh->m_vecBones[i].vecKeyFrame[j].qRot };
 			}
 		}
-
+		//Bind Pose
 		mesh->m_pBoneOffset = new StructuredBuffer(eSBType::BoneOffset,
 			eSRVTpye::BoneOffset,
 			sizeof(Matrix),

@@ -17,6 +17,17 @@ void EngineResourceLoader::loadResource()
 	loadShader();
 	loadComputeShader();
 	loadTexture();
+	loadMaterial();
+}
+
+void EngineResourceLoader::loadMaterial()
+{
+	{
+		Material* mat = new Material();
+		mat->SetShader(gResourceManager->Find<Shader>(L"Std3D"));		
+		gResourceManager->Insert(L"Std3DMat", mat);
+	}	
+
 }
 
 void EngineResourceLoader::loadMesh()

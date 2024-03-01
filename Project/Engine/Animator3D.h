@@ -7,10 +7,13 @@ REGISTER_COMPONENT_TYPE(Animator3D);
 class StructuredBuffer;
 class Mesh;
 class Anim3DBuuferCopyCS;
+class Animation3DController;
 
 class Animator3D : public Component
 {
+
 public:
+    friend class Animation3DController;
 	Animator3D();
 	virtual ~Animator3D();
 	Animator3D(const Animator3D& other);
@@ -46,7 +49,10 @@ public:
 
     void Play(const std::wstring& animationName);
 
+    float GetRatio() { return mRatio; }
+
     int GetCurFrameIdx() { return mFrameIdx; }
+    void SetController(Animation3DController* const controller) { mController = controller; }
 
     const std::vector<tMTBone>* GetBones() { return mBones; }
 public:
@@ -65,5 +71,7 @@ public:
 
     StructuredBuffer*               mSBBoneFinalBuffer;     // 특정 프레임의 최종 행렬
     Anim3DBuuferCopyCS*             mAnimMatrixCS;
+
+    Animation3DController*          mController;
 };
 

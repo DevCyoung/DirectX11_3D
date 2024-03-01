@@ -201,7 +201,7 @@ GameObject* MeshData::Instantiate()
 				childObj->GetComponent<Animator3D>()->SetBones(childMeshData->mMesh->GetBones());
 				childObj->GetComponent<Animator3D>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
 
-				root->GetComponent<Animation3DController>()->AddAnimator3D(childObj->GetComponent<Animator3D>());
+				root->GetComponent<Animation3DController>()->AddAnimator3D(childObj->GetComponent<Animator3D>());				
 			}
 
 			meshRoot->SetChild(childObj);

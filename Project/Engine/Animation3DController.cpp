@@ -3,6 +3,7 @@
 #include "Animator3D.h"
 Animation3DController::Animation3DController()
 	: Component(eComponentType::Animation3DController)
+	, mbStop(false)
 {
 }
 

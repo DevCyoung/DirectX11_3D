@@ -1,5 +1,11 @@
 ﻿# include "pch.h"
 #include <Engine/Animator3D.h>
+#include <Engine/SceneManager.h>
+#include <Engine/GameSystem.h>
+#include <Engine/RenderTargetRenderer.h>
+#include <Engine/DebugRenderer2D.h>
+#include <Engine/Transform.h>
+
 class RenderComponent;
 void ComponentUI(Component* component);
 
@@ -69,8 +75,27 @@ void Animator3DUI(Animator3D* component)
 
 				}
 			}
+			Matrix worldMatrix = component->GetComponent<Transform>()->GetWorldMatrix();
+			float ratio = component->GetRatio();
 
 			tMTKeyFrame key = bone.vecKeyFrame[curFrame];
+			tMTKeyFrame nextKey = bone.vecKeyFrame[(curFrame + 1) % bone.vecKeyFrame.size()];
+
+			Quaternion qt = Quaternion(key.qRot.x, key.qRot.y, key.qRot.z, key.qRot.w);
+			Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);			
+
+			Vector3 pos		=	Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
+			Vector3 scale	=	Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
+												
+			
+			Matrix scaleMatrix = Matrix::CreateScale(scale);
+			Matrix rotationMatrix = XMMatrixRotationQuaternion(qt);
+			Matrix transMatrix = Matrix::CreateTranslation(pos);			
+			scaleMatrix._11 *= 2;	
+			
+			worldMatrix = scaleMatrix * rotationMatrix * transMatrix * worldMatrix;
+			gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D(worldMatrix, 0);
+
 			ImGui::InputFloat3("T", &key.vTranslate.x);
 			ImGui::InputFloat3("S", &key.vScale.x);
 			ImGui::InputFloat4("Q", &key.qRot.x);

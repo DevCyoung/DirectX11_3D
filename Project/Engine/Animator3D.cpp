@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "StructuredBuffer.h"
 #include "TimeManager.h"
+#include "Animation3DController.h"
 
 Animator3D::Animator3D()
 	: Component(eComponentType::Animator3D)
@@ -27,6 +28,7 @@ Animator3D::Animator3D()
 	, m_bFinalMatUpdate(false)
 	, mSBBoneFinalBuffer(nullptr)
 	, mAnimMatrixCS(nullptr)
+	, mController(nullptr)
 {
 	mAnimMatrixCS = 
 		static_cast<Anim3DBuuferCopyCS*>(gResourceManager->Find<ComputeShader>(L"Animation3DCS"));
@@ -122,10 +124,15 @@ void Animator3D::update()
 
 void Animator3D::lateUpdate()
 {
+
 	m_dCurTime = 0.f;
 
 	// 현재 재생중인 Clip 의 시간을 진행한다.
-	m_vecClipUpdateTime[m_iCurClip] += gDeltaTime;
+	if (!mController->IsStop())
+	{
+		m_vecClipUpdateTime[m_iCurClip] += gDeltaTime;
+	}	
+
 
 	if (m_vecClipUpdateTime[m_iCurClip] >= m_pVecClip->at(m_iCurClip).dTimeLength)
 	{

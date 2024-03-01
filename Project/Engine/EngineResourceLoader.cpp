@@ -21,6 +21,9 @@ void EngineResourceLoader::loadResource()
 
 void EngineResourceLoader::loadMesh()
 {
+//2D
+#pragma region 2DMesh
+
 	///////
 	//2D///
 	//////
@@ -221,8 +224,10 @@ void EngineResourceLoader::loadMesh()
 			new Mesh(vertexArray, VERTEX_COUNT, sizeof(tVertex),
 				indexes.data(), indexes.size(), sizeof(UINT)));
 	}
+#pragma endregion
 
-
+//3D
+#pragma region Rect
 	///////
 	//3D///
 	//////
@@ -286,25 +291,176 @@ void EngineResourceLoader::loadMesh()
 		gResourceManager->Insert(L"Panel",
 			new Mesh(vertexArray, VERTEX_COUNT, sizeof(tVertex),
 				indexes.data(), indexes.size(), sizeof(UINT)));
-
-		//pMesh = new CMesh(true);
-		//pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-		//AddRes(L"RectMesh", pMesh);
-
-		//vecIdx.clear();
-		//vecIdx.push_back(0);
-		//vecIdx.push_back(1);
-		//vecIdx.push_back(2);
-		//vecIdx.push_back(3);
-		//vecIdx.push_back(0);
-
-		//pMesh = new CMesh(true);
-		//pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-		//AddRes(L"RectMesh_Debug", pMesh);
-
-		//vecVtx.clear();
-		//vecIdx.clear();
 	}
+#pragma endregion
+#pragma region CUBE
+	//Cube
+	{
+		// ========
+	// CubeMesh
+	// ========
+		const int vertexCount = 24;
+		tVertex arrCube[vertexCount] = {};
+
+		using Vec4 = Vector4;
+		using Vec3 = Vector3;
+		using Vec2 = Vector2;
+
+		// À­¸é
+		arrCube[0].Position = Vec3(-0.5f, 0.5f, 0.5f);
+		arrCube[0].Color = Vec4(1.f, 1.f, 1.f, 1.f);
+		arrCube[0].UV = Vec2(0.f, 0.f);
+		arrCube[0].Normal = Vec3(0.f, 1.f, 0.f);
+
+		arrCube[1].Position = Vec3(0.5f, 0.5f, 0.5f);
+		arrCube[1].Color = Vec4(1.f, 1.f, 1.f, 1.f);
+		arrCube[1].UV = Vec2(0.f, 0.f);
+		arrCube[1].Normal = Vec3(0.f, 1.f, 0.f);
+
+		arrCube[2].Position = Vec3(0.5f, 0.5f, -0.5f);
+		arrCube[2].Color = Vec4(1.f, 1.f, 1.f, 1.f);
+		arrCube[2].UV = Vec2(0.f, 0.f);
+		arrCube[2].Normal = Vec3(0.f, 1.f, 0.f);
+
+		arrCube[3].Position = Vec3(-0.5f, 0.5f, -0.5f);
+		arrCube[3].Color = Vec4(1.f, 1.f, 1.f, 1.f);
+		arrCube[3].UV = Vec2(0.f, 0.f);
+		arrCube[3].Normal = Vec3(0.f, 1.f, 0.f);
+
+
+		// ¾Æ·§ ¸é	
+		arrCube[4].Position = Vec3(-0.5f, -0.5f, -0.5f);
+		arrCube[4].Color = Vec4(1.f, 0.f, 0.f, 1.f);
+		arrCube[4].UV = Vec2(0.f, 0.f);
+		arrCube[4].Normal = Vec3(0.f, -1.f, 0.f);
+
+		arrCube[5].Position = Vec3(0.5f, -0.5f, -0.5f);
+		arrCube[5].Color = Vec4(1.f, 0.f, 0.f, 1.f);
+		arrCube[5].UV = Vec2(0.f, 0.f);
+		arrCube[5].Normal = Vec3(0.f, -1.f, 0.f);
+
+		arrCube[6].Position = Vec3(0.5f, -0.5f, 0.5f);
+		arrCube[6].Color = Vec4(1.f, 0.f, 0.f, 1.f);
+		arrCube[6].UV = Vec2(0.f, 0.f);
+		arrCube[6].Normal = Vec3(0.f, -1.f, 0.f);
+
+		arrCube[7].Position = Vec3(-0.5f, -0.5f, 0.5f);
+		arrCube[7].Color = Vec4(1.f, 0.f, 0.f, 1.f);
+		arrCube[7].UV = Vec2(0.f, 0.f);
+		arrCube[7].Normal = Vec3(0.f, -1.f, 0.f);
+
+		// ¿ÞÂÊ ¸é
+		arrCube[8].Position = Vec3(-0.5f, 0.5f, 0.5f);
+		arrCube[8].Color = Vec4(0.f, 1.f, 0.f, 1.f);
+		arrCube[8].UV = Vec2(0.f, 0.f);
+		arrCube[8].Normal = Vec3(-1.f, 0.f, 0.f);
+
+		arrCube[9].Position = Vec3(-0.5f, 0.5f, -0.5f);
+		arrCube[9].Color = Vec4(0.f, 1.f, 0.f, 1.f);
+		arrCube[9].UV = Vec2(0.f, 0.f);
+		arrCube[9].Normal = Vec3(-1.f, 0.f, 0.f);
+
+		arrCube[10].Position = Vec3(-0.5f, -0.5f, -0.5f);
+		arrCube[10].Color = Vec4(0.f, 1.f, 0.f, 1.f);
+		arrCube[10].UV = Vec2(0.f, 0.f);
+		arrCube[10].Normal = Vec3(-1.f, 0.f, 0.f);
+
+		arrCube[11].Position = Vec3(-0.5f, -0.5f, 0.5f);
+		arrCube[11].Color = Vec4(0.f, 1.f, 0.f, 1.f);
+		arrCube[11].UV = Vec2(0.f, 0.f);
+		arrCube[11].Normal = Vec3(-1.f, 0.f, 0.f);
+
+		// ¿À¸¥ÂÊ ¸é
+		arrCube[12].Position = Vec3(0.5f, 0.5f, -0.5f);
+		arrCube[12].Color = Vec4(0.f, 0.f, 1.f, 1.f);
+		arrCube[12].UV = Vec2(0.f, 0.f);
+		arrCube[12].Normal = Vec3(1.f, 0.f, 0.f);
+
+		arrCube[13].Position = Vec3(0.5f, 0.5f, 0.5f);
+		arrCube[13].Color = Vec4(0.f, 0.f, 1.f, 1.f);
+		arrCube[13].UV = Vec2(0.f, 0.f);
+		arrCube[13].Normal = Vec3(1.f, 0.f, 0.f);
+
+		arrCube[14].Position = Vec3(0.5f, -0.5f, 0.5f);
+		arrCube[14].Color = Vec4(0.f, 0.f, 1.f, 1.f);
+		arrCube[14].UV = Vec2(0.f, 0.f);
+		arrCube[14].Normal = Vec3(1.f, 0.f, 0.f);
+
+		arrCube[15].Position = Vec3(0.5f, -0.5f, -0.5f);
+		arrCube[15].Color = Vec4(0.f, 0.f, 1.f, 1.f);
+		arrCube[15].UV = Vec2(0.f, 0.f);
+		arrCube[15].Normal = Vec3(1.f, 0.f, 0.f);
+
+		// µÞ ¸é
+		arrCube[16].Position = Vec3(0.5f, 0.5f, 0.5f);
+		arrCube[16].Color = Vec4(1.f, 1.f, 0.f, 1.f);
+		arrCube[16].UV = Vec2(0.f, 0.f);
+		arrCube[16].Normal = Vec3(0.f, 0.f, 1.f);
+
+		arrCube[17].Position = Vec3(-0.5f, 0.5f, 0.5f);
+		arrCube[17].Color = Vec4(1.f, 1.f, 0.f, 1.f);
+		arrCube[17].UV = Vec2(0.f, 0.f);
+		arrCube[17].Normal = Vec3(0.f, 0.f, 1.f);
+
+		arrCube[18].Position = Vec3(-0.5f, -0.5f, 0.5f);
+		arrCube[18].Color = Vec4(1.f, 1.f, 0.f, 1.f);
+		arrCube[18].UV = Vec2(0.f, 0.f);
+		arrCube[18].Normal = Vec3(0.f, 0.f, 1.f);
+
+		arrCube[19].Position = Vec3(0.5f, -0.5f, 0.5f);
+		arrCube[19].Color = Vec4(1.f, 1.f, 0.f, 1.f);
+		arrCube[19].UV = Vec2(0.f, 0.f);
+		arrCube[19].Normal = Vec3(0.f, 0.f, 1.f);
+
+		// ¾Õ ¸é
+		arrCube[20].Position = Vec3(-0.5f, 0.5f, -0.5f);;
+		arrCube[20].Color = Vec4(1.f, 0.f, 1.f, 1.f);
+		arrCube[20].UV = Vec2(0.f, 0.f);
+		arrCube[20].Normal = Vec3(0.f, 0.f, -1.f);
+
+		arrCube[21].Position = Vec3(0.5f, 0.5f, -0.5f);
+		arrCube[21].Color = Vec4(1.f, 0.f, 1.f, 1.f);
+		arrCube[21].UV = Vec2(0.f, 0.f);
+		arrCube[21].Normal = Vec3(0.f, 0.f, -1.f);
+
+		arrCube[22].Position = Vec3(0.5f, -0.5f, -0.5f);
+		arrCube[22].Color = Vec4(1.f, 0.f, 1.f, 1.f);
+		arrCube[22].UV = Vec2(0.f, 0.f);
+		arrCube[22].Normal = Vec3(0.f, 0.f, -1.f);
+
+		arrCube[23].Position = Vec3(-0.5f, -0.5f, -0.5f);
+		arrCube[23].Color = Vec4(1.f, 0.f, 1.f, 1.f);
+		arrCube[23].UV = Vec2(0.f, 0.f);
+		arrCube[23].Normal = Vec3(0.f, 0.f, -1.f);
+
+		// ÀÎµ¦½º
+		std::vector<UINT> indexes;
+		for (int i = 0; i < 12; i += 2)
+		{
+			indexes.push_back(i * 2);
+			indexes.push_back(i * 2 + 1);
+			indexes.push_back(i * 2 + 2);
+
+			indexes.push_back(i * 2);
+			indexes.push_back(i * 2 + 2);
+			indexes.push_back(i * 2 + 3);
+		}
+
+		Mesh* mesh = new Mesh(arrCube, vertexCount, sizeof(tVertex),
+			indexes.data(), indexes.size(), sizeof(UINT));
+		gResourceManager->Insert(L"Cube", mesh);
+
+		indexes.clear();
+		indexes.push_back(0); indexes.push_back(1); indexes.push_back(2); indexes.push_back(3); indexes.push_back(0);
+		indexes.push_back(7); indexes.push_back(6); indexes.push_back(1); indexes.push_back(2); indexes.push_back(5);
+		indexes.push_back(6); indexes.push_back(7); indexes.push_back(4); indexes.push_back(3); indexes.push_back(2);
+		indexes.push_back(5); indexes.push_back(4);
+
+		mesh = new Mesh(arrCube, vertexCount, sizeof(tVertex),
+			indexes.data(), indexes.size(), sizeof(UINT));
+		gResourceManager->Insert(L"DebugCube", mesh);
+	}
+#pragma endregion
 }
 
 void EngineResourceLoader::loadTexture()
@@ -524,21 +680,33 @@ void EngineResourceLoader::loadShader()
 		gResourceManager->Insert(L"WavePostProcess", wavePostProcess);
 	}
 #pragma endregion
-#endif //  USE2D
-	
-
+#endif
 	//std3D
 	{
 		Shader* const wavePostProcess =
 			new Shader(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
 				L"\\Shader\\std3d.hlsl", L"VS_Std3D",
 				L"\\Shader\\std3d.hlsl", L"PS_Std3D",
-				eSMType::Std3D,					
+				eSMType::Std3D,
 				eRSType::CullBack,
 				eDSType::LessEqual,
 				eBSType::Default);
 
 		gResourceManager->Insert(L"Std3D", wavePostProcess);
+	}
+
+	//std3D Debug
+	{
+		Shader* const wavePostProcess =
+			new Shader(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+				L"\\Shader\\std3d_debug.hlsl", L"VS_Std3D",
+				L"\\Shader\\std3d_debug.hlsl", L"PS_Std3D",
+				eSMType::Std3D,
+				eRSType::WireframeNone,
+				eDSType::LessEqual,
+				eBSType::Default);
+
+		gResourceManager->Insert(L"Std3DDebug", wavePostProcess);
 	}
 }
 

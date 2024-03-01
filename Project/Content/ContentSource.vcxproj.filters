@@ -28,6 +28,18 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{faede2d2-c3d9-43c8-ba24-6bec305df60e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\Sound">
+      <UniqueIdentifier>{9dc54863-4ef6-4da2-a1ca-66faeadde459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Resource">
+      <UniqueIdentifier>{b5760e71-803f-4f22-9af7-d44435ab071e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Loader">
+      <UniqueIdentifier>{bbc35a33-fdd6-4133-8dfe-dc3fdacd4c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Components">
+      <UniqueIdentifier>{f7036e24-d69e-4906-9c59-0641fe010b15}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ShaderCode">
       <UniqueIdentifier>{2c32228f-6400-4c12-ba3a-80bcc9e68287}</UniqueIdentifier>
     </Filter>
@@ -100,20 +112,11 @@
     <Filter Include="ShaderCode\AlphaTo">
       <UniqueIdentifier>{7201c858-a042-4236-877b-61cf4596e9cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager\Sound">
-      <UniqueIdentifier>{9dc54863-4ef6-4da2-a1ca-66faeadde459}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Resource">
-      <UniqueIdentifier>{b5760e71-803f-4f22-9af7-d44435ab071e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ShaderCode\3D">
       <UniqueIdentifier>{1b1eecd1-2066-4029-8af2-afc65023ad1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Loader">
-      <UniqueIdentifier>{bbc35a33-fdd6-4133-8dfe-dc3fdacd4c8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Components">
-      <UniqueIdentifier>{f7036e24-d69e-4906-9c59-0641fe010b15}</UniqueIdentifier>
+    <Filter Include="ShaderCode\3D\Debug">
+      <UniqueIdentifier>{9292770b-152d-41e1-ba7e-06931cecd2bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +312,9 @@
     </FxCompile>
     <FxCompile Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
       <Filter>ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d_debug.hlsl">
+      <Filter>ShaderCode\3D\Debug</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

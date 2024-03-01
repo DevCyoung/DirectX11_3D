@@ -24,7 +24,7 @@ RenderTargetRenderer::RenderTargetRenderer()
 	, mCameras{ 0, }
 	, mRenderComponentsArray{}
 	, mLight2DInfos()
-	, mbDebugRender(false)
+	, mbDebugRender(true)
 	, mbWireFrame(false)
 	, mCameraMask(0XFFFFFFFF)
 {

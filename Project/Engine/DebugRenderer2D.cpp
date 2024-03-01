@@ -58,6 +58,13 @@ DebugRenderer2D::DebugRenderer2D()
 		debugMaterial.debugShader = gResourceManager->Find<Shader>(L"DebugGrid2D");
 		mDebugMaterial[static_cast<UINT>(eDebugDrawType::Grid2D)] = debugMaterial;
 	}
+
+	{
+		tDebugMaterial debugMaterial = {};
+		debugMaterial.debugMesh = gResourceManager->Find<Mesh>(L"DebugCube");
+		debugMaterial.debugShader = gResourceManager->Find<Shader>(L"Std3DDebug");
+		mDebugMaterial[static_cast<UINT>(eDebugDrawType::Cube)] = debugMaterial;
+	}
 }
 
 DebugRenderer2D::~DebugRenderer2D()
@@ -276,6 +283,21 @@ void DebugRenderer2D::DrawGrid2D(const Vector3& worldPos,
 	mDebugDrawInfos.push_back(drawInfo);
 }
 
+void DebugRenderer2D::DrawCube3D(const Matrix& matrix, 
+	const float drawTime, 
+	const Vector4& lineColor)
+{
+	tDebugDrawInfo drawInfo = {};
+
+	drawInfo.DebugDrawType = eDebugDrawType::Cube;
+
+	drawInfo.DrawTime = drawTime;
+	drawInfo.WorldMatrix = matrix;
+	drawInfo.OutLineColor = lineColor;
+
+	mDebugDrawInfos.push_back(drawInfo);
+}
+
 
 void DebugRenderer2D::render(const Camera* const camera) const
 {
@@ -343,6 +365,10 @@ void DebugRenderer2D::render(const Camera* const camera) const
 			renderGrid2D(DRAW_INFO, camera);
 			break;
 
+		case eDebugDrawType::Cube:
+			render3D(DRAW_INFO);
+			break;
+
 		default:
 			Assert(false, ASSERT_MSG_INVALID);
 			break;
@@ -353,6 +379,17 @@ void DebugRenderer2D::render(const Camera* const camera) const
 }
 
 void DebugRenderer2D::renderLine2D(const tDebugDrawInfo& drawInfo) const
+{
+	tCBDebugInfo CBRectInfo = {};
+	{
+		CBRectInfo.Color_1 = drawInfo.OutLineColor;
+
+		gGraphicDevice->PassCB(eCBType::DebugInfo, sizeof(CBRectInfo), &CBRectInfo);
+		gGraphicDevice->BindCB(eCBType::DebugInfo, eShaderBindType::PS);
+	}
+}
+
+void DebugRenderer2D::render3D(const tDebugDrawInfo& drawInfo) const
 {
 	tCBDebugInfo CBRectInfo = {};
 	{

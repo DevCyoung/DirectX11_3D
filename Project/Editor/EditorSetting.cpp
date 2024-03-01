@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EditorSetting.h"
+#include <Engine/GameObject.h>
 #include <Engine/SceneManager.h>
 #include <Engine/GameSystem.h>
 #include <Engine/RenderTargetRenderer.h>
@@ -27,5 +28,12 @@ void EditorSetting::drawForm()
 			gCurrentSceneRenderer->TurnOffWireFrame();
 		}
 	}
+
+	if (ImGui::Button("Create Object"))
+	{
+		GameObject* obj = new GameObject();
+		gCurrentScene->RegisterEventAddGameObject(obj, eLayerType::Default);
+	}
+
 	ImGui::End();
 }

@@ -76,6 +76,10 @@ public:
 		const float drawTime, 
 		const Vector4& fillColor);
 
+	void DrawCube3D(const Matrix& matrix,
+		const float drawTime,
+		const Vector4& lineColor = Vector4(1.f, 1.f, 1.f, 1.f));
+
 private:
 	enum class eDebugDrawType
 	{
@@ -85,6 +89,7 @@ private:
 		FillCircle2D,
 		Line2D,
 		Grid2D,
+		Cube,
 		End,
 	};
 
@@ -111,6 +116,7 @@ private:
 	void renderFill2D(const tDebugDrawInfo& debugDrawInfo) const;
 	void renderGrid2D(const tDebugDrawInfo& debugDrawInfo, const Camera* const camera) const;
 	void renderLine2D(const tDebugDrawInfo& debugDrawInfo) const;
+	void render3D(const tDebugDrawInfo& debugDrawInfo) const;
 	void render(const Camera* const camera) const;
 	void flush();
 

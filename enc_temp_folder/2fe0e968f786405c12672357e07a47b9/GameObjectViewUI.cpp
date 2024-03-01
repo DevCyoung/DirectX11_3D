@@ -60,6 +60,10 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 	{
 		if (ImGui::Button("Load"))
 		{
+			//MeshData* meshData = FBXLoader::FbxInstantiate(relativePath);
+			//meshData->Save(L"\\" + GetFileNameWithoutExtension(relativePath));
+			//delete meshData;
+			////gResourceManager->Find<Texture>(relativePath)
 		}
 		if (ImGui::Button("Close"))
 			ImGui::CloseCurrentPopup();

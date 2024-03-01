@@ -18,6 +18,7 @@ public:
 
 	const std::vector<Animator3D*>& GetAnimation3Ds() { return mAnimation3Ds; };
 	virtual void update();
+	virtual void lateUpdate();
 
 	void SetBones(std::vector<tMTBone>* bones) { mBones = bones; }
 	void SetClip(std::vector<tMTAnimClip>* clip) { m_pVecClip = clip; }

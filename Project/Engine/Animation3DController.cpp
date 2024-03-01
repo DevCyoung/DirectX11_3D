@@ -22,3 +22,7 @@ void Animation3DController::update()
 {
 
 }
+
+void Animation3DController::lateUpdate()
+{
+}

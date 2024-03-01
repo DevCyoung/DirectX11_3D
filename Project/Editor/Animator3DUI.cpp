@@ -36,7 +36,7 @@ void Animator3DUI(Animator3D* component)
 
 	if (ImGui::InputInt("starFrame", &startFrame))
 	{
-		component->SetStartFrame(idx, startFrame);
+		 component->SetStartFrame(idx, startFrame);
 	}
 	if (ImGui::InputInt("endFrame", &endFrame))
 	{

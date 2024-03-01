@@ -172,10 +172,8 @@ HRESULT MeshData::Save(const std::wstring& relativePath)
 GameObject* MeshData::Instantiate()
 {
 	GameObject* root = new GameObject();
-
 	{		
 	}
-
 	{
 		GameObject* meshRoot = new GameObject();
 		meshRoot->SetName(L"MeshRoot");

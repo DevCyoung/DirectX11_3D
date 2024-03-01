@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\source\\DirectX2D_Engine\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj": {}
+    "C:\\source\\DirectX11_3D\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj": {}
   },
   "projects": {
-    "C:\\source\\DirectX2D_Engine\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj": {
+    "C:\\source\\DirectX11_3D\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\source\\DirectX2D_Engine\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj",
+        "projectUniqueName": "C:\\source\\DirectX11_3D\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj",
         "projectName": "EditorGen",
-        "projectPath": "C:\\source\\DirectX2D_Engine\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj",
+        "projectPath": "C:\\source\\DirectX11_3D\\Helper\\EditorGen\\EditorGen\\EditorGen.csproj",
         "packagesPath": "C:\\Users\\tkdlq\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\DirectX2D_Engine\\Helper\\EditorGen\\EditorGen\\obj\\",
+        "outputPath": "C:\\source\\DirectX11_3D\\Helper\\EditorGen\\EditorGen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tkdlq\\AppData\\Roaming\\NuGet\\NuGet.Config",

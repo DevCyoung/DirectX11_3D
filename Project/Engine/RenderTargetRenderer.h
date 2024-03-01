@@ -41,9 +41,10 @@ public:
 
 	void SetCameraLayerMask(const UINT layerMask) { mCameraMask = layerMask; }
 	UINT GetCameraLayerMask() const { return mCameraMask; }
-
+	
 	void TurnOnAllCamera()  { mCameraMask = 0XFFFFFFFF; }
 	void TurnOffAllCamera() { mCameraMask = 0; }
+
 	bool IsVisibleDebugRenderer() const { return mbDebugRender; }
 
 	void TurnOnCamera(const eCameraPriorityType priorityType) 
@@ -60,6 +61,8 @@ public:
 	void TurnOffDebugRenderer() { mbDebugRender = false; }
 
 	void RegisterRenderCamera(Camera* const camera);
+
+	void PopUpCamera(const eCameraPriorityType priorityType);
 private:
 	void registerRenderComponent(RenderComponent* const renderComponent);
 	void registerLightInfo(const tLightInfo& light2DInfo);

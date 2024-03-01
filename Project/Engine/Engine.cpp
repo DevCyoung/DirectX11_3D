@@ -110,10 +110,10 @@ void Engine::lateUpdate()
 
 void Engine::render()
 {	
-	SceneManager::GetInstance()->render(mRenderTargetWidth,
+	/*SceneManager::GetInstance()->render(mRenderTargetWidth,
 				mRenderTargetHeight,
 				mGraphicDevice->GetRenderTargetViewAddressOf(),
-				mGraphicDevice->GetDepthStencilView());		
+				mGraphicDevice->GetDepthStencilView());		*/
 	
 	//FLOAT backgroundColor[4] = { 1.0f, 0.0f, 1.0f, 0.1f };
 	//gGraphicDevice->ClearRenderTarget(

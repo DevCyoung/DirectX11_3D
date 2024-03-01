@@ -51,6 +51,12 @@ void RenderTargetRenderer::RegisterRenderCamera(Camera* const camera)
 	mCameras[static_cast<UINT>(CAMERA_PRIORITY_TYPE)] = camera;
 }
 
+void RenderTargetRenderer::PopUpCamera(const eCameraPriorityType priorityType)
+{	
+	Assert(mCameras[static_cast<UINT>(priorityType)], ASSERT_MSG_NULL);
+	mCameras[static_cast<UINT>(priorityType)] = nullptr;
+}
+
 void RenderTargetRenderer::registerRenderComponent(RenderComponent* const renderComponent)
 {
 	Assert(renderComponent, ASSERT_MSG_NULL);

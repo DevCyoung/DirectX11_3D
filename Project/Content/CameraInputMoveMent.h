@@ -11,7 +11,7 @@ public:
 	virtual ~CameraInputMoveMent();
 	//CameraInputMoveMent(const CameraInputMoveMent&) = delete;
 	CameraInputMoveMent& operator=(const CameraInputMoveMent&) = delete;
-
+	void MoveCamera();
 	CLONE(CameraInputMoveMent)
 private:
 	virtual void initialize() override final;

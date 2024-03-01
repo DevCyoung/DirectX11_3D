@@ -27,94 +27,78 @@
 EditorViewUI::EditorViewUI()
 	: mEditorCamera(nullptr)
 {
-	//main Camera
+	//Editor Camera
 	{
 		const Vector2 screenSize = Vector2(1280, 720);
 		GameObject* const mainCamera = new GameObject();
 		mainCamera->AddComponent<Camera>();
 		mainCamera->AddComponent<CameraInputMoveMent>();
-		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);
-		//mainCamera->AddComponent<CameraInputMoveMent>();
 
-		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -3000.f);
-		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
+		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, 0.f);
 		mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
-		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();
-
-		//testScene->AddGameObject(mainCamera, eLayerType::Default);
+		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Editor);
+		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);
+		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		
 		mEditorCamera = mainCamera;		
 	}
 }
 
 EditorViewUI::~EditorViewUI()
 {
-	delete mEditorCamera;
+	DELETE_POINTER(mEditorCamera);
 }
 
 void EditorViewUI::update()
-{	//Mouse
+{
+}
 
-
-	//EngineInbox.SetRenderingPosition(screen_pos.x, screen_pos.y);
-	//ImGui::Image((ImTextureID)GPU_GetImageHandle(engine_screen->image), ImVec2(engine_screen->w, engine_screen->h));
-
-	//Render
-	Texture* renderTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDRenderTexture");
-	Texture* depThTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDDepthTexture");
-	Scene* currentScene = SceneManager::GetInstance()->GetCurrentScene();
+void EditorViewUI::drawForm()
+{
+	//EditorView 전용텍스처에 그린다.
+	Camera* editorCamera = mEditorCamera->GetComponent<Camera>();
+	RenderTargetRenderer* renderer = gCurrentSceneRenderer;
+	Texture* renderTex = gResourceManager->Find<Texture>(L"/Editor/EditorViewRenderTexture");
+	Texture* depThTex = gResourceManager->Find<Texture>(L"/Editor/EditorViewDepthTexture");
+	Scene* currentScene = gCurrentScene;
 	FLOAT backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.f };
-	//currentScene->Render()
+	UINT cameraMask = renderer->GetCameraLayerMask();
 
-
-	//Main을뽑는다.
-	/*RenderTargetRenderer* const rendertargetRenderer
-		= currentScene->GetGameSystem()->GetRenderTargetRenderer();	
-	UINT prevCameraMask = rendertargetRenderer->GetCameraLayerMask();
-	rendertargetRenderer->TurnOffAllCamera();*/
-	//rendertargetRenderer-
-	//rendertargetRenderer->TurnOnCamera(eCame);
-	
-	
+	renderer->RegisterRenderCamera(editorCamera);
+	renderer->TurnOffAllCamera();
+	renderer->TurnOnCamera(eCameraPriorityType::Editor);
+	mEditorCamera->GetComponent<Transform>()->CalculateTransform();
+	editorCamera->CalculateCamera();
 
 	gGraphicDevice->ClearRenderTarget(
 		renderTex->GetAddressOf(),
 		depThTex->GetDSV(), backgroundColor);
-
 	currentScene->Render(
 		static_cast<UINT>(renderTex->GetWidth()),
 		static_cast<UINT>(renderTex->GetHeight()),
 		renderTex->GetAddressOf(),
 		depThTex->GetDSV());
 
-	//rendertargetRenderer->TurnOffAllCamera();
+	renderer->SetCameraLayerMask(cameraMask);
+	renderer->PopUpCamera(eCameraPriorityType::Editor);	
+	renderer->TurnOffCamera(eCameraPriorityType::Editor);
 
-	//둘다 UAV여야함 /Editor/HDCopy
-	//LARGE_INTEGER start;
-	//TimeManager::GetInstance()->StartTime(&start);
-	Texture* rwTex = gResourceManager->Find<Texture>(L"/Editor/HDRWTexture");
-	Texture* rwTex2 = gResourceManager->Find<Texture>(L"/Editor/HDCopyRWTexture");
+	//둘다 UAV여야함	ImGUI 용도로 사용하기위해 Alpha값 1로 덮어쓴다.
+	Texture* rwTex = gResourceManager->Find<Texture>(L"/Editor/EditorViewRWTexture");
+	Texture* rwTex2 = gResourceManager->Find<Texture>(L"/Editor/EditorViewCopyRWTexture");
 	gGraphicDevice->CopyResource(rwTex2->GetID3D11Texture2D(), renderTex->GetID3D11Texture2D());
 	TextureAlphaTo(rwTex, rwTex2, 1.f);
 	gGraphicDevice->CopyResource(renderTex->GetID3D11Texture2D(), rwTex->GetID3D11Texture2D());
-	//float time = TimeManager::GetInstance()->EndTime(&start);
-	
 	Engine::GetInstance()->OmSet();
-}
 
-void EditorViewUI::drawForm()
-{
-	Texture* renderTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDRenderTexture");
-	ID3D11ShaderResourceView* texture = renderTex->GetSRV();
-
-	//ImGui::SetNextWindowSize(ImVec2(renderTex->GetWidth(), renderTex->GetHeight()), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Editor View");
-	//Window Pos는 화면 절대 좌표이다 왼쪽상단이 0,0
-	//ImGui::SetWindowPos(ImVec2(0, 0));	
-
-	//ImGui::SetNextWindowBgAlpha(0.00F);
-	//ImGui::SetCursorPos(ImVec2(0,0));
+	ID3D11ShaderResourceView* texture = renderTex->GetSRV();
 	ImVec2 cursurScreenPos = ImGui::GetCursorScreenPos();
 	ImVec2 renderTargetSize = ImVec2(renderTex->GetWidth(), renderTex->GetHeight());
+
+	if (ImGui::IsWindowFocused())
+	{
+		mEditorCamera->GetComponent<CameraInputMoveMent>()->MoveCamera();
+	}
 
 	POINT ptMousePos = {};
 	GetCursorPos(&ptMousePos);
@@ -127,16 +111,5 @@ void EditorViewUI::drawForm()
 	ImGui::Text("mouse posX%d mouse posY%d", ptMousePos.x, ptMousePos.y);
 	ImGui::Text("In Screen Mouse Pos X%f Y%f", screenMousePos.x, screenMousePos.y);
 	WindowManager::GetInstance()->SetWindowScreenPos(Vector2(screenMousePos.x, screenMousePos.y));
-
-
-	if (gInput->GetKeyDown(eKeyCode::Q))
-	{
-		ImVec2 cursurPos = ImGui::GetCursorPos(); //현재 윈도우기준
-		ImVec2 windowPos = ImGui::GetWindowPos();
-		//ImVec2 pos = ImGui::GetCursorScreenPos();
-		int a = 3;
-		(void)a;
-	}
-
 	ImGui::End();
 }

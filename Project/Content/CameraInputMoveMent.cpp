@@ -19,8 +19,7 @@ CameraInputMoveMent::~CameraInputMoveMent()
 void CameraInputMoveMent::initialize()
 {
 }
-
-void CameraInputMoveMent::update()
+void CameraInputMoveMent::MoveCamera()
 {
 	Camera* const camera = GetOwner()->GetComponent<Camera>();
 
@@ -148,6 +147,12 @@ void CameraInputMoveMent::update()
 		transform->SetPosition(pos);
 		transform->SetRotation(rot);
 	}
+}
+
+
+void CameraInputMoveMent::update()
+{
+	MoveCamera();
 }
 
 void CameraInputMoveMent::lateUpdate()

@@ -43,6 +43,7 @@ public:
 	void SetWorldMatrix(const Matrix& world) { mWorld = world; }
 	void SetFlipx(const bool bFlipx);
 
+	void CalculateTransform();
 private:
 	virtual void initialize() override final;
 	virtual void update() override final;

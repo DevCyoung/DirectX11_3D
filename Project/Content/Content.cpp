@@ -28,13 +28,12 @@ Content::Content()
 		GameObject* const mainCamera = new GameObject();
 		mainCamera->SetName(L"mainCamera");
 		mainCamera->AddComponent<Camera>();
-		mainCamera->AddComponent<CameraInputMoveMent>();
-		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);		
 		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -100.f);
+
+		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		
 		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
+		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);		
 		mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
-		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();
-		//mainCamera->GetComponent<Transform>()->SetPosition(Vector3(772.f, 2250.f, -3690.f));
 		testScene->AddGameObject(mainCamera, eLayerType::Default);
 	}
 

@@ -28,6 +28,10 @@ void Transform::update()
 
 void Transform::lateUpdate()
 {
+	CalculateTransform();
+}
+void Transform::CalculateTransform()
+{
 	mWorld = CreateWorldMatrix(mPosition, mRotation, mScale);
 
 	GameObject* const parentOrNull = GetOwner()->GetParentOrNull();
@@ -45,7 +49,8 @@ void Transform::lateUpdate()
 	mUp.Normalize();
 	mForward.Normalize();
 	mRight.Normalize();
-}	
+}
+
 
 Matrix Transform::CreateWorldMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale)
 {

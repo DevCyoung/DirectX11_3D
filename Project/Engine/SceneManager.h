@@ -68,3 +68,4 @@ private:
 };
 
 #define gCurrentScene SceneManager::GetInstance()->GetCurrentScene()
+#define gCurrentSceneRenderer SceneManager::GetInstance()->GetCurrentScene()->GetGameSystem()->GetRenderTargetRenderer()

@@ -11,62 +11,43 @@
 #include <Engine/GraphicDeviceDx11.h>
 #include <Engine/WindowManager.h>
 #include "AlphaHelper.h"
-
 #include <Engine/TimeManager.h>
 #include <Engine/InputManager.h>
 void GameViewUI::update()
 {
-	//Mouse
-	
 
-	//EngineInbox.SetRenderingPosition(screen_pos.x, screen_pos.y);
-	//ImGui::Image((ImTextureID)GPU_GetImageHandle(engine_screen->image), ImVec2(engine_screen->w, engine_screen->h));
-	 
+}
+void GameViewUI::drawForm()
+{
+	//GameView 전용텍스처에 그린다.
+	RenderTargetRenderer* renderer = gCurrentSceneRenderer;
+	Texture* renderTex = gResourceManager->Find<Texture>(L"/Editor/GameViewRenderTexture");
+	Texture* depThTex = gResourceManager->Find<Texture>(L"/Editor/GameViewDepthTexture");
+	Scene* currentScene = gCurrentScene;
 
-
-	//Render
-	Texture* renderTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDRenderTexture");
-	Texture* depThTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDDepthTexture");
-	Scene* currentScene = SceneManager::GetInstance()->GetCurrentScene();	
-	FLOAT backgroundColor[4] = {0.5f, 0.5f, 0.5f, 1.f};
-	//currentScene->Render()
-
+	FLOAT backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.f };	
+	renderer->TurnOffCamera(eCameraPriorityType::Editor);
 	gGraphicDevice->ClearRenderTarget(
 		renderTex->GetAddressOf(),
 		depThTex->GetDSV(), backgroundColor);
-
 	currentScene->Render(
 		static_cast<UINT>(renderTex->GetWidth()),
 		static_cast<UINT>(renderTex->GetHeight()),
 		renderTex->GetAddressOf(),
-		depThTex->GetDSV());	
+		depThTex->GetDSV());
 
-	//둘다 UAV여야함 /Editor/HDCopy
-	//LARGE_INTEGER start;
-	//TimeManager::GetInstance()->StartTime(&start);
-	Texture* rwTex = gResourceManager->Find<Texture>(L"/Editor/HDRWTexture");
-	Texture* rwTex2 = gResourceManager->Find<Texture>(L"/Editor/HDCopyRWTexture");
+	//둘다 UAV여야함	ImGUI 용도로 사용하기위해 Alpha값 1로 덮어쓴다.
+	Texture* rwTex = gResourceManager->Find<Texture>(L"/Editor/GameViewRWTexture");
+	Texture* rwTex2 = gResourceManager->Find<Texture>(L"/Editor/GameViewCopyRWTexture");
 	gGraphicDevice->CopyResource(rwTex2->GetID3D11Texture2D(), renderTex->GetID3D11Texture2D());
 	TextureAlphaTo(rwTex, rwTex2, 1.f);
 	gGraphicDevice->CopyResource(renderTex->GetID3D11Texture2D(), rwTex->GetID3D11Texture2D());
-	//float time = TimeManager::GetInstance()->EndTime(&start);
 	Engine::GetInstance()->OmSet();
-}
-void GameViewUI::drawForm()
-{
-	Texture* renderTex = ResourceManager::GetInstance()->Find<Texture>(L"/Editor/HDRenderTexture");
-	ID3D11ShaderResourceView* texture = renderTex->GetSRV();
 
-	//ImGui::SetNextWindowSize(ImVec2(renderTex->GetWidth(), renderTex->GetHeight()), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Game View");
-	//Window Pos는 화면 절대 좌표이다 왼쪽상단이 0,0
-	//ImGui::SetWindowPos(ImVec2(0, 0));	
-	
-	//ImGui::SetNextWindowBgAlpha(0.00F);
-	//ImGui::SetCursorPos(ImVec2(0,0));
+	ID3D11ShaderResourceView* texture = renderTex->GetSRV();
 	ImVec2 cursurScreenPos = ImGui::GetCursorScreenPos();
 	ImVec2 renderTargetSize = ImVec2(renderTex->GetWidth(), renderTex->GetHeight());
-
 	POINT ptMousePos = {};
 	GetCursorPos(&ptMousePos);
 	ImVec2 mousePos = ImVec2(ptMousePos.x, ptMousePos.y);
@@ -78,16 +59,5 @@ void GameViewUI::drawForm()
 	ImGui::Text("mouse posX%d mouse posY%d", ptMousePos.x, ptMousePos.y);
 	ImGui::Text("In Screen Mouse Pos X%f Y%f", screenMousePos.x, screenMousePos.y);
 	WindowManager::GetInstance()->SetWindowScreenPos(Vector2(screenMousePos.x, screenMousePos.y));
-
-
-	if (gInput->GetKeyDown(eKeyCode::Q))
-	{
-		ImVec2 cursurPos = ImGui::GetCursorPos(); //현재 윈도우기준
-		ImVec2 windowPos = ImGui::GetWindowPos();
-		//ImVec2 pos = ImGui::GetCursorScreenPos();
-		int a = 3;
-		(void)a;
-	}
-
 	ImGui::End();
 }

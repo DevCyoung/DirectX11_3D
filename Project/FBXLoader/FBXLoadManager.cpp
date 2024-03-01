@@ -299,7 +299,7 @@ void FBXLoadManager::loadSkeletonRe(FbxNode* _pNode, int depth, int Idx, int par
 			bone.boneName = std::wstring(BONE_NAME.begin(), BONE_NAME.end());
 			bone.depth = depth++;
 			bone.parentIdx = parentIdx;
-			m_vecOffsetBone.push_back(bone);
+			m_vecOffsetBone.push_back(bone);			
 		}
 	}
 
@@ -351,7 +351,7 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 {
 	// Animation Data 로드할 필요가 없음
 	const int SKIN_COUNT = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
-	if (SKIN_COUNT <= 0 || m_vecAnimClip.empty())
+	if (SKIN_COUNT <= 0)
 	{
 		return;
 	}
@@ -382,47 +382,6 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 				const std::string& BONE_NAME = fbxCluster->GetLink()->GetName();
 				const int BOND_IDX = findBoneIndex(BONE_NAME, _pContainer);
 				Assert(-1 != BOND_IDX, ASSERT_MSG_INVALID);
-
-				
-				{
-					FbxAMatrix transformMatrix;
-					FbxAMatrix transformLinkMatrix;
-					FbxAMatrix globalBindposeInverseMatrix;
-
-					fbxCluster->GetTransformMatrix(transformMatrix); // The transformation of the mesh at binding time
-					// The transformation of the cluster(joint) at binding time //from joint space to world space
-					fbxCluster->GetTransformLinkMatrix(transformLinkMatrix);					
-					globalBindposeInverseMatrix = transformLinkMatrix.Inverse() * transformMatrix * geometryTransform;
-
-					// Update the information in mSkeleton 
-					static std::set<int> idxes;
-					if (idxes.find(BOND_IDX) != idxes.end())
-					{
-						Assert(m_vecOffsetBone[BOND_IDX].globalBindposeInverse == globalBindposeInverseMatrix, ASSERT_MSG_INVALID);
-					}					
-					idxes.insert(BOND_IDX);
-
-					m_vecOffsetBone[BOND_IDX].globalBindposeInverse = globalBindposeInverseMatrix;
-					m_vecOffsetBone[BOND_IDX].node					= fbxCluster->GetLink();
-					//
-					//// Associate each joint with the control points it affects
-					//const int INDICES_COUNT = fbxCluster->GetControlPointIndicesCount();
-					//
-					//for (int i = 0; i < INDICES_COUNT; ++i)
-					//{
-					//	tWeightsAndIndices tWI = {};						 
-					//	tWI.iBoneIdx = BOND_IDX;
-					//	tWI.dWeight = fbxCluster->GetControlPointWeights()[i];
-					//	const int VERTEX_IDX = fbxCluster->GetControlPointIndices()[i];
-					//	_pContainer->vecWI[VERTEX_IDX].push_back(tWI);
-					//}
-				}
-						
-
-
-
-
-
 				FbxAMatrix matrixNodeTransform = getGeometryTransformation(_pMesh->GetNode());
 
 				// Weights And Indices 정보를 읽는다.

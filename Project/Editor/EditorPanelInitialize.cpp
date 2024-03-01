@@ -2,7 +2,7 @@
 #include "EditorPanelInitialize.h"
 #include "PanelUIManager.h"
 
-#include "TestUI.h"
+#include "EditorSetting.h"
 #include "TestUI2.h"
 #include "ESCUI.h"
 #include "InspectorUI.h"
@@ -15,7 +15,7 @@
 
 void EditorPanelInitialize()
 {		
-	AddPanel(new TestUI);
+	AddPanel(new EditorSetting);
 	AddPanel(new TestUI2);	
 	AddPanel(new ESCUI);
 	AddPanel(new InspectorUI);

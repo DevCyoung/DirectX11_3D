@@ -12,6 +12,8 @@ void MeshRendererUI(MeshRenderer* component)
 {
 	RenderComponentUI(component);
 
+	ImGui::Separator();
+
 	//Material
 	for (int i = 0; i < component->GetMaterialCount(); ++i)
 	{
@@ -33,7 +35,7 @@ void MeshRendererUI(MeshRenderer* component)
 			MaterialUI(component->GetMaterial(i));
 		}		
 	}
-
+	ImGui::Separator();
 	//Mesh
 	Mesh* mesh = component->GetMesh();
 	std::vector<tMTBone>* bones = mesh->GetBones();

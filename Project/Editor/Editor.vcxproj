@@ -184,7 +184,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
     <ClInclude Include="GameViewUI.h" />
     <ClInclude Include="ResourceViewUI.h" />
     <ClInclude Include="ShaderUI.h" />
-    <ClInclude Include="TestUI.h" />
+    <ClInclude Include="EditorSetting.h" />
     <ClInclude Include="TestUI2.h" />
     <ClInclude Include="TextureUI.h" />
     <ClInclude Include="UIHelper.h" />
@@ -242,7 +242,7 @@ call EditorGen.exe $(SolutionDir)Project\Engine $(SolutionDir)Project\Content $(
     <ClCompile Include="ScriptComponentUIRender.cpp" />
     <ClCompile Include="ShaderUI.cpp" />
     <ClCompile Include="SpriteRendererUI.cpp" />
-    <ClCompile Include="TestUI.cpp" />
+    <ClCompile Include="EditorSetting.cpp" />
     <ClCompile Include="TestUI2.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />

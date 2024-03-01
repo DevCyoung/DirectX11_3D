@@ -99,7 +99,7 @@
     <ClInclude Include="Editor.h">
       <Filter>Source\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="TestUI.h">
+    <ClInclude Include="EditorSetting.h">
       <Filter>Source\CustomUI</Filter>
     </ClInclude>
     <ClInclude Include="TestUI2.h">
@@ -188,7 +188,7 @@
     <ClCompile Include="Editor.cpp">
       <Filter>Source\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="TestUI.cpp">
+    <ClCompile Include="EditorSetting.cpp">
       <Filter>Source\CustomUI</Filter>
     </ClCompile>
     <ClCompile Include="TestUI2.cpp">

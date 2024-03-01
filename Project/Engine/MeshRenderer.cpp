@@ -13,6 +13,9 @@
 #include "ResourceManager.h"
 #include "Mesh.h"
 #include "Animator3D.h"
+#include "RenderTargetRenderer.h"
+#include "SceneManager.h"
+#include "GameSystem.h"
 MeshRenderer::MeshRenderer()
 	: RenderComponent(eComponentType::MeshRenderer)
 {
@@ -69,10 +72,15 @@ void MeshRenderer::render(const Camera* const camera)
 	}
 
 	const UINT INDEX_COUNT = mMesh->GetIndexBufferCount();
+	bool bWireFrame = gCurrentSceneRenderer->IsWireFrame();
 	for (UINT i = 0; i < INDEX_COUNT; ++i)
 	{
-		GetMaterial(i)->UpdateData();
-		gGraphicDevice->BindMesh(mMesh, i);
+		GetMaterial(i)->UpdateData();	
+		if (bWireFrame)
+		{
+			gGraphicDevice->BindRS(eRSType::WireframeNone);
+		}		
+		gGraphicDevice->BindMesh(mMesh, i);		
 		gGraphicDevice->Draw(mMesh, i);
 	}
 

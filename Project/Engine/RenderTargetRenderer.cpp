@@ -25,6 +25,7 @@ RenderTargetRenderer::RenderTargetRenderer()
 	, mRenderComponentsArray{}
 	, mLight2DInfos()
 	, mbDebugRender(false)
+	, mbWireFrame(false)
 	, mCameraMask(0XFFFFFFFF)
 {
 	for (auto& renderObjectArray : mRenderComponentsArray)

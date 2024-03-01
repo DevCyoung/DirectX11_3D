@@ -60,6 +60,11 @@ public:
 	void TurnOnDebugRenderer() { mbDebugRender = true; }
 	void TurnOffDebugRenderer() { mbDebugRender = false; }
 
+	void TurnOnWireFrame() { mbWireFrame = true; }
+	void TurnOffWireFrame() { mbWireFrame = false; }
+	bool IsWireFrame() { return mbWireFrame; }
+
+
 	void RegisterRenderCamera(Camera* const camera);
 
 	void PopUpCamera(const eCameraPriorityType priorityType);
@@ -77,5 +82,6 @@ private:
 	std::vector<RenderComponent*> mPostProcessComponents;
 	std::vector<tLightInfo> mLight2DInfos;
 	bool mbDebugRender;
+	bool mbWireFrame;
 	UINT mCameraMask;
 };

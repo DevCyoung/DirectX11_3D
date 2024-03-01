@@ -12,6 +12,6 @@ public:
 	MeshRenderer& operator=(const MeshRenderer&) = delete;
 
 	CLONE(MeshRenderer);
-	virtual void render(const Camera* const camera);
+	virtual void render(const Camera* const camera);	
 };
 

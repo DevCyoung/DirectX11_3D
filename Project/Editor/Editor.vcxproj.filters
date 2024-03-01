@@ -329,5 +329,8 @@
     <ClCompile Include="Animation3DControllerUI.cpp">
       <Filter>Component\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="BoneMapUI.cpp">
+      <Filter>Component\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,7 +5,8 @@
 #include <Engine/RenderTargetRenderer.h>
 #include <Engine/DebugRenderer2D.h>
 #include <Engine/Transform.h>
-
+#include "EditorSetting.h"
+#include <Engine/BoneMap.h>
 class RenderComponent;
 void ComponentUI(Component* component);
 
@@ -55,14 +56,17 @@ void Animator3DUI(Animator3D* component)
 	//Bone
 		//Mesh
 	const std::vector<tMTBone>* bones  = component->GetBones();	
-
+	static int clickIdx = -1;
 	if (ImGui::CollapsingHeader("BonData"))
 	{
 		for (int i = 0; i < bones->size(); ++i)
 		{
 			const tMTBone& bone = bones->at(i);
 			std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
-			ImGui::Selectable(bonName.c_str());
+			if (ImGui::Selectable(bonName.c_str()))
+			{
+				clickIdx = i;
+			}
 			if (bone.vecKeyFrame.empty())
 			{
 				continue;
@@ -72,29 +76,23 @@ void Animator3DUI(Animator3D* component)
 			{
 				if (ImGui::Button("Add Bone"))
 				{
-
+					GameObject* obj =  EditorSetting::CreateObject();
+					obj->AddComponent<BoneMap>();
+					obj->GetComponent< BoneMap>()->SetAnimator3D(component, i);
+					gCurrentScene->RegisterEventAddGameObject(obj, eLayerType::Default);
 				}
+
+				ImGui::EndPopup();
 			}
-			Matrix worldMatrix = component->GetComponent<Transform>()->GetWorldMatrix();
-			float ratio = component->GetRatio();
-
+			
 			tMTKeyFrame key = bone.vecKeyFrame[curFrame];
-			tMTKeyFrame nextKey = bone.vecKeyFrame[(curFrame + 1) % bone.vecKeyFrame.size()];
-
-			Quaternion qt = Quaternion(key.qRot.x, key.qRot.y, key.qRot.z, key.qRot.w);
-			Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);			
-
-			Vector3 pos		=	Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
-			Vector3 scale	=	Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
-												
-			
-			Matrix scaleMatrix = Matrix::CreateScale(scale);
-			Matrix rotationMatrix = XMMatrixRotationQuaternion(qt);
-			Matrix transMatrix = Matrix::CreateTranslation(pos);			
-			scaleMatrix._11 *= 2;	
-			
-			worldMatrix = scaleMatrix * rotationMatrix * transMatrix * worldMatrix;
-			gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D(worldMatrix, 0);
+			Matrix worldMatrix = component->GetCurGrameBoneMatrix(i);			
+			Vector4 color = Vector4(0.f, 1.f, 0.f, 1.f);
+			if (clickIdx != -1 && clickIdx == i)
+			{
+				color = Vector4(1.f, 0.f, 0.f, 1.f);
+			}
+			gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D(worldMatrix, 0, color);
 
 			ImGui::InputFloat3("T", &key.vTranslate.x);
 			ImGui::InputFloat3("S", &key.vScale.x);

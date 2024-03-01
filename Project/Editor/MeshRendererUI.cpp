@@ -40,18 +40,18 @@ void MeshRendererUI(MeshRenderer* component)
 	Mesh* mesh = component->GetMesh();
 	std::vector<tMTBone>* bones = mesh->GetBones();
 
-	if (ImGui::CollapsingHeader("BonData"))
-	{
-		for (int i = 0; i < bones->size(); ++i)
-		{
-			const tMTBone& bone = bones->at(i);
-			std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
-			if (ImGui::TreeNode(bonName.c_str()))
-			{				
-				ImGui::TreePop();
-			}
+	//if (ImGui::CollapsingHeader("BonData"))
+	//{
+	//	for (int i = 0; i < bones->size(); ++i)
+	//	{
+	//		const tMTBone& bone = bones->at(i);
+	//		std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
+	//		if (ImGui::TreeNode(bonName.c_str()))
+	//		{				
+	//			ImGui::TreePop();
+	//		}
 
-		}
-	}
+	//	}
+	//}
 }
 	

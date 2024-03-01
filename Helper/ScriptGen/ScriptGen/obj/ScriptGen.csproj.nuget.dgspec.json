@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\source\\DirectX2D_Engine\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj": {}
+    "C:\\source\\DirectX11_3D\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj": {}
   },
   "projects": {
-    "C:\\source\\DirectX2D_Engine\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj": {
+    "C:\\source\\DirectX11_3D\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\source\\DirectX2D_Engine\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj",
+        "projectUniqueName": "C:\\source\\DirectX11_3D\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj",
         "projectName": "ScriptGen",
-        "projectPath": "C:\\source\\DirectX2D_Engine\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj",
+        "projectPath": "C:\\source\\DirectX11_3D\\Helper\\ScriptGen\\ScriptGen\\ScriptGen.csproj",
         "packagesPath": "C:\\Users\\tkdlq\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\DirectX2D_Engine\\Helper\\ScriptGen\\ScriptGen\\obj\\",
+        "outputPath": "C:\\source\\DirectX11_3D\\Helper\\ScriptGen\\ScriptGen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tkdlq\\AppData\\Roaming\\NuGet\\NuGet.Config",

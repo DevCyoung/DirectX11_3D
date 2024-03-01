@@ -7,6 +7,7 @@
 #include "Animator3D.h"
 #include "AudioListener.h"
 #include "AudioSource.h"
+#include "BoneMap.h"
 #include "Camera.h"
 #include "CircleCollider2D.h"
 #include "Collider2D.h"
@@ -28,6 +29,7 @@ static constexpr const wchar_t* const ComponentNames[static_cast<UINT>(eComponen
 	L"Animator3D",
 	L"AudioListener",
 	L"AudioSource",
+	L"BoneMap",
 	L"Camera",
 	L"CircleCollider2D",
 	L"Collider2D",
@@ -64,6 +66,8 @@ Component* CreateComponentByName(const std::wstring& componentName)
 		component = new AudioListener;
 	else if (L"AudioSource" == componentName)
 		component = new AudioSource;
+	else if (L"BoneMap" == componentName)
+		component = new BoneMap;
 	else if (L"Camera" == componentName)
 		component = new Camera;
 	else if (L"CircleCollider2D" == componentName)
@@ -116,6 +120,9 @@ Component* CreateComponentByEnum(const eComponentType type)
 		break;
 	case eComponentType::AudioSource:
 		component = new AudioSource;
+		break;
+	case eComponentType::BoneMap:
+		component = new BoneMap;
 		break;
 	case eComponentType::Camera:
 		component = new Camera;

@@ -182,6 +182,7 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="BoneMap.h" />
     <ClInclude Include="BSCollection.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CBCollection.h" />
@@ -305,6 +306,7 @@ call ScriptGen.exe Component $(SolutionDir)Project\Engine $(SolutionDir)Project\
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="BoneMap.cpp" />
     <ClCompile Include="BSCollection.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CBCollection.cpp" />

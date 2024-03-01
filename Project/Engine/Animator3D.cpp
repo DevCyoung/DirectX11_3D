@@ -12,6 +12,7 @@
 #include "StructuredBuffer.h"
 #include "TimeManager.h"
 #include "Animation3DController.h"
+#include "Transform.h"
 
 Animator3D::Animator3D()
 	: Component(eComponentType::Animator3D)
@@ -167,4 +168,27 @@ void Animator3D::lateUpdate()
 void Animator3D::Play(const std::wstring& animationName)
 {
 	(void)animationName;
+}
+
+Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
+{
+	Matrix worldMatrix = GetComponent<Transform>()->GetWorldMatrix();
+	float ratio = GetRatio();
+	Assert(boneIdx < mBones->size(), ASSERT_MSG_INVALID);
+	const tMTBone& bone = mBones->at(boneIdx);
+	tMTKeyFrame key = bone.vecKeyFrame[mFrameIdx];
+	tMTKeyFrame nextKey = bone.vecKeyFrame[(mFrameIdx + 1) % bone.vecKeyFrame.size()];
+
+	Quaternion qt = Quaternion(key.qRot.x, key.qRot.y, key.qRot.z, key.qRot.w);
+	Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
+
+	Vector3 pos = Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
+	Vector3 scale = Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
+
+
+	Matrix scaleMatrix = Matrix::CreateScale(scale);
+	Matrix rotationMatrix = XMMatrixRotationQuaternion(qt);
+	Matrix transMatrix = Matrix::CreateTranslation(pos);	
+	worldMatrix = scaleMatrix * rotationMatrix * transMatrix * worldMatrix;
+	return worldMatrix;
 }

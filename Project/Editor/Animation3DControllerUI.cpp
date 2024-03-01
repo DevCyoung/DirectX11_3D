@@ -10,6 +10,14 @@ void Animation3DControllerUI(Animation3DController* component)
 	ComponentUI(component);
 
 	const std::vector<Animator3D*>& animation3Ds = component->GetAnimation3Ds();
+
+	bool bStop = component->IsStop();
+
+	if (ImGui::Checkbox("stop", &bStop))
+	{
+		component->Stop(bStop);
+	}
+
 	if (!animation3Ds.empty())
 	{
 		const std::vector<tMTAnimClip>& clips = *animation3Ds[0]->GetAnimationClip();

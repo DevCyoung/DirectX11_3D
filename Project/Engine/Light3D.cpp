@@ -45,5 +45,5 @@ void Light3D::lateUpdate()
 	gGraphicDevice->BindCBAllShader(eCBType::Light3D);
 
 	Matrix word = GetComponent<Transform>()->GetWorldMatrix();
-	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D( word, 0 );
+	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D( word, 0 , Vector4(1.f, 1.f, 0.f, 1.f));
 }

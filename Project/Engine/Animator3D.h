@@ -54,6 +54,8 @@ public:
     int GetCurFrameIdx() { return mFrameIdx; }
     void SetController(Animation3DController* const controller) { mController = controller; }
 
+    Matrix GetCurGrameBoneMatrix(int boneIdx);
+
     const std::vector<tMTBone>* GetBones() { return mBones; }
 public:
     std::vector<tMTBone>*           mBones;

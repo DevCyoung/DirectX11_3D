@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScriptGen")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a46d3dbf1f4eae43d8c088ccf5a5d69ee1116e6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+865227fe545308372c475b6a311cfbaac0e7dec3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScriptGen")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScriptGen")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

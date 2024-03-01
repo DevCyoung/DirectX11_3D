@@ -463,6 +463,9 @@
     <ClInclude Include="Animation3DController.h">
       <Filter>Source\03. Component\03. Render\Animation3DController</Filter>
     </ClInclude>
+    <ClInclude Include="BoneMap.h">
+      <Filter>Source\03. Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -669,6 +672,9 @@
     </ClCompile>
     <ClCompile Include="Animation3DController.cpp">
       <Filter>Source\03. Component\03. Render\Animation3DController</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneMap.cpp">
+      <Filter>Source\03. Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

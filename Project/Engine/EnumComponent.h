@@ -11,6 +11,7 @@ enum class eComponentType
 	Animator3D,
 	AudioListener,
 	AudioSource,
+	BoneMap,
 	Camera,
 	CircleCollider2D,
 	Collider2D,

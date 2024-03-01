@@ -13,6 +13,8 @@ class AudioListener;
 void AudioListenerUI(AudioListener* component);
 class AudioSource;
 void AudioSourceUI(AudioSource* component);
+class BoneMap;
+void BoneMapUI(BoneMap* component);
 class Camera;
 void CameraUI(Camera* component);
 class Collider2D;
@@ -59,6 +61,9 @@ void ComponentUIRender(Component* component)
 		break;
 	case eComponentType::AudioSource:
 		AudioSourceUI((AudioSource*)component);
+		break;
+	case eComponentType::BoneMap:
+		BoneMapUI((BoneMap*)component);
 		break;
 	case eComponentType::Camera:
 		CameraUI((Camera*)component);

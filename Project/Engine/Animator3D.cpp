@@ -122,7 +122,7 @@ void Animator3D::ClearData()
 void Animator3D::update()
 {
 }
-
+//FIXME ComputeShader연산 항상하는것 고치기
 void Animator3D::lateUpdate()
 {
 
@@ -178,16 +178,13 @@ Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
 	const tMTBone& bone = mBones->at(boneIdx);
 	tMTKeyFrame key = bone.vecKeyFrame[mFrameIdx];
 	tMTKeyFrame nextKey = bone.vecKeyFrame[(mFrameIdx + 1) % bone.vecKeyFrame.size()];
-
-	Quaternion qt = Quaternion(key.qRot.x, key.qRot.y, key.qRot.z, key.qRot.w);
-	Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
-
+	
+	Quaternion qRot = Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
 	Vector3 pos = Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
 	Vector3 scale = Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
 
-
 	Matrix scaleMatrix = Matrix::CreateScale(scale);
-	Matrix rotationMatrix = XMMatrixRotationQuaternion(qt);
+	Matrix rotationMatrix = XMMatrixRotationQuaternion(qRot);
 	Matrix transMatrix = Matrix::CreateTranslation(pos);	
 	worldMatrix = scaleMatrix * rotationMatrix * transMatrix * worldMatrix;
 	return worldMatrix;

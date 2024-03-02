@@ -709,7 +709,7 @@ void EngineResourceLoader::loadShader()
 	//std3D Debug
 	{
 		Shader* const wavePostProcess =
-			new Shader(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+			new Shader(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP,
 				L"\\Shader\\std3d_debug.hlsl", L"VS_Std3D",
 				L"\\Shader\\std3d_debug.hlsl", L"PS_Std3D",
 				eSMType::Std3D,
@@ -717,7 +717,7 @@ void EngineResourceLoader::loadShader()
 				eDSType::LessEqual,
 				eBSType::Default);
 
-		gResourceManager->Insert(L"Std3DDebug", wavePostProcess);
+		gResourceManager->Insert(L"Std3DCubeDebug", wavePostProcess);
 	}
 }
 

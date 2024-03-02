@@ -9,7 +9,9 @@
 #include <Engine/Mesh.h>
 #include <Engine/Material.h>
 
-EditorSetting::EditorSetting()
+float EditorSetting::SkeletonScale = 1.f;
+
+EditorSetting::EditorSetting()	
 {
 	SetTitle("Editor Setting");
 }
@@ -47,6 +49,12 @@ void EditorSetting::drawForm()
 	{
 		GameObject* obj = CreateObject();
 		gCurrentScene->RegisterEventAddGameObject(obj, eLayerType::Default);
+	}
+
+	//float mSkeletonScale = 1.f;
+
+	if (ImGui::InputFloat("skeletonScale", &SkeletonScale, 0.01f, 5.f))
+	{
 	}
 
 	ImGui::End();

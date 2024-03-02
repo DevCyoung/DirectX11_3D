@@ -92,6 +92,11 @@ void Animator3DUI(Animator3D* component)
 			{
 				color = Vector4(1.f, 0.f, 0.f, 1.f);
 			}
+
+			Matrix skeletonScaleMatrix = Matrix::CreateScale(EditorSetting::SkeletonScale, EditorSetting::SkeletonScale, EditorSetting::SkeletonScale);
+
+			worldMatrix = skeletonScaleMatrix * worldMatrix;
+
 			gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D(worldMatrix, 0, color);
 
 			ImGui::InputFloat3("T", &key.vTranslate.x);

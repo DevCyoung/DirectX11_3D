@@ -22,7 +22,7 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 {		
 	const std::vector<GameObject*>& childObjects = gameObject->GetChildObjects();
 
-	std::string itemName = std::string(gameObject->GetName().begin(), gameObject->GetName().end());
+	std::string itemName = StringHelper::WStrToStr(gameObject->GetName());
 	UINT id = gameObject->GetID();
 	itemName += "##";
 	itemName += std::to_string(id);
@@ -63,7 +63,7 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 
 void GameObjectViewUI::popEvent(GameObject* gameObject)
 {	
-	std::string name = std::string(gameObject->GetName().begin(), gameObject->GetName().end());
+	std::string name = StringHelper::WStrToStr(gameObject->GetName());
 	
 	if (!ImGui::IsItemHovered())
 	{

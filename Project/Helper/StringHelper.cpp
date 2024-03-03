@@ -12,6 +12,27 @@ StringHelper::~StringHelper()
 {
 }
 
+//FIXME ÇÙ
+std::wstring StringHelper::StrToWStr(const std::string& str)
+{
+	const int WSTR_LEN = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0) - 1;
+	Assert(0 <= WSTR_LEN, ASSERT_MSG_INVALID);
+
+	std::wstring wstr(WSTR_LEN, 0);
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, wstr.data(), WSTR_LEN);
+	return wstr;
+}
+
+std::string StringHelper::WStrToStr(const std::wstring& wstr)
+{
+	const int STR_LEN = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr) - 1;
+	Assert(0 <= STR_LEN, ASSERT_MSG_INVALID);
+
+	std::string str(STR_LEN, 0);
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, str.data(), STR_LEN, nullptr, nullptr);
+	return str;
+}
+
 std::vector<std::wstring> StringHelper::VecToWVec(const std::vector<std::string>& vec)
 {
 	std::vector<std::wstring> result;
@@ -31,70 +52,57 @@ std::vector<std::string> StringHelper::WVecToVec(const std::vector<std::wstring>
 
 	for (const std::wstring& wstr : wvec)
 	{
-		result.push_back(std::string(wstr.begin(), wstr.end()));
+		result.push_back(StringHelper::WStrToStr(wstr));
 	}
 	return result;
 }
 
-//ÇöÀçÇÙÀ¸·Î ÇÏ¿´À½ ÃßÈÄ¿¡ Á¤È®È÷ »ç¿ë¹ýÀ» ÀÍÈú°Í
-std::wstring StringHelper::StrToWStr(const std::string& str)
-{
-	const int WSTR_LEN = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
-	std::wstring wstr(WSTR_LEN, 0);
-	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, wstr.data(), WSTR_LEN);
-	return wstr;
-}
-
-std::string StringHelper::WStrToStr(const std::wstring& wstr)
-{
-	const int STR_LEN = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
-	std::string str(STR_LEN, 0);
-	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, str.data(), STR_LEN, nullptr, nullptr);
-	return str;
-}
-//ÇÙÇÙÇÙ
-
-std::wstring StringHelper::SplitFilePathExtension(const std::wstring& filePath)
-{
+std::wstring StringHelper::GetFileExtension(const std::wstring& path)
+{	
 	constexpr UINT FILE_PATH_MAX_LEN = 512;
+	Assert(path.length() < FILE_PATH_MAX_LEN, ASSERT_MSG("error file path"));
 	wchar_t szExtension[FILE_PATH_MAX_LEN] = { 0, };
 
-	errno_t err = _wsplitpath_s(filePath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExtension, FILE_PATH_MAX_LEN);
+	errno_t err = _wsplitpath_s(path.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExtension, FILE_PATH_MAX_LEN);
 	(void)(err);
-
 	Assert(!err, ASSERT_MSG("error file path"));
 
 	return szExtension;
 }
 
-void StringHelper::SplitDirectoryPathAndFileName(const std::wstring& filePath,
-	std::wstring* outDirectoryPath, std::wstring* outFileName)
+void StringHelper::GetRootPathAndFileName(const std::wstring& path,
+	std::wstring* const outDirectoryPath, 
+	std::wstring* const outFileName)
 {
 	Assert(outDirectoryPath, ASSERT_MSG_NULL);
 	Assert(outFileName, ASSERT_MSG_NULL);
-
-	std::wstring copyPath = filePath;
+	
 	std::wstring retDirectoryPath;
 	std::wstring retFileName;
 
 	retDirectoryPath.reserve(100);
 	retFileName.reserve(100);
 
-	int i = static_cast<int>(copyPath.length()) - 1;
+	int i = static_cast<int>(path.length()) - 1;
 
-	for (; i >= 0; --i)
+	if (L'\\' == path[i])
 	{
-		if (L'\\' == filePath[i])
-		{
-			break;
-		}
-
-		retFileName += copyPath[i];
+		--i;
 	}
 
 	for (; i >= 0; --i)
 	{
-		retDirectoryPath += copyPath[i];
+		if (L'\\' == path[i])
+		{
+			break;
+		}
+
+		retFileName += path[i];
+	}
+
+	for (; i >= 0; --i)
+	{
+		retDirectoryPath += path[i];
 	}
 
 	std::reverse(retFileName.begin(), retFileName.end());
@@ -104,8 +112,9 @@ void StringHelper::SplitDirectoryPathAndFileName(const std::wstring& filePath,
 	*outFileName = retFileName;
 }
 
-void StringHelper::SplitRootNameAndFilePath(const std::wstring& filePath,
-	std::wstring* outRootName, std::wstring* outFilePath)
+void StringHelper::GetRootNameAndRelativeFilePath(const std::wstring& path,
+	std::wstring* const outRootName, 
+	std::wstring* const outFilePath)
 {
 	Assert(outRootName, ASSERT_MSG_NULL);
 	Assert(outFilePath, ASSERT_MSG_NULL);
@@ -121,9 +130,9 @@ void StringHelper::SplitRootNameAndFilePath(const std::wstring& filePath,
 
 	int i = 0;
 
-	for (; i < filePath.length(); ++i)
+	for (; i < path.length(); ++i)
 	{
-		if (filePath[i] == L'\\')
+		if (path[i] == L'\\')
 		{
 			++check;
 		}
@@ -132,12 +141,12 @@ void StringHelper::SplitRootNameAndFilePath(const std::wstring& filePath,
 			break;
 		}
 
-		retRootName += filePath[i];
+		retRootName += path[i];
 	}
 
-	for (; i < filePath.length(); ++i)
+	for (; i < path.length(); ++i)
 	{
-		retFilePath += filePath[i];
+		retFilePath += path[i];
 	}
 
 	//ÆÄÀÏÈ¥ÀÚ³²¾Ò´Ù!

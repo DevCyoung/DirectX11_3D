@@ -109,7 +109,7 @@ public:
 		FbxCluster* _pCluster, 
 		const FbxAMatrix& _matNodeTransform
 		, int _iBoneIdx, tContainer* _pContainer);
-	void checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer);
+	void checkWeightAndIndices(tContainer* _pContainer);
 
 	FbxAMatrix getGeometryTransformation(FbxNode* _pNode);
 

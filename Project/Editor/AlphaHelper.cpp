@@ -14,7 +14,7 @@
 #include <Engine/StructBuffer.h>
 #include <Engine/EnumShaderBindStage.h>
 #include <Engine/ConstantBuffer.h>
-void TextureAlphaTo(Texture* const dst, Texture* const src, const float alpha)
+void TextureAlphaTo(Texture* const dst, Texture* const src)
 {
 	ComputeShader* cs = gResourceManager->Find<ComputeShader>(L"StdCS");
 	{

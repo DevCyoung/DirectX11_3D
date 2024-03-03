@@ -9,7 +9,7 @@ void ResourceUI::AddResourceUI(ItemUI* const itemUI)
 	std::wstring wOutRootName;
 	std::wstring wOutFilePath;
 
-	StringHelper::SplitRootNameAndFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
+	StringHelper::GetRootNameAndRelativeFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
 
 	//myRootName
 	mRootName = StringHelper::WStrToStr(wOutRootName);

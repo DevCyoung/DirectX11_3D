@@ -4,4 +4,5 @@
 
 void MeshDataUI(MeshData* meshData)
 {
+	(void)meshData;
 }

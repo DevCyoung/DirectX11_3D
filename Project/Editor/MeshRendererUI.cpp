@@ -7,7 +7,6 @@
 class RenderComponent;
 void RenderComponentUI(RenderComponent* component);
 
-
 void MeshRendererUI(MeshRenderer* component)
 {
 	RenderComponentUI(component);
@@ -15,7 +14,7 @@ void MeshRendererUI(MeshRenderer* component)
 	ImGui::Separator();
 
 	//Material
-	for (int i = 0; i < component->GetMaterialCount(); ++i)
+	for (UINT i = 0; i < component->GetMaterialCount(); ++i)
 	{
 		Material* material = component->GetMaterial(i);
 		std::string name = StringHelper::WStrToStr(material->GetRelativePathorName());
@@ -36,22 +35,5 @@ void MeshRendererUI(MeshRenderer* component)
 		}		
 	}
 	ImGui::Separator();
-	//Mesh
-	Mesh* mesh = component->GetMesh();
-	std::vector<tMTBone>* bones = mesh->GetBones();
-
-	//if (ImGui::CollapsingHeader("BonData"))
-	//{
-	//	for (int i = 0; i < bones->size(); ++i)
-	//	{
-	//		const tMTBone& bone = bones->at(i);
-	//		std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
-	//		if (ImGui::TreeNode(bonName.c_str()))
-	//		{				
-	//			ImGui::TreePop();
-	//		}
-
-	//	}
-	//}
 }
 	

@@ -115,8 +115,8 @@ namespace ImGui
 
     bool ComboAutoSelectData::SetNewValue(const char* new_val) noexcept
     {
-        bool ret;
-        if (ret = CurrentSelection != InitialValues.Index) {
+        bool ret = CurrentSelection != InitialValues.Index;
+        if (ret) {
             strncpy(InputText, new_val, StringCapacity);
             InitialValues.Preview = new_val;
             InitialValues.Index = CurrentSelection;
@@ -154,8 +154,8 @@ namespace ImGui
             InputText[0] = '\0';
         }
 
-        bool ret;
-        if (ret = CurrentSelection != InitialValues.Index) {
+        bool ret = CurrentSelection != InitialValues.Index;
+        if (ret) {
             InitialValues.Preview = new_val;
             InitialValues.Index = CurrentSelection;
         }

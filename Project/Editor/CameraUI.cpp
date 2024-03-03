@@ -8,12 +8,15 @@ void CameraUI(Camera* component)
 {
 	ComponentUI(component);
 	//component->get
-	eCameraProjectionType type = component->GetProjectionType();
+	//eCameraProjectionType type = component->GetProjectionType();
 	float fov = component->GetFOV();
 	float _far = component->GetFar();
 	float _near = component->GetNear();
 	float ratio = component->GetAspectRatio();
 	int mask = component->GetLayerMask();
+
+	(void)mask;
+	(void)ratio;
 
 	ImGui::DragFloat("Fov", &fov);
 	ImGui::DragFloat("Far", &_far);

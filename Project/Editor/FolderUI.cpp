@@ -11,7 +11,6 @@ FolderUI::~FolderUI()
 	mem::del::DeleteVectorElements(&mForderUIs);
 }
 
-
 void FolderUI::AddResourceUI(ResourceUI* const resourceUI)
 {
 	std::string relativePath = resourceUI->GetName();
@@ -20,7 +19,7 @@ void FolderUI::AddResourceUI(ResourceUI* const resourceUI)
 	std::wstring wOutRootName;
 	std::wstring wOutFilePath;
 
-	StringHelper::SplitRootNameAndFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
+	StringHelper::GetRootNameAndRelativeFilePath(wRelativePath, &wOutRootName, &wOutFilePath);
 
 	std::string outRootName = StringHelper::WStrToStr(wOutRootName);
 	std::string outFilePath = StringHelper::WStrToStr(wOutFilePath);

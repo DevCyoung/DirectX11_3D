@@ -4,4 +4,5 @@
 
 void ShaderUI(Shader* shader)
 {
+	(void)shader;
 }

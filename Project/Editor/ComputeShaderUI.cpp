@@ -4,4 +4,5 @@
 
 void ComputeShaderUI(ComputeShader* computeShader)
 {
+	(void)computeShader;
 }

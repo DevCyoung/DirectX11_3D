@@ -107,7 +107,7 @@ Texture::~Texture()
 
 HRESULT Texture::Load(const std::wstring& filePath)
 {
-	const std::wstring& FILE_EXTENSION = StringHelper::SplitFilePathExtension(filePath);
+	const std::wstring& FILE_EXTENSION = StringHelper::GetFileExtension(filePath);
 
 	if (FILE_EXTENSION == L".dds" || FILE_EXTENSION == L".DDS")
 	{

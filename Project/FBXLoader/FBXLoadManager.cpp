@@ -22,7 +22,7 @@ FBXLoadManager::~FBXLoadManager()
 
 void FBXLoadManager::Load(const std::wstring& wFilePath)
 {
-	const std::string& FILE_PATH = std::string(wFilePath.cbegin(), wFilePath.cend());
+	const std::string& FILE_PATH = StringHelper::WStrToStr(wFilePath);
 	FbxImporter* const imposter = FbxImporter::Create(mFbxManager, "");
 	Assert(imposter, ASSERT_MSG_NULL);
 
@@ -104,7 +104,7 @@ void FBXLoadManager::lodeMesh(FbxScene* const fbxScene, FbxMesh* FbxMesh)
 	tContainer& container = mVecContainer[mVecContainer.size() - 1];
 	const std::string& MESH_NAME = FbxMesh->GetName();
 
-	container.strName = std::wstring(MESH_NAME.begin(), MESH_NAME.end());
+	container.strName = StringHelper::StrToWStr(MESH_NAME);
 	container.vecBone = m_vecOffsetBone;
 	const int VERTEX_COUNT = FbxMesh->GetControlPointsCount();
 	container.Resize(VERTEX_COUNT);
@@ -215,7 +215,7 @@ std::wstring FBXLoadManager::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, c
 		}
 	}
 
-	return std::wstring(strName.begin(), strName.end());
+	return StringHelper::StrToWStr(strName);
 }
 
 void FBXLoadManager::lodeMaterial(FbxSurfaceMaterial* _pMtrlSur)
@@ -223,7 +223,7 @@ void FBXLoadManager::lodeMaterial(FbxSurfaceMaterial* _pMtrlSur)
 	tFbxMaterial tMtrlInfo{};
 
 	std::string str = _pMtrlSur->GetName();
-	tMtrlInfo.strMtrlName = std::wstring(str.begin(), str.end());
+	tMtrlInfo.strMtrlName = StringHelper::StrToWStr(str);
 
 	// Diff
 	tMtrlInfo.tMtrl.vDiff = GetMtrlData(_pMtrlSur
@@ -296,7 +296,7 @@ void FBXLoadManager::loadSkeletonRe(FbxNode* _pNode, int depth, int Idx, int par
 		{
 			tBone bone = {};
 			const std::string& BONE_NAME = _pNode->GetName();
-			bone.boneName = std::wstring(BONE_NAME.begin(), BONE_NAME.end());
+			bone.boneName = StringHelper::StrToWStr(BONE_NAME);
 			bone.depth = depth++;
 			bone.parentIdx = parentIdx;
 			m_vecOffsetBone.push_back(bone);			
@@ -331,7 +331,7 @@ void FBXLoadManager::loadAnimationClip(FbxScene* const fbxScene)
 		tAnimClip* pAnimClip = new tAnimClip;
 
 		std::string strClipName = pAnimStack->GetName();
-		pAnimClip->strName = std::wstring(strClipName.begin(), strClipName.end());
+		pAnimClip->strName = StringHelper::StrToWStr(strClipName);
 
 		FbxTakeInfo* pTakeInfo = fbxScene->GetTakeInfo(pAnimStack->GetName());
 		pAnimClip->tStartTime = pTakeInfo->mLocalTimeSpan.GetStart();
@@ -396,12 +396,12 @@ void FBXLoadManager::loadAnimationData(FbxScene* const fbxScene, FbxMesh* _pMesh
 			}
 		}
 	}
-	checkWeightAndIndices(_pMesh, _pContainer);
+	checkWeightAndIndices(_pContainer);
 }
 
 int FBXLoadManager::findBoneIndex(const std::string& _strBoneName, tContainer* _pContainer)
 {
-	std::wstring strBoneName = std::wstring(_strBoneName.begin(), _strBoneName.end());
+	std::wstring strBoneName = StringHelper::StrToWStr(_strBoneName);
 
 	for (UINT i = 0; i < _pContainer->vecBone.size(); ++i)
 	{
@@ -491,7 +491,7 @@ void FBXLoadManager::loadKeyframeTransform(FbxScene* const fbxScene,
 	for (size_t i = 0; i < m_vecAnimClip.size(); ++i)
 	{
 		// 애님 클립 이름으로 FbxAnimStack 정보를 찾는다.
-		std::string strClipName = std::string(m_vecAnimClip[i]->strName.begin(), m_vecAnimClip[i]->strName.end());
+		std::string strClipName = StringHelper::WStrToStr(m_vecAnimClip[i]->strName);
 		FbxAnimStack* pAnimStack = fbxScene->FindMember<FbxAnimStack>(strClipName.c_str());
 
 		// 현재 AnimStack 을 변경한다.
@@ -501,12 +501,12 @@ void FBXLoadManager::loadKeyframeTransform(FbxScene* const fbxScene,
 		FbxLongLong llStartFrame = m_vecAnimClip[i]->tStartTime.GetFrameCount(eTimeMode);
 		FbxLongLong llEndFrame = m_vecAnimClip[i]->tEndTime.GetFrameCount(eTimeMode);
 
-		for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
+		for (FbxLongLong j = llStartFrame; j < llEndFrame; ++j)
 		{
 			tKeyFrame tFrame = {};
 			FbxTime   tTime = 0;
 
-			tTime.SetFrame(i, eTimeMode);
+			tTime.SetFrame(j, eTimeMode);
 
 			FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * _matNodeTransform;
 			FbxAMatrix matCurTrans = matFromNode.Inverse() * _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
@@ -520,7 +520,7 @@ void FBXLoadManager::loadKeyframeTransform(FbxScene* const fbxScene,
 	}
 }
 
-void FBXLoadManager::checkWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer)
+void FBXLoadManager::checkWeightAndIndices(tContainer* _pContainer)
 {
 	std::vector<std::vector<tWeightsAndIndices>>::iterator iter = _pContainer->vecWI.begin();
 

@@ -207,6 +207,7 @@ void FolderViewUI::Pop()
 
 void FolderViewUI::Enter(const std::string& enter)
 {
+	(void)enter;
 }
 
 void FolderViewUI::update()

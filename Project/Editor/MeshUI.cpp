@@ -4,4 +4,5 @@
 
 void MeshUI(Mesh* shader)
 {
+	(void)shader;
 }

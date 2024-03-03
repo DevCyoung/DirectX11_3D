@@ -299,22 +299,20 @@
     <None Include="..\..\Output\bin\Resources\Shader\VSAlphaTo.hlsl">
       <Filter>ShaderCode\AlphaTo</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl">
-      <Filter>ShaderCode\Animation2D\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d.hlsl">
+    <None Include="..\..\Output\bin\Resources\Shader\animation3d.hlsl">
+      <Filter>ShaderCode</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
+      <Filter>ShaderCode</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\std3d.hlsl">
       <Filter>ShaderCode\3D</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\animation3d.hlsl">
-      <Filter>ShaderCode</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
-      <Filter>ShaderCode</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d_debug.hlsl">
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\std3d_debug.hlsl">
       <Filter>ShaderCode\3D\Debug</Filter>
-    </FxCompile>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl">
+      <Filter>ShaderCode\Animation2D\Default</Filter>
+    </None>
   </ItemGroup>
 </Project>

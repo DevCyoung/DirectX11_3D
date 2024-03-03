@@ -40,7 +40,7 @@ void GameViewUI::drawForm()
 	Texture* rwTex = gResourceManager->Find<Texture>(L"/Editor/GameViewRWTexture");
 	Texture* rwTex2 = gResourceManager->Find<Texture>(L"/Editor/GameViewCopyRWTexture");
 	gGraphicDevice->CopyResource(rwTex2->GetID3D11Texture2D(), renderTex->GetID3D11Texture2D());
-	TextureAlphaTo(rwTex, rwTex2, 1.f);
+	TextureAlphaTo(rwTex, rwTex2);
 	gGraphicDevice->CopyResource(renderTex->GetID3D11Texture2D(), rwTex->GetID3D11Texture2D());
 	Engine::GetInstance()->OmSet();
 
@@ -50,7 +50,8 @@ void GameViewUI::drawForm()
 	ImVec2 renderTargetSize = ImVec2(renderTex->GetWidth(), renderTex->GetHeight());
 	POINT ptMousePos = {};
 	GetCursorPos(&ptMousePos);
-	ImVec2 mousePos = ImVec2(ptMousePos.x, ptMousePos.y);
+	ImVec2 mousePos = 
+		ImVec2(static_cast<float>(ptMousePos.x), static_cast<float>(ptMousePos.y));
 	ImGui::Image((void*)texture, renderTargetSize);
 	ImVec2 screenMousePos = ImVec2(mousePos.x - cursurScreenPos.x,
 		mousePos.y - cursurScreenPos.y);

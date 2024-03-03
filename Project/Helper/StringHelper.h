@@ -15,15 +15,15 @@ public:
 
 	static std::wstring StrToWStr(const std::string& str);
 	static std::string WStrToStr(const std::wstring& wstr);
-	static std::wstring SplitFilePathExtension(const std::wstring& filePath);
+	static std::wstring GetFileExtension(const std::wstring& filePath);
 
-	static void SplitDirectoryPathAndFileName(const std::wstring& filePath,
-		std::wstring* outDirectoryPath,
-		std::wstring* outFileName);
+	static void GetRootPathAndFileName(const std::wstring& filePath,
+		std::wstring* const outDirectoryPath,
+		std::wstring* const outFileName);
 
-	static void SplitRootNameAndFilePath(const std::wstring& filePath,
-		std::wstring* outRootName,
-		std::wstring* outFilePath);
+	static void GetRootNameAndRelativeFilePath(const std::wstring& filePath,
+		std::wstring* const outRootName,
+		std::wstring* const outFilePath);
 
 	static std::wstring SWPrintf(const wchar_t* const format, ...);
 

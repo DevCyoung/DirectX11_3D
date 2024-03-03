@@ -7277,6 +7277,8 @@ bool ImGui::BeginMenuBar()
 void ImGui::EndMenuBar()
 {
     ImGuiWindow* window = GetCurrentWindow();
+    if (!window)
+        return;    
     if (window->SkipItems)
         return;
     ImGuiContext& g = *GImGui;

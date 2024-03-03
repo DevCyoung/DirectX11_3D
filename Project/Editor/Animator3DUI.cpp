@@ -62,7 +62,7 @@ void Animator3DUI(Animator3D* component)
 		for (int i = 0; i < bones->size(); ++i)
 		{
 			const tMTBone& bone = bones->at(i);
-			std::string bonName = std::string(bone.strBoneName.begin(), bone.strBoneName.end());
+			std::string bonName = StringHelper::WStrToStr(bone.strBoneName);
 			if (ImGui::Selectable(bonName.c_str()))
 			{
 				clickIdx = i;

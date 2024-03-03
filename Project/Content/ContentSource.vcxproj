@@ -161,9 +161,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)Project\Content\Helper\Resource\Release\net6.0
-call ResourceHelper.exe $(SolutionDir)Output\bin\Resources $(SolutionDir)Project\Content
-cd $(SolutionDir)Project\Content\Helper\ScriptGen\Release\net6.0
+      <Command>cd $(SolutionDir)Project\Content\Helper\ScriptGen\Release\net6.0
 call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)Project\Content\EnumScriptComponent.h $(SolutionDir)Project\Content\EnumScriptComponent.cpp FALSE</Command>
     </PreBuildEvent>
     <FxCompile>
@@ -404,7 +402,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
     <None Include="..\..\Output\bin\Resources\Shader\PSNextScene.hlsl">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\animation3d.hlsl">
+    <None Include="..\..\Output\bin\Resources\Shader\animation3d.hlsl">
       <FileType>Document</FileType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </EntryPointName>
@@ -414,8 +412,8 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       </EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\copybone.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
@@ -424,8 +422,9 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       </EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </EntryPointName>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\std3d.hlsl">
       <FileType>Document</FileType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
@@ -435,14 +434,17 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       </EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\std3d_debug.hlsl">
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\std3d_debug.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl" />
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl">
+      <FileType>Document</FileType>
+    </None>
     <None Include="..\..\Output\bin\Resources\Shader\VSUI2D.hlsl">
       <FileType>Document</FileType>
     </None>

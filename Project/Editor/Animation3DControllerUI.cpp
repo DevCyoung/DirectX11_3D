@@ -19,8 +19,11 @@ void Animation3DControllerUI(Animation3DController* component)
 	}
 
 	if (!animation3Ds.empty())
-	{
-		const std::vector<tMTAnimClip>& clips = *animation3Ds[0]->GetAnimationClip();
+	{		
+		int curFrame = component->GetCurFrameIdx();
+		ImGui::Text("frame %d", curFrame);		
+
+		std::vector<tMTAnimClip>& clips = *component->GetAnimationClip();
 		static int item_current = 0;
 
 		std::vector<std::wstring> clipNames;
@@ -33,7 +36,8 @@ void Animation3DControllerUI(Animation3DController* component)
 
 		if (ImGui::Combo("##Animation3DComboCLips", &item_current, clipNames))
 		{
-			//component->SetClipID(item_current);
+			//component->SetClipID(item_current);		
+			component->SetClip(item_current);
 		}
 
 		int idx = item_current;
@@ -43,16 +47,61 @@ void Animation3DControllerUI(Animation3DController* component)
 			return;
 		}
 
-		int startFrame = animation3Ds[0]->GetStartFrame(idx);
-		int endFrame = animation3Ds[0]->GetEndFrame(idx);
+		int startFrame = clips[idx].iStartFrame;
+		int endFrame = clips[idx].iEndFrame;
 
-		if (ImGui::InputInt("starFrame", &startFrame))
+		ImGui::InputInt("starFrame : %d", &startFrame);
+		ImGui::InputInt("endFrame : %d", &endFrame);
+
+		if (bStop && ImGui::InputInt("stop##frame", &curFrame))
+		{
+			component->SetCurFrameIde(curFrame);
+		}
+
+		static int createStartFrame = 0;
+		static int createEndFrame   = 0;
+
+		ImGui::Text("Create Clip");
+		static char buf[256] = {0,};
+		ImGui::InputText("##Create Clip", buf, 256);
+
+		if (ImGui::InputInt("starFrame", &createStartFrame))
 		{
 			//component->SetStartFrame(idx, startFrame);
 		}
-		if (ImGui::InputInt("endFrame", &endFrame))
+		if (ImGui::InputInt("endFrame", &createEndFrame))
 		{
 			//component->SetEndFrame(idx, endFrame);
+		}
+
+		bool flag = true;
+		const std::wstring& bufStr = StringHelper::StrToWStr(buf);
+		if (ImGui::Button("Create Clip"))
+		{
+			std::vector<tMTAnimClip>::iterator iter = clips.begin();
+			
+			for (; iter != clips.end(); ++iter)
+			{
+				if (iter->strAnimName == bufStr)
+				{
+					flag = false;
+					break;
+				}
+			}
+
+			if (flag)
+			{
+				tMTAnimClip clip = {};
+				clip.iStartFrame = createStartFrame;
+				clip.iEndFrame = createEndFrame;
+				clip.strAnimName = StringHelper::StrToWStr(buf);
+				clips.push_back(clip);
+				component->SetAnimClip(&clips);
+			}
+		}
+		if (clips.size() > 1 && ImGui::Button("Remove Clip"))
+		{			
+			component->RemoveClip(clipNames[idx]);
 		}
 	}
 }

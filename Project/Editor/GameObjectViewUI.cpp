@@ -5,6 +5,7 @@
 #include <Engine/GameObject.h>
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
+
 GameObjectViewUI::GameObjectViewUI()
 	:mSelectedGameObject(nullptr)
 {
@@ -15,11 +16,11 @@ GameObjectViewUI::~GameObjectViewUI()
 }
 
 void GameObjectViewUI::update()
-{	
+{
 }
 
-void GameObjectViewUI::popUpView(GameObject* gameObject)
-{		
+void GameObjectViewUI::popUpView(GameObject* const gameObject)
+{
 	const std::vector<GameObject*>& childObjects = gameObject->GetChildObjects();
 
 	std::string itemName = StringHelper::WStrToStr(gameObject->GetName());
@@ -27,83 +28,87 @@ void GameObjectViewUI::popUpView(GameObject* gameObject)
 	itemName += "##";
 	itemName += std::to_string(id);
 
-	if (!childObjects.empty())
-	{		
-		if (ImGui::TreeNode(itemName.c_str()))
+	if (childObjects.empty())
+	{
+		ImGui::Bullet();
+		if (ImGui::Selectable(itemName.c_str(), false))
+		{	
+			mSelectedGameObject = gameObject;
+		}
+		popEvent(gameObject);
+	}
+	else
+	{
+		if (ImGui::TreeNodeEx(itemName.c_str()))
 		{
 			if (ImGui::IsItemClicked())
 			{
-				//ImGui::SetMouseCursor(0);
 				mSelectedGameObject = gameObject;
 			}
-
+			popEvent(gameObject);
 			for (GameObject* childObj : childObjects)
 			{
 				popUpView(childObj);
 			}
-
-			popEvent(gameObject);
 			ImGui::TreePop();
 		}
-	}	
-	else
-	{
-		ImGui::Bullet();
-		if (ImGui::Selectable(itemName.c_str(), false))
-		{
-			//ImGui::SetMouseCursor(0);			
-			mSelectedGameObject = gameObject;
-		}
-
-		popEvent(gameObject);
 	}
-
-	//popEvent(gameObject);
 }
 
-void GameObjectViewUI::popEvent(GameObject* gameObject)
-{	
+void GameObjectViewUI::popEvent(GameObject* const gameObject)
+{
 	std::string name = StringHelper::WStrToStr(gameObject->GetName());
-	
-	if (!ImGui::IsItemHovered())
-	{
-		return;
-	}
 
+	if (ImGui::BeginDragDropSource())
+	{
+		ImGui::SetDragDropPayload("GAMEOBJECT", &gameObject, sizeof(gameObject));
+		ImGui::Text("%s", name.c_str());
+		ImGui::EndDragDropSource();
+	}
+	if (ImGui::BeginDragDropTarget())
+	{
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GAMEOBJECT");
+		if (payload)
+		{
+			GameObject* resObject = *(GameObject**)payload->Data; 			
+			gameObject->SetChild(resObject);			
+		}		
+		ImGui::EndDragDropTarget();
+	}
 	if (ImGui::BeginPopupContextItem())
 	{
-		if (ImGui::Button("Load"))
+		ImGui::Text("%s", name.c_str());
+		if (ImGui::Button("Remove"))
 		{
+			gCurrentScene->RegisterEventSetDestroy(gameObject);
+			PanelUI* inspectorUI = PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI");
+			GameObject* obj = nullptr;
+			static_cast<InspectorUI*>(inspectorUI)->Register(obj);
 		}
-		if (ImGui::Button("Close"))
-			ImGui::CloseCurrentPopup();
+		if (ImGui::Button("Detatch"))
+		{
+			gameObject->SetParent(nullptr);
+		}
 		ImGui::EndPopup();
-	}	
-	ImGui::SetItemTooltip(name.c_str());
+	}
 }
 
 void GameObjectViewUI::drawForm()
 {
 	mSelectedGameObject = nullptr;
 	Scene* curScene = SceneManager::GetInstance()->GetCurrentScene();
-	InspectorUI* inspectorUI = 
+	InspectorUI* inspectorUI =
 		static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"));
-	
-
 	ImGui::Begin("GameObjectViewUI");
-
 	for (UINT i = 0; i < static_cast<UINT>(eLayerType::End); ++i)
 	{
 		Layer& layer = curScene->GetLayer(static_cast<eLayerType>(i));
-
 		std::vector<GameObject*>& gameObjects = layer.GetGameObjects();
-
 		for (GameObject* gameObject : gameObjects)
-		{			
+		{
 			popUpView(gameObject);
 		}
 	}
-
 	if (mSelectedGameObject)
 	{
 		inspectorUI->Register(mSelectedGameObject);

@@ -77,8 +77,12 @@ void InspectorUI::drawForm()
 	if (nullptr != mGameObject)
 	{
 		std::string name = StringHelper::WStrToStr(mGameObject->GetName());
-		ImGui::Bullet();
-		ImGui::Text("%s\t\t\t%d", name.c_str(), mGameObject->GetID());		
+		char buff[256] = { 0, };
+		memcpy_s(buff, 256, name.c_str(), name.size());
+		if (ImGui::InputText("name", buff, 256))
+		{
+			mGameObject->SetName(StringHelper::StrToWStr(buff));
+		}
 
 		for (int i = 0; i < static_cast<UINT>(eComponentType::End); ++i)
 		{

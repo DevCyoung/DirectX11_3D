@@ -24,7 +24,7 @@ public:
 	//virtual Scene* Clone() = 0;
 	virtual Scene* Clone();
 
-	void RegisterEventAddGameObject(GameObject* const gameObject, const eLayerType layerType,
+	void RegisterEventAddGameObject(GameObject* const gameObject, const eLayerType layerType, const bool bInit = true,
 		const std::source_location& location = std::source_location::current());
 	void RegisterEventSetDestroy(GameObject* const gameObject,
 		const std::source_location& location = std::source_location::current());
@@ -62,6 +62,7 @@ private:
 		eEvent EventOfSceneType;
 		GameObject* EventGameObject;
 		eLayerType LayerType;
+		bool	bValue;
 		std::source_location ErrorHint;
 	};
 

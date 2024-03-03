@@ -3,9 +3,10 @@
 #include "Transform.h"
 #include "ScriptComponent.h"
 #include "EnumLayer.h"
+#include "SceneManager.h"
 
 GameObject::GameObject()
-	: mEngineComponents{0, }
+	: mEngineComponents{0,}
 	, mScriptComponents()
 	, mLayerType(eLayerType::Default)
 	, mState(eState::Active)
@@ -212,11 +213,76 @@ GameObject* GameObject::FindChidOrNull(GameObject* childObj)
 	return obj;
 }
 
-void GameObject::SetChild(GameObject* const childObj)
+void GameObject::DetatchChild(GameObject* childObj)
 {	
-	Assert(!FindChidOrNull(childObj), ASSERT_MSG_NOT_NULL);
-	mChildObjects.push_back(childObj);
+	if (!FindChidOrNull(childObj))
+	{
+		return;
+	}
+
+	Assert(childObj->mParent == this, ASSERT_MSG_INVALID);
+
+	//부모는 child를 떼어낸다.
+	std::vector<GameObject*>::iterator iter = childObj->mParent->mChildObjects.begin();
+	for (; iter != childObj->mParent->mChildObjects.end(); ++iter)
+	{
+		if (childObj == *iter)
+		{
+			childObj->mParent->mChildObjects.erase(iter);
+			break;
+		}
+	}
+
+	childObj->mParent = nullptr;
+}
+
+void GameObject::SetChild(GameObject* const childObj)
+{
+	Assert(childObj, ASSERT_MSG_NULL);
+
+	//부모를 넣으려고 한다면
+	if (childObj->FindChidOrNull(this))
+	{
+		return;
+	}
+	else if (childObj->mParent) //부모는 child를 떼어낸다.
+	{
+		GameObject* parentObject = childObj->mParent;
+		std::vector<GameObject*>::iterator iter = parentObject->mChildObjects.begin();		
+		for (; iter != parentObject->mChildObjects.end(); ++iter)
+		{
+			if (childObj == *iter)
+			{
+				iter = parentObject->mChildObjects.erase(iter);				
+				parentObject = nullptr;
+				break;
+			}
+		}
+		
+		Assert(!parentObject, ASSERT_MSG_NULL);
+	}
+	else if (SceneManager::GetInstance()->GetCurrentSceneOrNull())
+	{
+		eLayerType layerType = childObj->GetLayer();
+		Layer& layer = gCurrentScene->GetLayer(layerType);
+		layer.DetatchGameObject(childObj);
+	}
+
 	childObj->mParent = this;
+	mChildObjects.push_back(childObj);	
+}
+
+void GameObject::SetParent(GameObject* const parent)
+{
+	if (parent)
+	{
+		parent->SetChild(this);
+	}
+	else if (mParent)
+	{
+		mParent->DetatchChild(this);
+		gCurrentScene->RegisterEventAddGameObject(this, mLayerType, false);
+	}
 }
 
 void GameObject::AddComponent(ScriptComponent* const scriptComponent)
@@ -276,7 +342,6 @@ ScriptComponent* GameObject::GetComponentOrNull(const eScriptComponentType scrip
 	}
 
 	return component;
-
 }
 
 Component* GameObject::GetComponent(const eComponentType componentType) const

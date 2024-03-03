@@ -11,6 +11,7 @@ class SceneManager
 
 public:
 	void LoadScene(Scene* const scene);
+	Scene* GetCurrentSceneOrNull() const { return mCurrentScene; }
 	Scene* GetCurrentScene() const { Assert(mCurrentScene, ASSERT_MSG_NULL); return mCurrentScene; }
 
 public:

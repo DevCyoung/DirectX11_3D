@@ -128,6 +128,10 @@ void Scene::eventUpdate()
 			if (message.EventGameObject->mState != GameObject::eState::Destroy)
 			{
 				message.EventGameObject->mState = GameObject::eState::Destroy;
+				if (message.EventGameObject->mParent)
+				{
+					message.EventGameObject->mParent->DetatchChild(message.EventGameObject);
+				}
 				mGarbages.push_back(message.EventGameObject);
 			}
 
@@ -137,7 +141,11 @@ void Scene::eventUpdate()
 			Assert(message.LayerType != eLayerType::End, ASSERT_MSG_INVALID);
 
 			AddGameObject(message.EventGameObject, message.LayerType);
-			message.EventGameObject->initialize();
+
+			if (message.bValue)
+			{
+				message.EventGameObject->initialize();
+			}			
 			break;		
 		default:
 			Assert(false, ASSERT_MSG_INVALID);
@@ -149,7 +157,7 @@ void Scene::eventUpdate()
 }
 
 void Scene::RegisterEventAddGameObject(GameObject* const gameObject,
-	const eLayerType layerType, const std::source_location& location)
+	const eLayerType layerType, const bool bInit, const std::source_location& location)
 {
 	Assert(gameObject, ASSERT_MSG_NULL);
 	Assert(layerType != eLayerType::End, ASSERT_MSG_INVALID);
@@ -160,6 +168,7 @@ void Scene::RegisterEventAddGameObject(GameObject* const gameObject,
 	message.EventGameObject = gameObject;
 	message.LayerType = layerType;
 	message.ErrorHint = location;
+	message.bValue = bInit;
 
 	mEventMessages.push_back(message);
 }

@@ -52,12 +52,15 @@ public:
 	GameObject* FindChidOrNull(const std::wstring& name);
 	GameObject* FindChidOrNull(GameObject* childObj);
 
+	void DetatchChild(GameObject* childObj);
+
 	const std::vector<GameObject*>& GetChildObjects() const { return mChildObjects; }
 
 	//FIXME:
 	//void SetParent(GameObject* const parent) { mParent = parent; }
 
 	void SetChild(GameObject* const childObj);
+	void SetParent(GameObject* const parent);
 
 	template<typename T>
 		requires (is_component<T>::value)

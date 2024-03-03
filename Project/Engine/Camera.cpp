@@ -8,7 +8,7 @@
 
 Camera::Camera()
 	: Component(eComponentType::Camera)	
-	, mRenderTargetSize(Vector2::Zero)
+	, mRenderTargetSize(Vector2(1280, 720))
 	, mLayerMask(0XFFFFFFFF)
 	, mNear(1.0f)
 	, mFar(10000.0f)

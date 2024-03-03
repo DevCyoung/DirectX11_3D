@@ -14,6 +14,7 @@ public:
 	void Register(GameObject* Object);
 	void Register(Resource* resource);
 
+
 	// PanelUI을(를) 통해 상속됨
 private:
 	void drawForm() override;

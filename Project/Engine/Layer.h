@@ -9,6 +9,8 @@ public:
 	const std::vector<GameObject*>& GetGameObjects() const { return mGameObjects; }
 	std::vector<GameObject*>& GetGameObjects() { return mGameObjects; }
 
+	void DetatchGameObject(GameObject* gameobject);
+
 private:
 	Layer();
 	virtual ~Layer();

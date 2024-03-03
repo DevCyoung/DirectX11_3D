@@ -10,8 +10,8 @@ public:
 
 private:
 	// PanelUI을(를) 통해 상속됨
-	void popUpView(GameObject* gameObject);
-	void popEvent(GameObject* gameObject);
+	void popUpView(GameObject* const gameObject);
+	void popEvent(GameObject* const gameObject);
 	virtual void update() final;
 	void drawForm() override;
 

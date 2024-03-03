@@ -66,3 +66,18 @@ void Layer::lastUpdate()
 		}
 	}
 }
+
+void Layer::DetatchGameObject(GameObject* gameobject)
+{
+	std::vector<GameObject*>::iterator iter = mGameObjects.begin();
+	for (; iter != mGameObjects.end(); ++iter)
+	{
+		if (*iter == gameobject)
+		{
+			iter = mGameObjects.erase(iter);
+			break;
+		}
+	}
+
+	//Assert(iter != mGameObjects.end(), ASSERT_MSG_INVALID);
+}

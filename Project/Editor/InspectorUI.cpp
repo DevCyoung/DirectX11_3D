@@ -68,6 +68,12 @@ void InspectorUI::Register(Resource* resource)
 	mGameObject = nullptr;
 }
 
+void InspectorUI::UnRegister()
+{
+	mGameObject = nullptr;
+	mResource = nullptr;
+}
+
 void InspectorUI::drawForm()
 {	
 	ImGui::Begin("InspectorUI");

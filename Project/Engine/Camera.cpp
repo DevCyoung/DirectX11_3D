@@ -17,8 +17,8 @@ Camera::Camera()
 	, mAspectRatio(1.0f)
 	, mView(Matrix::Identity)
 	, mProjection(Matrix::Identity)
-	, mProjectionType(eCameraProjectionType::Orthographic)
-	, mCameraType(eCameraPriorityType::End)
+	, mProjectionType(eCameraProjectionType::Perspective)
+	, mCameraType(eCameraPriorityType::Main)
 {
 }
 

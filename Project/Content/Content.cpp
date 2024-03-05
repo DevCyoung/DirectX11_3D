@@ -16,7 +16,7 @@
 #include "CameraInputMoveMent.h"
 #include "ContentResourceLoader.h"
 #include "ResourceManager.h"
-
+#include <Engine\Builder.h>
 Content::Content()
 {
 	//LoadAllResourceFiles(gPathManager->GetResourcePath());
@@ -25,7 +25,7 @@ Content::Content()
 	//main Camera
 	{
 		const Vector2 screenSize = Vector2(1280, 720);
-		GameObject* const mainCamera = new GameObject();
+		GameObject* const mainCamera = CreateGameObject();
 		mainCamera->SetName(L"mainCamera");
 		mainCamera->AddComponent<Camera>();
 		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -100.f);
@@ -52,7 +52,7 @@ Content::Content()
 
 	//Light3D
 	{
-		GameObject* obj = new GameObject();
+		GameObject* obj = CreateGameObject();
 		obj->AddComponent<Light3D>();
 		obj->SetName(L"Light3D");
 
@@ -61,21 +61,21 @@ Content::Content()
 
 	//Hirearchy Test
 	{
-		GameObject* parent = new GameObject();
+		GameObject* parent = CreateGameObject();
 		parent->SetName(L"parent");
 
 		{
-			GameObject* obj = new GameObject();
+			GameObject* obj = CreateGameObject();
 			//obj->AddComponent<Light3D>();
 			obj->SetName(L"Test");
 			{
-				GameObject* childObj = new GameObject();
+				GameObject* childObj = CreateGameObject();
 				childObj->SetName(L"childObj1");
 				obj->SetChild(childObj);
 			}
 
 			{
-				GameObject* childObj = new GameObject();
+				GameObject* childObj = CreateGameObject();
 				childObj->SetName(L"childObj2");
 				obj->SetChild(childObj);
 			}
@@ -84,17 +84,17 @@ Content::Content()
 		}
 
 		{
-			GameObject* obj = new GameObject();
+			GameObject* obj = CreateGameObject();
 			//obj->AddComponent<Light3D>();
 			obj->SetName(L"Test");
 			{
-				GameObject* childObj = new GameObject();
+				GameObject* childObj = CreateGameObject();
 				childObj->SetName(L"childObj1");
 				obj->SetChild(childObj);
 			}
 
 			{
-				GameObject* childObj = new GameObject();
+				GameObject* childObj = CreateGameObject();
 				childObj->SetName(L"childObj2");
 				obj->SetChild(childObj);
 			}
@@ -103,6 +103,21 @@ Content::Content()
 		}
 
 		testScene->AddGameObject(parent, eLayerType::Default);
+
+		//std::wstring resourcePath = gPathManager->GetResourcePath();
+		//resourcePath = resourcePath + L"\\Prefab\\test.pf";
+		//FILE* file = nullptr;
+		//errno_t err = _wfopen_s(&file, resourcePath.c_str(), L"wb");
+		//parent->Save(file);
+		//fclose(file);
+		//
+		//file = nullptr;
+		//err = _wfopen_s(&file, resourcePath.c_str(), L"rb");
+		//GameObject* saveObj = CreateGameObjectNoTransform();
+		//saveObj->Load(file);
+		//fclose(file);
+		//DELETE_POINTER(saveObj);
+
 	}
 
 	SceneManager::GetInstance()->LoadScene(testScene);

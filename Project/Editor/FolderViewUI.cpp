@@ -10,6 +10,7 @@
 #include <Engine\SceneManager.h>
 #include <Engine\EnumLayer.h>
 #include <Engine\GameObject.h>
+#include <Engine\Builder.h>
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
 #include <Shlwapi.h> // PathFindFileName 함수가 정의된 헤더 파일
@@ -47,7 +48,7 @@ static eResourceType GetResTypeByExt(const std::wstring& _relativepath)
 	_wsplitpath_s(_relativepath.c_str(), 0, 0, 0, 0, 0, 0, szExt, 50);
 	std::wstring strExt = szExt;
 
-	if (L".pref" == strExt)
+	if (L".pf" == strExt)
 		return eResourceType::Prefab;
 	else if (L".mesh" == strExt)
 		return eResourceType::Mesh;
@@ -275,14 +276,14 @@ void FolderViewUI::drawForm()
 	}
 	static ImGuiTextFilter filter;
 
-	std::vector<std::wstring> files = GetFileNames(curPath);
+	std::vector<std::wstring> filePaths = GetFileNames(curPath);
 
-	for (std::wstring file : files)
+	for (std::wstring filePath : filePaths)
 	{
-		std::wstring name = GetFileNameWithoutExtension(file);
+		std::wstring name = GetFileNameWithoutExtension(filePath);
 		std::string strName = StringHelper::WStrToStr(name);
-		eResourceType type = GetResTypeByExt(file);
-		std::wstring relativePath = file.substr(resourcePath.size());
+		eResourceType type = GetResTypeByExt(filePath);
+		std::wstring relativePath = filePath.substr(resourcePath.size());
 		ImGui::BeginGroup();
 
 		const Texture* resFileUI = GetFileUITexture(type);
@@ -370,6 +371,25 @@ void FolderViewUI::drawForm()
 				//Prefab* prefab = gResourceManager->Find<Prefab>(relativePath);
 				//inspectorUI->Register(prefab);
 			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::Button("Instantiate"))
+				{
+					gPathManager->GetResourcePath();
+					FILE* file = nullptr;
+					_wfopen_s(&file, filePath.c_str(), L"rb");
+					GameObject* obj = CreateGameObjectNoTransform();
+					obj->Load(file);
+					gCurrentScene->RegisterEventAddGameObject(obj, obj->GetLayer());
+					fclose(file);
+				}
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
+			ImGui::SetItemTooltip("Right-click to open popup");
+
 		}
 		break;
 		case eResourceType::ComputeShader:

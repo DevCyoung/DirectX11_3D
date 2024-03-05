@@ -58,3 +58,13 @@ void Component::lateUpdate()
 void Component::lastUpdate()
 {
 }
+
+void Component::Save(FILE* const file)
+{
+	(void)file;
+}
+
+void Component::Load(FILE* const file)
+{
+	(void)file;
+}

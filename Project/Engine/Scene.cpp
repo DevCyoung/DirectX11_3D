@@ -6,6 +6,7 @@
 #include "Physics2D.h"
 #include "CollisionManagement2D.h"
 #include "GameSystem.h"
+#include "PathManager.h"
 
 Scene::Scene()
 	: mCollisionManagement2D(new CollisionManagement2D())
@@ -200,14 +201,51 @@ void Scene::AddGameObject(GameObject* const gameObject, const eLayerType layerTy
 
 	gameObject->mLayerType = layerType;
 	gameObject->mGameSystem = mGameSystem;
-	mLayers[static_cast<UINT>(layerType)].mGameObjects.push_back(gameObject);
+	mLayers[static_cast<UINT>(layerType)].AddGameObject(gameObject);
+}
+
+HRESULT Scene::Save(const std::wstring& filePath)
+{
+	FILE* file = nullptr;
+	errno_t err = _wfopen_s(&file, filePath.c_str(), L"wb");
+	(void)err;
+
+	for (Layer& layer : mLayers)
+	{
+		UINT objectCount = static_cast<UINT>(layer.mGameObjects.size());
+		fwrite(&objectCount, sizeof(UINT), 1, file);
+
+		for (GameObject* obj: layer.mGameObjects)
+		{			
+			obj->Save(file);			
+		}
+	}
+
+	fclose(file);
+	return S_OK;
 }
 
 HRESULT Scene::Load(const std::wstring& filePath)
 {
-	Assert(false, ASSERT_MSG(""));
-	(void)filePath;
+	FILE* file = nullptr;
+	errno_t err = _wfopen_s(&file, filePath.c_str(), L"rb");
+	(void)err;
 
+	for (Layer& layer : mLayers)
+	{
+		(void)layer;
+		UINT objectCount = 0;
+		fread(&objectCount, sizeof(UINT), 1, file);
+
+		for (UINT i = 0; i < objectCount; i++)
+		{
+			GameObject* obj = new GameObject();
+			obj->Load(file);
+			AddGameObject(obj, obj->GetLayer());
+		}
+	}
+	
+	fclose(file);
 	return E_NOTIMPL;
 }
 

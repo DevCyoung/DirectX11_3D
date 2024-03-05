@@ -26,6 +26,7 @@
 #include "PathManager.h"
 #include  <Helper\FileHelper.h>
 #include "Animation3DController.h"
+#include <Engine\Builder.h>
 MeshData::MeshData()
 	: Resource(eResourceType::MeshData)
 	, mMesh(nullptr)
@@ -171,16 +172,16 @@ HRESULT MeshData::Save(const std::wstring& relativePath)
 
 GameObject* MeshData::Instantiate()
 {
-	GameObject* root = new GameObject();
+	GameObject* root = CreateGameObject();
 	{		
 	}
 	{
-		GameObject* meshRoot = new GameObject();
+		GameObject* meshRoot = CreateGameObject();
 		meshRoot->SetName(L"MeshRoot");
 
 		for (MeshData* childMeshData : mChildMeshDatas)
 		{
-			GameObject* childObj = new GameObject();
+			GameObject* childObj = CreateGameObject();
 			childObj->SetName(childMeshData->GetMeshDataName());
 			childObj->AddComponent<MeshRenderer>();
 

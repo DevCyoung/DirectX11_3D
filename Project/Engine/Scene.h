@@ -38,6 +38,7 @@ public:
 	GameSystem* GetGameSystem() const { return mGameSystem; }
 	CollisionManagement2D* GetCollisionManagement2D() const { return mCollisionManagement2D; }
 
+	virtual HRESULT Save(const std::wstring& filePath);
 	virtual HRESULT Load(const std::wstring& filePath) override;
 
 	const Vector4& GetBackgroundColor() const { return mBackgroundColor; }

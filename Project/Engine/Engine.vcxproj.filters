@@ -226,6 +226,9 @@
     <Filter Include="Source\03. Component\03. Render\Animation3DController">
       <UniqueIdentifier>{ad53f6fb-6646-4235-833f-4e9dd1530ae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Builder">
+      <UniqueIdentifier>{20c6e9bb-9c48-4469-95f5-ce05cf79256a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -466,6 +469,9 @@
     <ClInclude Include="BoneMap.h">
       <Filter>Source\03. Component</Filter>
     </ClInclude>
+    <ClInclude Include="Builder.h">
+      <Filter>Source\Builder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -675,6 +681,9 @@
     </ClCompile>
     <ClCompile Include="BoneMap.cpp">
       <Filter>Source\03. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder.cpp">
+      <Filter>Source\Builder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

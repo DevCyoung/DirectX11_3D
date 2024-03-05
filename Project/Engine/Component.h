@@ -35,6 +35,9 @@ public:
 	Component* GetComponent(const eComponentType componentType) const;
 	ScriptComponent* GetComponent(const eScriptComponentType scriptComponentType) const;
 
+	virtual void Save(FILE* const file);
+	virtual void Load(FILE* const file);
+
 	CLONE(Component)
 private:
 	virtual void initialize();

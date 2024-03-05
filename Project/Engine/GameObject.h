@@ -20,8 +20,11 @@ public:
 		Active,
 		Destroy,
 	};
-
+	friend GameObject* CreateGameObject();
+	friend GameObject* CreateGameObjectNoTransform();
+private:	
 	GameObject();
+public:
 	virtual ~GameObject();
 	GameObject(const GameObject&);
 	GameObject& operator=(const GameObject&) = delete;
@@ -54,10 +57,7 @@ public:
 
 	void DetatchChild(GameObject* childObj);
 
-	const std::vector<GameObject*>& GetChildObjects() const { return mChildObjects; }
-
-	//FIXME:
-	//void SetParent(GameObject* const parent) { mParent = parent; }
+	const std::vector<GameObject*>& GetChildObjects() const { return mChildObjects; }		
 
 	void SetChild(GameObject* const childObj);
 	void SetParent(GameObject* const parent);
@@ -70,6 +70,9 @@ public:
 	void AddComponent();
 	void AddComponent(ScriptComponent* const component);
 	void AddComponent(Component* const component);
+
+	virtual void Save(FILE* const file);
+	virtual void Load(FILE* const file);
 
 private:
 	void initialize();	

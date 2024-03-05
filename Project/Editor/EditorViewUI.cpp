@@ -20,6 +20,7 @@
 #include <Engine/Camera.h>
 #include <Content/CameraInputMoveMent.h>
 #include <Engine/RenderTargetRenderer.h>
+#include <Engine/Builder.h>
 //#include
 
 //#include <ImGUI/imgui_filter.h>
@@ -30,7 +31,7 @@ EditorViewUI::EditorViewUI()
 	//Editor Camera
 	{
 		const Vector2 screenSize = Vector2(1280, 720);
-		GameObject* const mainCamera = new GameObject();
+		GameObject* const mainCamera = CreateGameObject();
 		mainCamera->AddComponent<Camera>();
 		mainCamera->AddComponent<CameraInputMoveMent>();
 

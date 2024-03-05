@@ -29,5 +29,10 @@ enum class eLayerType
 	Mouse,
 	Light,
 	UI,
+	__0,
+	__1,
+	__2,
+	__3,
+	__4,
 	End
 };

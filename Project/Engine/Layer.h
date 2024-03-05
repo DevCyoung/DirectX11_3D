@@ -17,7 +17,9 @@ private:
 	Layer(const Layer&) = delete;
 	Layer& operator=(const Layer&) = delete;
 
-	
+	void Save(FILE* const file);
+	void Load(FILE* const file);
+	void AddGameObject(GameObject* obj) { mGameObjects.push_back(obj); }
 
 private:
 	void initialize();

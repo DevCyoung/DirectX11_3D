@@ -20,6 +20,7 @@ class Scene : public Resource
 
 public:
 	Scene();
+	//Scene(const Scene& otehr);
 	virtual ~Scene();
 	//virtual Scene* Clone() = 0;
 	virtual Scene* Clone();

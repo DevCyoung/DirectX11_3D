@@ -32,19 +32,11 @@ GameObject::GameObject(const GameObject& other)
 	: mEngineComponents{0, }
 	, mScriptComponents()
 	, mLayerType(other.mLayerType)
-	, mState(other.mState)
-	, mParent(other.mParent)
+	, mState(eState::Active)
+	, mParent(nullptr)
 	, mChildObjects()
-	, mGameSystem(other.mGameSystem)
+	, mGameSystem(nullptr)
 {
-	//AddComponent<Transform>();
-
-	for (const GameObject* obj : other.mChildObjects)
-	{
-		GameObject* copyObject = new GameObject(*obj);
-		mChildObjects.push_back(copyObject);
-	}
-
 	for (UINT i = 0; i < static_cast<UINT>(eComponentType::End); i++)
 	{
 		if (other.mEngineComponents[i])
@@ -56,6 +48,12 @@ GameObject::GameObject(const GameObject& other)
 	for (UINT i = 0; i < mScriptComponents.size(); i++)
 	{
 		AddComponent(other.mScriptComponents[i]->Clone());
+	}
+
+	for (const GameObject* obj : other.mChildObjects)
+	{
+		GameObject* copyObject = new GameObject(*obj);
+		mChildObjects.push_back(copyObject);
 	}
 }
 

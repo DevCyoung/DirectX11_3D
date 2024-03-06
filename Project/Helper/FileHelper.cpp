@@ -10,11 +10,11 @@ void SaveWString(const std::wstring& str, FILE* file)
 
 void LoadWString(std::wstring* const str, FILE* _File)
 {
-	wchar_t szBuffer[256] = {};
+	wchar_t szBuffer[512] = {};
 
 	UINT iLen = 0;
 	fread(&iLen, sizeof(UINT), 1, _File);
-	Assert(iLen < 256, ASSERT_MSG_INVALID);
+	Assert(iLen < 512, ASSERT_MSG_INVALID);
 	fread(szBuffer, sizeof(wchar_t), iLen, _File);
 	*str = szBuffer;
 }

@@ -90,3 +90,13 @@ void MeshRenderer::render(const Camera* const camera)
 	}
 
 }
+
+void MeshRenderer::Save(FILE* const file)
+{
+	RenderComponent::Save(file);
+}
+
+void MeshRenderer::Load(FILE* const file)
+{
+	RenderComponent::Load(file);
+}

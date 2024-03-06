@@ -148,6 +148,9 @@
     <ClInclude Include="ContentResourceLoader.h">
       <Filter>Source\Loader</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdPersonOrbitCam.h">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -170,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="ContentResourceLoader.cpp">
       <Filter>Source\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdPersonOrbitCam.cpp">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

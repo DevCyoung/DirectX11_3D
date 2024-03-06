@@ -185,6 +185,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ScreenSize.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="ThirdPersonOrbitCam.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraInputMoveMent.cpp">
@@ -207,6 +208,7 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="ThirdPersonOrbitCam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Output\bin\Resources\Shader\VSAlphaTo.hlsl" />

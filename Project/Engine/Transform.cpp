@@ -18,6 +18,19 @@ Transform::Transform()
 Transform::~Transform()
 {
 }
+
+Transform::Transform(const Transform& other)
+	: Component(other)
+	, mPosition(other.mPosition)
+	, mRotation(other.mRotation)
+	, mScale(other.mScale)
+	, mForward(Vector3::Zero)
+	, mRight(Vector3::Zero)
+	, mUp(Vector3::Zero)
+	, mWorld(Matrix::Identity)
+{
+}
+
 void Transform::initialize()
 {
 }
@@ -50,7 +63,6 @@ void Transform::CalculateTransform()
 	mForward.Normalize();
 	mRight.Normalize();
 }
-
 
 Matrix Transform::CreateWorldMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale)
 {
@@ -95,4 +107,20 @@ bool Transform::GetFlipX() const
 	}
 
 	return bFlipx;
+}
+
+void Transform::Save(FILE* const file)
+{
+	Component::Save(file);
+	fwrite(&mPosition,	sizeof(Vector3), 1, file);
+	fwrite(&mRotation,	sizeof(Vector3), 1, file);
+	fwrite(&mScale,		sizeof(Vector3), 1, file);
+}
+
+void Transform::Load(FILE* const file)
+{	
+	Component::Load(file);
+	fread(&mPosition,	sizeof(Vector3), 1, file);
+	fread(&mRotation,	sizeof(Vector3), 1, file);
+	fread(&mScale,		sizeof(Vector3), 1, file);
 }

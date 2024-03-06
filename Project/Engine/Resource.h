@@ -7,6 +7,7 @@ class Resource
 	friend class ResourceManager;
 public:
 	Resource();
+	Resource(const Resource& other) = default;
 	Resource(eResourceType mResourceType);
 	virtual ~Resource();
 

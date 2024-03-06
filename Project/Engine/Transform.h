@@ -9,7 +9,7 @@ class Transform : public Component
 public:
 	Transform();
 	virtual ~Transform();
-	//Transform(const Transform& other);
+	Transform(const Transform& other);
 	Transform& operator=(const Transform&) = delete;
 
 	const Vector3& GetPosition() const { return mPosition; }
@@ -44,6 +44,10 @@ public:
 	void SetFlipx(const bool bFlipx);
 
 	void CalculateTransform();
+
+	virtual void Save(FILE* const file) override;
+	virtual void Load(FILE* const file) override;
+
 private:
 	virtual void initialize() override final;
 	virtual void update() override final;

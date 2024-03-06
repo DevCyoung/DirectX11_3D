@@ -17,6 +17,8 @@
 #include "ContentResourceLoader.h"
 #include "ResourceManager.h"
 #include <Engine\Builder.h>
+#include "Components.h"
+#include "ThirdPersonOrbitCam.h"
 Content::Content()
 {
 	//LoadAllResourceFiles(gPathManager->GetResourcePath());
@@ -28,13 +30,17 @@ Content::Content()
 		GameObject* const mainCamera = CreateGameObject();
 		mainCamera->SetName(L"mainCamera");
 		mainCamera->AddComponent<Camera>();
+		mainCamera->AddComponent<ThirdPersonOrbitCam>();
 		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -100.f);
 
-		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		
+		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		 
 		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
 		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);		
 		mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
 		testScene->AddGameObject(mainCamera, eLayerType::Default);
+
+		//GameObject* tg = new GameObject(*mainCamera);
+		//(void)tg;
 	}
 
 	//MeshData Object
@@ -51,74 +57,74 @@ Content::Content()
 	}
 
 	//Light3D
-	{
-		GameObject* obj = CreateGameObject();
-		obj->AddComponent<Light3D>();
-		obj->SetName(L"Light3D");
-
-		testScene->AddGameObject(obj, eLayerType::Light);
-	}
-
-	//Hirearchy Test
-	{
-		GameObject* parent = CreateGameObject();
-		parent->SetName(L"parent");
-
-		{
-			GameObject* obj = CreateGameObject();
-			//obj->AddComponent<Light3D>();
-			obj->SetName(L"Test");
-			{
-				GameObject* childObj = CreateGameObject();
-				childObj->SetName(L"childObj1");
-				obj->SetChild(childObj);
-			}
-
-			{
-				GameObject* childObj = CreateGameObject();
-				childObj->SetName(L"childObj2");
-				obj->SetChild(childObj);
-			}
-
-			parent->SetChild(obj);
-		}
-
-		{
-			GameObject* obj = CreateGameObject();
-			//obj->AddComponent<Light3D>();
-			obj->SetName(L"Test");
-			{
-				GameObject* childObj = CreateGameObject();
-				childObj->SetName(L"childObj1");
-				obj->SetChild(childObj);
-			}
-
-			{
-				GameObject* childObj = CreateGameObject();
-				childObj->SetName(L"childObj2");
-				obj->SetChild(childObj);
-			}
-
-			parent->SetChild(obj);
-		}
-
-		testScene->AddGameObject(parent, eLayerType::Default);
-
-		//std::wstring resourcePath = gPathManager->GetResourcePath();
-		//resourcePath = resourcePath + L"\\Prefab\\test.pf";
-		//FILE* file = nullptr;
-		//errno_t err = _wfopen_s(&file, resourcePath.c_str(), L"wb");
-		//parent->Save(file);
-		//fclose(file);
-		//
-		//file = nullptr;
-		//err = _wfopen_s(&file, resourcePath.c_str(), L"rb");
-		//GameObject* saveObj = CreateGameObjectNoTransform();
-		//saveObj->Load(file);
-		//fclose(file);
-		//DELETE_POINTER(saveObj);
-
-	}
+	//{
+	//	GameObject* obj = CreateGameObject();
+	//	obj->AddComponent<Light3D>();
+	//	obj->SetName(L"Light3D");
+	//
+	//	testScene->AddGameObject(obj, eLayerType::Light);
+	//}
+	//
+	////Hirearchy Test
+	//{
+	//	GameObject* parent = CreateGameObject();
+	//	parent->SetName(L"parent");
+	//
+	//	{
+	//		GameObject* obj = CreateGameObject();
+	//		//obj->AddComponent<Light3D>();
+	//		obj->SetName(L"Test");
+	//		{
+	//			GameObject* childObj = CreateGameObject();
+	//			childObj->SetName(L"childObj1");
+	//			obj->SetChild(childObj);
+	//		}
+	//
+	//		{
+	//			GameObject* childObj = CreateGameObject();
+	//			childObj->SetName(L"childObj2");
+	//			obj->SetChild(childObj);
+	//		}
+	//
+	//		parent->SetChild(obj);
+	//	}
+	//
+	//	{
+	//		GameObject* obj = CreateGameObject();
+	//		//obj->AddComponent<Light3D>();
+	//		obj->SetName(L"Test");
+	//		{
+	//			GameObject* childObj = CreateGameObject();
+	//			childObj->SetName(L"childObj1");
+	//			obj->SetChild(childObj);
+	//		}
+	//
+	//		{
+	//			GameObject* childObj = CreateGameObject();
+	//			childObj->SetName(L"childObj2");
+	//			obj->SetChild(childObj);
+	//		}
+	//
+	//		parent->SetChild(obj);
+	//	}
+	//
+	//	testScene->AddGameObject(parent, eLayerType::Default);
+	//
+	//	//std::wstring resourcePath = gPathManager->GetResourcePath();
+	//	//resourcePath = resourcePath + L"\\Prefab\\test.pf";
+	//	//FILE* file = nullptr;
+	//	//errno_t err = _wfopen_s(&file, resourcePath.c_str(), L"wb");
+	//	//parent->Save(file);
+	//	//fclose(file);
+	//	//
+	//	//file = nullptr;
+	//	//err = _wfopen_s(&file, resourcePath.c_str(), L"rb");
+	//	//GameObject* saveObj = CreateGameObjectNoTransform();
+	//	//saveObj->Load(file);
+	//	//fclose(file);
+	//	//DELETE_POINTER(saveObj);
+	//
+	//}
 
 	SceneManager::GetInstance()->LoadScene(testScene);
 }

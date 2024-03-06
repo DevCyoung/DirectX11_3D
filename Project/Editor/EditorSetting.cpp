@@ -34,6 +34,8 @@ GameObject* EditorSetting::CreateObject()
 
 void EditorSetting::drawForm()
 {
+	static bool bStartGame = true;
+
 	ImGui::Begin("Editor Setting");		
 	bool bWireFrame = gCurrentSceneRenderer->IsWireFrame();
 	if (ImGui::Checkbox("Wire Frame", &bWireFrame))
@@ -132,7 +134,9 @@ void EditorSetting::drawForm()
 			//gCurrentScene->Save(ofn.lpstrFile);
 			Scene* scene = new Scene();
 			scene->Load(ofn.lpstrFile);
-			SceneManager::GetInstance()->RegisterLoadScene(scene);			
+			SceneManager::GetInstance()->RegisterLoadScene(scene);
+			//reset
+			bStartGame = true;
 			static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"))->UnRegister();
 			//gameObject->Save(file);
 			//fclose(file);
@@ -140,6 +144,43 @@ void EditorSetting::drawForm()
 		else {
 			// 사용자가 취소를 눌렀을 때
 			MessageBox(NULL, TEXT("No file selected!"), TEXT("Error"), MB_OK | MB_ICONERROR);
+		}
+	}
+
+	
+
+	if (bStartGame)
+	{
+		if (ImGui::Button("Start Game"))
+		{
+			bStartGame = false;
+
+			//현재씬을 저장하고 로드함
+			std::wstring relativePath = gPathManager->GetResourcePath();
+			relativePath += L"\\Scene\\Editor\\main.scene";
+			gCurrentScene->Save(relativePath);
+
+			Scene* scene = new Scene();
+			scene->Load(relativePath);
+			
+			SceneManager::GetInstance()->RegisterLoadScene(scene);
+			static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"))->UnRegister();
+		}
+	}
+	else
+	{
+		if (ImGui::Button("End Game"))
+		{
+			bStartGame = true;
+			//이전씬을 로드함
+
+			std::wstring relativePath = gPathManager->GetResourcePath();
+			relativePath += L"\\Scene\\Editor\\main.scene";
+
+			Scene* scene = new Scene();
+			scene->Load(relativePath);
+			SceneManager::GetInstance()->RegisterLoadScene(scene);
+			static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"))->UnRegister();
 		}
 	}
 

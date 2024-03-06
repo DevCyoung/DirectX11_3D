@@ -13,7 +13,8 @@ Component::~Component()
 }
 
 Component::Component(const Component& other)
-	: mType(other.mType)
+	: Entity(other)
+	, mType(other.mType)
 	, mOwner(nullptr)
 {
 

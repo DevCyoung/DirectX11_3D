@@ -8,8 +8,11 @@ class MeshRenderer : public RenderComponent
 public:
 	MeshRenderer();
 	virtual ~MeshRenderer();
-	//SpriteRenderer(const SpriteRenderer&);
+	//MeshRenderer(const MeshRenderer&);
 	MeshRenderer& operator=(const MeshRenderer&) = delete;
+
+	virtual void Save(FILE* const file);
+	virtual void Load(FILE* const file);
 
 	CLONE(MeshRenderer);
 	virtual void render(const Camera* const camera);	

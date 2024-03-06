@@ -44,6 +44,8 @@ public:
 		return static_cast<UINT>(mMaterials.size()); 
 	}
 	
+	virtual void Save(FILE* const file) override;
+	virtual void Load(FILE* const file) override;
 	CLONE(RenderComponent)
 
 protected:

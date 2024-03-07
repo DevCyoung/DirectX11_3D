@@ -13,6 +13,7 @@ RenderComponent::RenderComponent()
 	, mMesh(nullptr)
 	, mMaterials()
 {
+	//mMaterials.resize(sizeof(UINT));
 }
 
 RenderComponent::RenderComponent(const eComponentType componentType)

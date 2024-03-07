@@ -19,7 +19,7 @@
 MeshRenderer::MeshRenderer()
 	: RenderComponent(eComponentType::MeshRenderer)
 {
-	mMaterials.resize(sizeof(UINT));
+	//mMaterials.resize(sizeof(UINT));
 }
 
 MeshRenderer::~MeshRenderer()

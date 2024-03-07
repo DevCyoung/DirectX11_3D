@@ -264,7 +264,7 @@ void FolderViewUI::drawForm()
 		ImGui::Text(strName.c_str());
 		ImGui::PopTextWrapPos();
 		ImGui::EndGroup();
-		if (idx == 0 || idx % 7 != 0)
+		if (idx == 0 || idx % 11 != 0)
 		{
 			ImGui::SameLine();
 		}
@@ -470,7 +470,7 @@ void FolderViewUI::drawForm()
 		ImGui::Text(strName.c_str());
 		ImGui::PopTextWrapPos();
 		ImGui::EndGroup();
-		if (idx == 0 || idx % 7 != 0)
+		if (idx == 0 || idx % 11 != 0)
 		{
 			ImGui::SameLine();
 		}

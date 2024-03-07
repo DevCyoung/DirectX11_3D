@@ -23,25 +23,28 @@ Content::Content()
 {
 	//LoadAllResourceFiles(gPathManager->GetResourcePath());
 	Scene* testScene = new Scene;
+	std::wstring relativePath = gPathManager->GetResourcePath();
+	relativePath += L"\\Scene\\Editor\\main.scene";
+	testScene->Load(relativePath);
 
 	//main Camera
-	{
-		const Vector2 screenSize = Vector2(1280, 720);
-		GameObject* const mainCamera = CreateGameObject();
-		mainCamera->SetName(L"mainCamera");
-		mainCamera->AddComponent<Camera>();
-		mainCamera->AddComponent<ThirdPersonOrbitCam>();
-		mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -100.f);
-
-		mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		 
-		mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
-		mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);		
-		mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
-		testScene->AddGameObject(mainCamera, eLayerType::Default);
-
-		//GameObject* tg = new GameObject(*mainCamera);
-		//(void)tg;
-	}
+	//{
+	//	const Vector2 screenSize = Vector2(1280, 720);
+	//	GameObject* const mainCamera = CreateGameObject();
+	//	mainCamera->SetName(L"mainCamera");
+	//	mainCamera->AddComponent<Camera>();
+	//	mainCamera->AddComponent<ThirdPersonOrbitCam>();
+	//	mainCamera->GetComponent<Transform>()->SetPosition(0.f, 0.f, -100.f);
+	//
+	//	mainCamera->GetComponent<Camera>()->TurnOnAllLayer();		 
+	//	mainCamera->GetComponent<Camera>()->SetPriorityType(eCameraPriorityType::Main);
+	//	mainCamera->GetComponent<Camera>()->SetProjectionType(eCameraProjectionType::Perspective);		
+	//	mainCamera->GetComponent<Camera>()->SetRenderTargetSize(screenSize);
+	//	testScene->AddGameObject(mainCamera, eLayerType::Default);
+	//
+	//	//GameObject* tg = new GameObject(*mainCamera);
+	//	//(void)tg;
+	//}
 
 	//MeshData Object
 	{
@@ -64,7 +67,7 @@ Content::Content()
 	//
 	//	testScene->AddGameObject(obj, eLayerType::Light);
 	//}
-	//
+	
 	////Hirearchy Test
 	//{
 	//	GameObject* parent = CreateGameObject();

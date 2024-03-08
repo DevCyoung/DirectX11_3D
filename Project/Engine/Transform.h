@@ -39,11 +39,16 @@ public:
 	void SetScale(const float x, const float y, const float z) { mScale = Vector3(x, y, z); }		
 
 	static Matrix CreateWorldMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale);
+	static Matrix CreateWorldMatrix(const Vector3& position, const Matrix& rotationMatrix, const Vector3& scale);
 
+	Matrix GetTransformMatrix();
+	Matrix GetRotationMatrix();
+	Matrix GetScaleMatrix();
 	void SetWorldMatrix(const Matrix& world) { mWorld = world; }
 	void SetFlipx(const bool bFlipx);
 
 	void CalculateTransform();
+	void CalculateTransform(const Matrix& rotationMatrix);
 
 	virtual void Save(FILE* const file) override;
 	virtual void Load(FILE* const file) override;

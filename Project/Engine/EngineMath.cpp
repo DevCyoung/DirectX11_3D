@@ -351,6 +351,17 @@ namespace helper::math
 		return Rad2Deg(atan2(direction.y, direction.x));
 	}
 
+	XMVECTOR QuaternionEuler(float x, float y, float z)
+	{
+		// DirectXMath는 기본적으로 radian을 사용하므로, degree를 radian으로 변환
+		float radX = XMConvertToRadians(x);
+		float radY = XMConvertToRadians(y);
+		float radZ = XMConvertToRadians(z);
+
+		// Roll, Pitch, Yaw 각도를 이용하여 Quaternion을 생성
+		return XMQuaternionRotationRollPitchYaw(radX, radY, radZ);	
+	}
+
 	/*float GetAngle3D(const GameObject* const origin, const GameObject* const dest)
 	{
 		Vector3 direction = GetDirection3D(origin, dest);

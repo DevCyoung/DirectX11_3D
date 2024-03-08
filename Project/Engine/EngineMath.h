@@ -59,10 +59,7 @@ namespace helper::math
 
 	float GetAngle2D(Vector3 direction);
 	float GetAngle2D(Vector2 direction);
-
-	
-
-
+	XMVECTOR QuaternionEuler(float x, float y, float z);	
 
 
 #pragma endregion

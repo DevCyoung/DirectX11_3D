@@ -64,6 +64,28 @@ void Transform::CalculateTransform()
 	mRight.Normalize();
 }
 
+//FIX ME
+void Transform::CalculateTransform(const Matrix& rotationMatrix)
+{
+	mWorld = CreateWorldMatrix(mPosition, rotationMatrix, mScale);
+
+	GameObject* const parentOrNull = GetOwner()->GetParentOrNull();
+
+	if (parentOrNull)
+	{
+		const Transform* const transform = parentOrNull->GetComponent<Transform>();
+		mWorld *= transform->mWorld;
+	}
+
+	mUp = XMVector3TransformNormal(Vector3::Up, mWorld);
+	mForward = XMVector3TransformNormal(Vector3::Forward, mWorld);
+	mRight = XMVector3TransformNormal(Vector3::Right, mWorld);
+
+	mUp.Normalize();
+	mForward.Normalize();
+	mRight.Normalize();
+}
+
 Matrix Transform::CreateWorldMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale)
 {
 	Matrix world = Matrix::Identity;
@@ -83,6 +105,44 @@ Matrix Transform::CreateWorldMatrix(const Vector3& position, const Vector3& rota
 	world *= positionMatrix;
 
 	return world;
+}
+
+Matrix Transform::CreateWorldMatrix(const Vector3& position, const Matrix& rotationMatrix, const Vector3& scale)
+{
+	Matrix world = Matrix::Identity;
+
+	Matrix scaleMatrix = Matrix::CreateScale(scale);
+
+	Matrix positionMatrix = {};
+	positionMatrix.Translation(position);
+
+	world *= scaleMatrix;
+	world *= rotationMatrix;
+	world *= positionMatrix;
+
+	return world;
+}
+
+Matrix Transform::GetTransformMatrix()
+{
+	Matrix positionMatrix = {};
+	positionMatrix.Translation(mPosition);
+	return positionMatrix;
+}
+
+Matrix Transform::GetRotationMatrix()
+{
+	Matrix rotationMatrix = {};
+	rotationMatrix = Matrix::CreateRotationX(Deg2Rad(mRotation.x));
+	rotationMatrix *= Matrix::CreateRotationY(Deg2Rad(mRotation.y));
+	rotationMatrix *= Matrix::CreateRotationZ(Deg2Rad(mRotation.z));
+	return rotationMatrix;
+}
+
+Matrix Transform::GetScaleMatrix()
+{
+	Matrix scaleMatrix = Matrix::CreateScale(mScale);
+	return scaleMatrix;
 }
 
 void Transform::SetFlipx(const bool bFlipx)

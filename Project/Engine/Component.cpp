@@ -63,6 +63,7 @@ void Component::lastUpdate()
 void Component::Save(FILE* const file)
 {
 	(void)file;
+	//Save EntityName
 }
 
 void Component::Load(FILE* const file)

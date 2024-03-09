@@ -27,6 +27,7 @@ InputManager::InputManager()
 	, mMousePos(Vector2::Zero)
 	, mPrevMousePos(Vector2::Zero)
 	, mMouseDir(Vector2::Zero)
+	, mMonitorSize(Vector2(3840,1080))
 {
 	mKeyInfos.reserve(static_cast<UINT>(eKeyCode::END));
 
@@ -93,18 +94,38 @@ void InputManager::update(const HWND hWnd)
 
 		POINT ptMousePos = {};
 		GetCursorPos(&ptMousePos);
+		POINT ptScreenMousePos = ptMousePos;
 		//ScreenToClient(hWnd, &ptMousePos);
-		ScreenToClient(focusWindow, &ptMousePos);
+		ScreenToClient(focusWindow, &ptScreenMousePos);
 		if (gInput->GetKeyDown(eKeyCode::Q))
 		{
 			//ImVec2 cursurPos = ImGui::GetCursorPos();
 			int a = 3;
 			(void)a;
 		}
-		mMousePos.x = static_cast<float>(ptMousePos.x);
-		mMousePos.y = static_cast<float>(ptMousePos.y);
+		mMousePos.x = static_cast<float>(ptScreenMousePos.x);
+		mMousePos.y = static_cast<float>(ptScreenMousePos.y);		
 
 		mMouseDir = mMousePos - mPrevMousePos;
+
+		//마우스가 끝에있을때
+		if (ptMousePos.x <= 8)
+		{
+			mMouseDir.x = -1.f;
+		}
+		else if (ptMousePos.x >= mMonitorSize.x / 2 - 8)
+		{
+			mMouseDir.x = 1.f;
+		}
+		if (ptMousePos.y <= 8)
+		{
+			mMouseDir.y = -1.f;
+		}
+		else if (ptMousePos.y >= mMonitorSize.y - 8)
+		{
+			mMouseDir.y = 1.f;
+		}
+
 		mMouseDir.y *= -1;
 
 		mPrevMousePos = mMousePos;

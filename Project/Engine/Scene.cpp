@@ -107,6 +107,30 @@ void Scene::Render(const UINT renderTargetWidth,
 		depthStencilView);
 }
 
+GameObject* Scene::FindGameObjectOrNull(const std::wstring& name)
+{
+	GameObject* result = nullptr;
+
+	for (Layer& layer : mLayers)
+	{		
+		for (int i = 0; i < layer.mGameObjects.size(); ++i)
+		{			
+			if (name == layer.mGameObjects[i]->GetName())
+			{
+				return layer.mGameObjects[i];
+			}
+
+			result = layer.mGameObjects[i]->FindChidOrNull(name);
+			if (result)
+			{
+				return result;
+			}
+		}
+
+	}
+	return result;
+}
+
 void Scene::renderFlush()
 {
 	mGameSystem->GetRenderTargetRenderer()->flush();

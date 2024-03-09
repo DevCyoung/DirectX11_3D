@@ -50,6 +50,8 @@ public:
 		ID3D11RenderTargetView** const ppRenderTargetView,
 		ID3D11DepthStencilView* const depthStencilView) const;
 
+	GameObject* FindGameObjectOrNull(const std::wstring& name);
+
 private:
 	enum class eEvent
 	{

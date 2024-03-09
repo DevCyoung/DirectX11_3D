@@ -113,7 +113,7 @@ void InspectorUI::drawForm()
 			std::wstring wstr = GetScriptComponentName(type);
 			std::string str = StringHelper::WStrToStr(wstr);
 			RenderComponentName(str);
-			ComponentUIRender(scriptCompnent);
+			ScriptComponentUIRender(scriptCompnent);
 		}
 
 		ImGui::Separator();

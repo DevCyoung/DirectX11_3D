@@ -182,8 +182,11 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
     <ClInclude Include="EnumScriptComponent.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PlayerMovement.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="ScreenSize.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="ThirdPersonOrbitCam.h" />
   </ItemGroup>
@@ -206,6 +209,10 @@ call ScriptGen.exe ScriptComponent $(SolutionDir)Project\Content $(SolutionDir)P
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
+      <SubType>
+      </SubType>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="ThirdPersonOrbitCam.cpp" />

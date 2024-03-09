@@ -118,6 +118,9 @@
     <Filter Include="ShaderCode\3D\Debug">
       <UniqueIdentifier>{9292770b-152d-41e1-ba7e-06931cecd2bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\01. ScriptComponent\Player">
+      <UniqueIdentifier>{fa734943-4437-4233-b1d7-9931e1e11e35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -144,11 +147,13 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Manager\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenSize.h" />
     <ClInclude Include="ContentResourceLoader.h">
       <Filter>Source\Loader</Filter>
     </ClInclude>
     <ClInclude Include="ThirdPersonOrbitCam.h">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovement.h">
       <Filter>Source\01. ScriptComponent\Camera</Filter>
     </ClInclude>
   </ItemGroup>
@@ -175,6 +180,9 @@
       <Filter>Source\Loader</Filter>
     </ClCompile>
     <ClCompile Include="ThirdPersonOrbitCam.cpp">
+      <Filter>Source\01. ScriptComponent\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
       <Filter>Source\01. ScriptComponent\Camera</Filter>
     </ClCompile>
   </ItemGroup>

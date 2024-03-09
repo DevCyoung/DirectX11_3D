@@ -472,6 +472,9 @@
     <ClInclude Include="Builder.h">
       <Filter>Source\Builder</Filter>
     </ClInclude>
+    <ClInclude Include="BuildSetting.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">

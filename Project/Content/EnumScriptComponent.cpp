@@ -3,12 +3,14 @@
 
 #include "CameraInputMoveMent.h"
 #include "CursorMovement.h"
+#include "PlayerMovement.h"
 #include "ThirdPersonOrbitCam.h"
 
 static constexpr const wchar_t* const ScriptComponentNames[static_cast<UINT>(eScriptComponentType::End)]
 {
 	L"CameraInputMoveMent",
 	L"CursorMovement",
+	L"PlayerMovement",
 	L"ThirdPersonOrbitCam",
 };
 
@@ -26,6 +28,8 @@ ScriptComponent* CreateScriptComponentByName(const std::wstring& scriptcomponent
 		scriptcomponent = new CameraInputMoveMent;
 	else if (L"CursorMovement" == scriptcomponentName)
 		scriptcomponent = new CursorMovement;
+	else if (L"PlayerMovement" == scriptcomponentName)
+		scriptcomponent = new PlayerMovement;
 	else if (L"ThirdPersonOrbitCam" == scriptcomponentName)
 		scriptcomponent = new ThirdPersonOrbitCam;
 	else
@@ -44,6 +48,9 @@ ScriptComponent* CreateScriptComponentByEnum(const eScriptComponentType type)
 		break;
 	case eScriptComponentType::CursorMovement:
 		scriptcomponent = new CursorMovement;
+		break;
+	case eScriptComponentType::PlayerMovement:
+		scriptcomponent = new PlayerMovement;
 		break;
 	case eScriptComponentType::ThirdPersonOrbitCam:
 		scriptcomponent = new ThirdPersonOrbitCam;

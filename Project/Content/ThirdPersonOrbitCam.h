@@ -16,12 +16,13 @@ public:
 
 	//void SetPlayerTransform(Transform* playerTransform)
 
-private:
+
 	virtual void initialize() override final;
 	virtual void update() override final;
 	virtual void lateUpdate() override final;
 
-	Transform*	mPlayer;
+public:
+	Transform*	mPlayerTransform;
 	Transform*	mCameraTransform;
 	Camera*		mMyCamera;
 	Vector3		mPivotOffset;

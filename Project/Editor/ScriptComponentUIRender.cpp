@@ -9,6 +9,8 @@ class CameraInputMoveMent;
 void CameraInputMoveMentUI(CameraInputMoveMent* component);
 class CursorMovement;
 void CursorMovementUI(CursorMovement* component);
+class PlayerMovement;
+void PlayerMovementUI(PlayerMovement* component);
 class ThirdPersonOrbitCam;
 void ThirdPersonOrbitCamUI(ThirdPersonOrbitCam* component);
 
@@ -21,6 +23,9 @@ void ScriptComponentUIRender(ScriptComponent* component)
 		break;
 	case eScriptComponentType::CursorMovement:
 		CursorMovementUI((CursorMovement*)component);
+		break;
+	case eScriptComponentType::PlayerMovement:
+		PlayerMovementUI((PlayerMovement*)component);
 		break;
 	case eScriptComponentType::ThirdPersonOrbitCam:
 		ThirdPersonOrbitCamUI((ThirdPersonOrbitCam*)component);

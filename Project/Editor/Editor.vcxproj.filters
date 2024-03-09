@@ -332,5 +332,11 @@
     <ClCompile Include="BoneMapUI.cpp">
       <Filter>Component\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdPersonOrbitCamUI.cpp">
+      <Filter>Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovementUI.cpp">
+      <Filter>Component\Script</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

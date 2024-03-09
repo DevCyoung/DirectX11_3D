@@ -7,6 +7,7 @@ enum class eScriptComponentType
 {
 	CameraInputMoveMent,
 	CursorMovement,
+	PlayerMovement,
 	ThirdPersonOrbitCam,
 	End
 };

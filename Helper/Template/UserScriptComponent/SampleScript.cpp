@@ -22,7 +22,3 @@ void $safeitemname$::update()
 void $safeitemname$::lateUpdate()
 {
 }
-
-void $safeitemname$::render()
-{
-}

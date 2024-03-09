@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "$safeitemname$.h"
 
-
 $safeitemname$::$safeitemname$()
 	: Component(eComponentType::$safeitemname$)
 {
@@ -20,9 +19,5 @@ void $safeitemname$::update()
 }
 
 void $safeitemname$::lateUpdate()
-{
-}
-
-void $safeitemname$::render()
 {
 }

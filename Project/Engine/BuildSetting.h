@@ -1,4 +1,5 @@
-#define EDITOR_MODE
+#pragma once
+//#define EDITOR_MODE
 
 #define WINDOW_EDIT_SCREEN_WIDTH 1900
 #define WINDOW_EDIT_SCREEN_HEIGHT 1000

@@ -12,6 +12,7 @@
 #include "EngineResourceLoader.h"
 #include "Fmod.h"
 #include "FontManager.h"
+#include "BuildSetting.h"
 #include <FBXLoader\FBXLoadManager.h>
 Engine::Engine(const HWND hWnd, const UINT renderTargetWidth, const UINT renderTargetHeight)
 	: mHwnd(hWnd)
@@ -110,15 +111,16 @@ void Engine::lateUpdate()
 
 void Engine::render()
 {	
-	/*SceneManager::GetInstance()->render(mRenderTargetWidth,
+#ifndef EDITOR_MODE
+	SceneManager::GetInstance()->render(mRenderTargetWidth,
 				mRenderTargetHeight,
 				mGraphicDevice->GetRenderTargetViewAddressOf(),
-				mGraphicDevice->GetDepthStencilView());		*/
-	
+				mGraphicDevice->GetDepthStencilView());			
 	//FLOAT backgroundColor[4] = { 1.0f, 0.0f, 1.0f, 0.1f };
 	//gGraphicDevice->ClearRenderTarget(
 	//	mGraphicDevice->GetRenderTargetViewAddressOf(),
 	//	mGraphicDevice->GetDepthStencilView(), backgroundColor);
+#endif
 }
 
 void Engine::eventUpdate()

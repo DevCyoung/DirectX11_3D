@@ -3,7 +3,7 @@
 #include "framework.h"
 #include <Engine/Engine.h>
 #include <Content/Content.h>
-#include <Content/ScreenSize.h>
+#include <Engine/BuildSetting.h>
 #include <Editor/Editor.h>
 #include <Editor/PanelUIManager.h>
 

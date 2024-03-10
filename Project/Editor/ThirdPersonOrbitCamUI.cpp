@@ -14,12 +14,12 @@ void ThirdPersonOrbitCamUI(ThirdPersonOrbitCam* component)
 	ImGui::InputFloat("Angle H", &angleH);
 	ImGui::InputFloat("Angle V", &angleV);
 
-	Vector3 pivotOffset = component->mSmoothPivotOffset;
-	Vector3 camOffset = component->mSmoothCamOffset;
+	Vector3 pivotOffset = component->mPivotOffset;
+	Vector3 camOffset = component->mCamOffset;
 
 	ImGui::DragFloat3("pivotOffset", &pivotOffset.x);
 	ImGui::DragFloat3("camOffset", &camOffset.x	);
 
-	component->mSmoothPivotOffset = pivotOffset;
-	component->mSmoothCamOffset = camOffset;
+	component->mPivotOffset = pivotOffset;
+	component->mCamOffset = camOffset;
 }

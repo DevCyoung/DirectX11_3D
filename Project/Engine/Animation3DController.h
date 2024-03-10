@@ -26,23 +26,26 @@ public:
 	virtual void update();
 	virtual void lateUpdate();
 
-	void SetBones(std::vector<tMTBone>* bones) { mBones = bones; }
-	void SetClips(std::vector<tMTAnimClip>* clip) { m_pVecClip = clip; }
-	void SetClip(int clipIdx) { m_iCurClip = clipIdx; }
-	void Stop(bool stop) { mbStop = stop; }
-	bool IsStop() { return mbStop; }
-	int GetCurFrameIdx() { return mFrameIdx; }
-	void SetCurFrameIde(int frameIdx) { mFrameIdx = frameIdx; }
-	void SetAnimClip(std::vector<tMTAnimClip>* _vecAnimClip);
+	//void	SetBones(std::vector<tMTBone>* bones) { mBones = bones; }
+	void	SetClips(std::vector<tMTAnimClip> clip) { mAnimClips = clip; }
+	void	SetClip(int clipIdx) { m_iCurClip = clipIdx; }
+	void	Stop(bool stop) { mbStop = stop; }
+	bool	IsStop() { return mbStop; }
+	int		GetCurFrameIdx() { return mFrameIdx; }
+	void	SetCurFrameIde(int frameIdx) { mFrameIdx = frameIdx; }
+	void	SetAnimClip(std::vector<tMTAnimClip> _vecAnimClip);
 
 	void RemoveClip(const std::wstring& clipName);
 	void CreateClip(const std::wstring& clipName, int startFrame, int endFrame);
 
-	std::vector<tMTAnimClip>* GetAnimationClip() { return m_pVecClip; }
+	virtual void Save(FILE* const file) override;
+	virtual void Load(FILE* const file) override;
+
+	std::vector<tMTAnimClip>& GetAnimationClip() { return mAnimClips; }
 
 	std::vector<Animator3D*>	mAnimation3Ds;
-	std::vector<tMTBone>*		mBones;
-	std::vector<tMTAnimClip>*	m_pVecClip;
+	//std::vector<tMTBone>*		mBones;
+	std::vector<tMTAnimClip>	mAnimClips;
 
 	bool						mbStop;
 	int							m_iFrameCount;

@@ -64,6 +64,10 @@ void MeshRenderer::render(const Camera* const camera)
 				continue;
 			}
 
+			//if (!animator3D->mBones)
+			//{
+			//	continue;
+			//}
 			UINT boneCount = animator3D->GetBoneCount();
 
 			GetMaterial(i)->SetAnim3D(true); // Animation Mesh ¾Ë¸®±â			

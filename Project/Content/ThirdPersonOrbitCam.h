@@ -21,6 +21,9 @@ public:
 	virtual void update() override final;
 	virtual void lateUpdate() override final;
 
+	virtual void Save(FILE* file) override;
+	virtual void Load(FILE* file) override;
+
 public:
 	Transform*	mPlayerTransform;
 	Transform*	mCameraTransform;

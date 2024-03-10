@@ -196,11 +196,11 @@ GameObject* MeshData::Instantiate()
 				if (!root->GetComponentOrNull<Animation3DController>())
 				{					
 					root->AddComponent<Animation3DController>();
-					root->GetComponent< Animation3DController>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
+					root->GetComponent< Animation3DController>()->SetAnimClip(*childMeshData->mMesh->GetAnimClip());
 				}
 
 				childObj->AddComponent<Animator3D>();
-				childObj->GetComponent<Animator3D>()->SetBones(childMeshData->mMesh->GetBones());
+				childObj->GetComponent<Animator3D>()->SetBones(*childMeshData->mMesh->GetBones());
 				//childObj->GetComponent<Animator3D>()->SetAnimClip(childMeshData->mMesh->GetAnimClip());
 
 				root->GetComponent<Animation3DController>()->AddAnimator3D(childObj->GetComponent<Animator3D>());				

@@ -127,12 +127,10 @@ void EditorSetting::drawForm()
 		if (GetOpenFileName(&ofn) == TRUE) {
 			// 사용자가 파일을 선택하고 확인을 눌렀을 때
 			MessageBox(NULL, ofn.lpstrFile, TEXT("Selected File"), MB_OK);
-
-			//FILE* file = nullptr;
-			//errno_t err = _wfopen_s(&file, ofn.lpstrFile, L"wb");
-			//(void)err;
-			//gCurrentScene->Save(ofn.lpstrFile);
+	
+			//에디터 씬을 로드한다
 			Scene* scene = new Scene();
+			scene->TurnOffScript();
 			scene->Load(ofn.lpstrFile);
 			SceneManager::GetInstance()->RegisterLoadScene(scene);
 			//reset
@@ -160,7 +158,10 @@ void EditorSetting::drawForm()
 			relativePath += L"\\Scene\\Editor\\main.scene";
 			gCurrentScene->Save(relativePath);
 
+			//플레이
 			Scene* scene = new Scene();
+			scene->TurnOnScript();
+
 			scene->Load(relativePath);
 			
 			SceneManager::GetInstance()->RegisterLoadScene(scene);
@@ -177,7 +178,10 @@ void EditorSetting::drawForm()
 			std::wstring relativePath = gPathManager->GetResourcePath();
 			relativePath += L"\\Scene\\Editor\\main.scene";
 
+			//에디터씬 로드
 			Scene* scene = new Scene();
+			scene->TurnOffScript();
+
 			scene->Load(relativePath);
 			SceneManager::GetInstance()->RegisterLoadScene(scene);
 			static_cast<InspectorUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI"))->UnRegister();

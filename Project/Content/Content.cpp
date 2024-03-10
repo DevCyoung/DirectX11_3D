@@ -19,12 +19,18 @@
 #include <Engine\Builder.h>
 #include "Components.h"
 #include "ThirdPersonOrbitCam.h"
+#include <Engine\BuildSetting.h>
 Content::Content()
 {
 	//LoadAllResourceFiles(gPathManager->GetResourcePath());
 	Scene* testScene = new Scene;
 	std::wstring relativePath = gPathManager->GetResourcePath();
 	relativePath += L"\\Scene\\Editor\\main.scene";
+
+#ifdef EDITOR_MODE
+	testScene->TurnOffScript();
+#endif
+
 	testScene->Load(relativePath);
 
 	//main Camera

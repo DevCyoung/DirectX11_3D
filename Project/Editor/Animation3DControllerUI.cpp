@@ -23,7 +23,7 @@ void Animation3DControllerUI(Animation3DController* component)
 		int curFrame = component->GetCurFrameIdx();
 		ImGui::Text("frame %d", curFrame);		
 
-		std::vector<tMTAnimClip>& clips = *component->GetAnimationClip();
+		std::vector<tMTAnimClip>& clips = component->GetAnimationClip();
 		static int item_current = 0;
 
 		std::vector<std::wstring> clipNames;
@@ -50,11 +50,27 @@ void Animation3DControllerUI(Animation3DController* component)
 		int startFrame = clips[idx].iStartFrame;
 		int endFrame = clips[idx].iEndFrame;
 
-		ImGui::InputInt("starFrame : %d", &startFrame);
-		ImGui::InputInt("endFrame : %d", &endFrame);
+		if (ImGui::InputInt("starFrame : %d", &startFrame))
+		{
+			clips[idx].iStartFrame = startFrame;
+		}
+
+		if (ImGui::InputInt("endFrame : %d", &endFrame))
+		{
+			clips[idx].iEndFrame = endFrame;
+		}
 
 		if (bStop && ImGui::InputInt("stop##frame", &curFrame))
 		{
+			if (curFrame > endFrame)
+			{
+				curFrame = startFrame;
+			}
+
+			if (curFrame < startFrame)
+			{
+				curFrame = endFrame;
+			}
 			component->SetCurFrameIde(curFrame);
 		}
 
@@ -96,7 +112,7 @@ void Animation3DControllerUI(Animation3DController* component)
 				clip.iEndFrame = createEndFrame;
 				clip.strAnimName = StringHelper::StrToWStr(buf);
 				clips.push_back(clip);
-				component->SetAnimClip(&clips);
+				component->SetAnimClip(clips);
 			}
 		}
 		if (clips.size() > 1 && ImGui::Button("Remove Clip"))

@@ -56,13 +56,13 @@ void Animator3DUI(Animator3D* component)
 
 	//Bone
 	//Mesh
-	const std::vector<tMTBone>* bones  = component->GetBones();	
+	const std::vector<tMTBone>& bones  = component->GetBones();	
 	static int clickIdx = -1;
 	if (ImGui::CollapsingHeader("BonData"))
 	{
-		for (int i = 0; i < bones->size(); ++i)
+		for (int i = 0; i < bones.size(); ++i)
 		{
-			const tMTBone& bone = bones->at(i);
+			const tMTBone& bone = bones[i];
 			std::string bonName = StringHelper::WStrToStr(bone.strBoneName);
 			if (ImGui::Selectable(bonName.c_str()))
 			{

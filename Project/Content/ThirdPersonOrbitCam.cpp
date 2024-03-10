@@ -82,8 +82,10 @@ void ThirdPersonOrbitCam::lateUpdate()
 	Quaternion aimRotation = helper::math::QuaternionEuler(-mAngleV, mAngleH, 0.0f); //vertial 은 반대이다.
 	Matrix aimRotationMatrix = XMMatrixRotationQuaternion(aimRotation);
 	Matrix camYRotationMatrix = XMMatrixRotationQuaternion(camYRotation);
-	Vector3 p1 = XMVector3TransformCoord(mSmoothPivotOffset, camYRotationMatrix);
-	Vector3 p2 = XMVector3TransformCoord(mSmoothCamOffset, aimRotationMatrix);
+	//Vector3 p1 = XMVector3TransformCoord(mSmoothPivotOffset, camYRotationMatrix);
+	//Vector3 p2 = XMVector3TransformCoord(mSmoothCamOffset, aimRotationMatrix);
+	Vector3 p1 = XMVector3TransformCoord(mPivotOffset, camYRotationMatrix);
+	Vector3 p2 = XMVector3TransformCoord(mCamOffset, aimRotationMatrix);
 
 	Vector3 cameraPosition = mPlayerTransform->GetPosition();
 	cameraPosition += p1 + p2;
@@ -92,4 +94,17 @@ void ThirdPersonOrbitCam::lateUpdate()
 	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D(mCameraTransform->GetWorldMatrix(), 0.f);
 	mCameraTransform->CalculateTransform(aimRotationMatrix);
 	mMyCamera->CalculateCamera();
+}
+
+void ThirdPersonOrbitCam::Save(FILE* file)
+{
+	fwrite(&mPivotOffset, sizeof(mPivotOffset), 1, file);
+	fwrite(&mCamOffset, sizeof(mCamOffset), 1, file);
+}
+
+void ThirdPersonOrbitCam::Load(FILE* file)
+{
+	(void)file;
+	fread(&mPivotOffset, sizeof(mPivotOffset), 1, file);
+	fread(&mCamOffset, sizeof(mCamOffset), 1, file);
 }

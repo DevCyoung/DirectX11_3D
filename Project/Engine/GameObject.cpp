@@ -4,6 +4,7 @@
 #include "ScriptComponent.h"
 #include "EnumLayer.h"
 #include "SceneManager.h"
+#include "BuildSetting.h"
 #include <Helper\FileHelper.h>
 
 const wchar_t* GetScriptComponentName(const eScriptComponentType type);
@@ -69,10 +70,20 @@ void GameObject::initialize()
 		}
 	}
 
+#ifdef EDITOR_MODE
+	if (gCurrentScene->IsExcuteScript())
+	{
+		for (ScriptComponent* const script : mScriptComponents)
+		{
+			script->initialize();
+		}
+	}
+#else
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->initialize();
 	}
+#endif // !1	
 
 	for (GameObject* childObj : mChildObjects)
 	{
@@ -91,10 +102,21 @@ void GameObject::update()
 		}
 	}
 
+
+#ifdef EDITOR_MODE
+	if (gCurrentScene->IsExcuteScript())
+	{
+		for (ScriptComponent* const script : mScriptComponents)
+		{
+			script->update();
+		}
+	}
+#else
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->update();
 	}
+#endif // !1	
 
 	for (GameObject* childobj : mChildObjects)
 	{
@@ -112,10 +134,22 @@ void GameObject::fixedUpdate()
 		}
 	}
 
+#ifdef EDITOR_MODE
+	if (gCurrentScene->IsExcuteScript())
+	{
+		for (ScriptComponent* const script : mScriptComponents)
+		{
+			script->fixedUpdate();
+		}
+	}
+#else
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->fixedUpdate();
 	}
+#endif // !1	
+
+
 
 	for (GameObject* childobj : mChildObjects)
 	{
@@ -134,10 +168,20 @@ void GameObject::lateUpdate()
 		}
 	}
 
+#ifdef EDITOR_MODE
+	if (gCurrentScene->IsExcuteScript())
+	{
+		for (ScriptComponent* const script : mScriptComponents)
+		{
+			script->lateUpdate();
+		}
+	}
+#else
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->lateUpdate();
 	}
+#endif // !1	
 
 	for (GameObject* childobj : mChildObjects)
 	{
@@ -156,10 +200,22 @@ void GameObject::lastUpdate()
 		}
 	}
 
+
+#ifdef EDITOR_MODE
+	if (gCurrentScene->IsExcuteScript())
+	{
+		for (ScriptComponent* const script : mScriptComponents)
+		{
+			script->lastUpdate();
+		}
+	}
+#else
 	for (ScriptComponent* const script : mScriptComponents)
 	{
 		script->lastUpdate();
 	}
+#endif // !1	
+
 
 	for (GameObject* childobj : mChildObjects)
 	{

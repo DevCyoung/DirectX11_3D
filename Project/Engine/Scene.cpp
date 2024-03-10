@@ -15,6 +15,7 @@ Scene::Scene()
 	, mEventMessages()
 	, mGarbages()	
 	, mBackgroundColor(Vector4(0.4f, 0.4f, 0.4f, 1.f))
+	, mbExcuteScript(false)
 {
 	mEventMessages.reserve(100);
 	mGarbages.reserve(100);

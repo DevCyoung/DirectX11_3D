@@ -52,6 +52,9 @@ public:
 
 	GameObject* FindGameObjectOrNull(const std::wstring& name);
 
+	void TurnOnScript() { mbExcuteScript = true; }
+	void TurnOffScript() { mbExcuteScript = false; }
+	bool IsExcuteScript() const { return mbExcuteScript; }
 private:
 	enum class eEvent
 	{
@@ -91,4 +94,6 @@ private:
 	std::vector<tEventMessageScene> mEventMessages;
 	std::vector<GameObject*> mGarbages;
 	Vector4 mBackgroundColor;
+
+	bool mbExcuteScript;
 };

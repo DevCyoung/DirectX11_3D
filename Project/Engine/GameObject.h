@@ -37,6 +37,10 @@ public:
 		requires (is_component<T>::value)
 	T* GetComponent() const;
 
+	template<typename T>
+		requires (is_component<T>::value)
+	T* FindParentByComponent() const;
+
 	Component* GetComponentOrNull(const eComponentType componentType) const;
 	ScriptComponent* GetComponentOrNull(const eScriptComponentType scriptComponentType) const;
 
@@ -53,7 +57,7 @@ public:
 	GameSystem* GetGameSystem() const { return mGameSystem; }
 
 	GameObject* FindChidOrNull(const std::wstring& name);
-	GameObject* FindChidOrNull(GameObject* childObj);
+	GameObject* FindChidOrNull(GameObject* childObj);	
 
 	void DetatchChild(GameObject* childObj);
 
@@ -185,4 +189,22 @@ inline T* GameObject::GetComponent() const
 	Assert(component, ASSERT_MSG_NULL);
 
 	return component;
+}
+
+template<typename T>
+	requires (is_component<T>::value)
+inline T* GameObject::FindParentByComponent() const
+{
+	if (nullptr == mParent)
+	{
+		return nullptr;
+	}
+
+	T* component =  mParent->GetComponentOrNull<T>();
+	if (component)
+	{
+		return component;
+	}
+
+	return mParent->FindParentByComponent<T>();
 }

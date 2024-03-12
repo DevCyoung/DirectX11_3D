@@ -1,5 +1,6 @@
 #pragma once
 #define EDITOR_MODE
+#define SHOW_CURSOR
 
 #define WINDOW_EDIT_SCREEN_WIDTH 1900
 #define WINDOW_EDIT_SCREEN_HEIGHT 1000

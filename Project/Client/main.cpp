@@ -65,14 +65,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MSG msg;
 #pragma endregion
 
-#pragma region Mouse
-	//Mose Cursor
-	//ShowCursor(FALSE);
-
-	//FIXME(ASSERT_MSG("반드시해야지"));
-	//Assert Test
-	//Assert(false, ASSERT_MSG("this is message"));
-#pragma endregion
+#ifdef SHOW_CURSOR
+	ShowCursor(FALSE);
+#endif
 
 	Engine::initialize(gHwnd, WINDOW_SCREEN_WIDTH, WINDOW_SCREEN_HEIGHT);
 	Content::initialize();

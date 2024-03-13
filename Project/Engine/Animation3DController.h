@@ -28,13 +28,13 @@ public:
 
 	//void	SetBones(std::vector<tMTBone>* bones) { mBones = bones; }
 	void	SetClips(std::vector<tMTAnimClip> clip) { mAnimClips = clip; }
-	void	SetClip(int clipIdx) { m_iCurClip = clipIdx; }
+	void	SetClip(int clipIdx) { mCurClip = clipIdx; }
 	void	Stop(bool stop) { mbStop = stop; }
 	bool	IsStop() { return mbStop; }
-	int		GetCurFrameIdx() { return mFrameIdx; }
-	void	SetCurFrameIde(int frameIdx) { mFrameIdx = frameIdx; }
+	int		GetCurFrameIdx() { return mCurFrameIdx; }
+	void	SetCurFrameIde(int frameIdx) { mCurFrameIdx = frameIdx; }
 	void	SetAnimClip(std::vector<tMTAnimClip> _vecAnimClip);
-
+	int		GetAnimationClipIdx(const std::wstring& name);
 	void RemoveClip(const std::wstring& clipName);
 	void CreateClip(const std::wstring& clipName, int startFrame, int endFrame);
 
@@ -44,16 +44,25 @@ public:
 	std::vector<tMTAnimClip>& GetAnimationClip() { return mAnimClips; }
 
 	std::vector<Animator3D*>	mAnimation3Ds;
-	//std::vector<tMTBone>*		mBones;
 	std::vector<tMTAnimClip>	mAnimClips;
+	int							mFramePer;
+	bool						mbStop;	
 
-	bool						mbStop;
-	int							m_iFrameCount;
-	int							m_iCurClip;
-	int							mFrameIdx;
-	int							mNextFrameIdx;
-	float						m_dCurTime;
-	float						mRatio;	
+	int							mCurClip;
+	int							mCurFrameIdx;
+	int							mCurNextFrameIdx;	
+	float						mCurRatio;
+
+	bool						mbOtherClip;
+
+	int							mOtherClip;
+	int							mOtherFrameIdx;
+	int							mOtherNextFrameIdx;
+	float						mOtherRatio;
+
+	float						mMixRatio;
+
+
 	std::vector<float>			m_vecClipUpdateTime;
 
 

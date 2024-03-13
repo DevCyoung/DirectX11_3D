@@ -18,10 +18,8 @@
 Animator3D::Animator3D()
 	: Component(eComponentType::Animator3D)
 	, mBones()
-	, mFrameIdx(0)
-	, mNextFrameIdx(0)
-	, mRatio(0)
-	, m_bFinalMatUpdate(false)
+	, mCurAnimationFrame{}
+	, mNextAnimationFrame{}
 	, mSBBoneFinalBuffer(nullptr)
 	, mAnimMatrixCS(nullptr)
 	, mController(nullptr)
@@ -70,7 +68,7 @@ void Animator3D::update()
 void Animator3D::lateUpdate()
 {
 	// 컴퓨트 쉐이더 연산여부
-	m_bFinalMatUpdate = false;
+	//m_bFinalMatUpdate = false;
 }
 
 void Animator3D::Play(const std::wstring& animationName)
@@ -102,19 +100,15 @@ void Animator3D::UpdateData()
 
 		mAnimMatrixCS->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
 		mAnimMatrixCS->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
+		mAnimMatrixCS->SetFrameData(BONE_COUNT, mCurAnimationFrame.mFrameIdx, mCurAnimationFrame.mNextFrameIdx, mCurAnimationFrame.mRatio);
 		mAnimMatrixCS->SetOutputBuffer(mSBBoneFinalBuffer);
-
-		mAnimMatrixCS->SetBoneCount(BONE_COUNT);
-		mAnimMatrixCS->SetFrameIndex(mFrameIdx);
-		mAnimMatrixCS->SetNextFrameIdx(mNextFrameIdx);
-		mAnimMatrixCS->SetFrameRatio(mRatio);
 		mAnimMatrixCS->UpdateData();
 
 		gGraphicDevice->BindCS(mAnimMatrixCS);
 		gGraphicDevice->Distpatch(mAnimMatrixCS);
 
 		mAnimMatrixCS->Clear();
-		m_bFinalMatUpdate = true;
+		mCurAnimationFrame.m_bFinalMatUpdate = true;
 	}
 
 	gGraphicDevice->BindSB(30, mSBBoneFinalBuffer, eShaderBindType::VS);
@@ -150,11 +144,11 @@ void Animator3D::ClearData()
 Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
 {
 	Matrix worldMatrix = GetComponent<Transform>()->GetWorldMatrix();
-	float ratio = GetRatio();
+	float ratio = GetCurAnimationRatio();
 	Assert(boneIdx < mBones.size(), ASSERT_MSG_INVALID);
 	const tMTBone& bone = mBones[boneIdx];
-	tMTKeyFrame key = bone.vecKeyFrame[mFrameIdx];
-	tMTKeyFrame nextKey = bone.vecKeyFrame[(mFrameIdx + 1) % bone.vecKeyFrame.size()];
+	tMTKeyFrame key = bone.vecKeyFrame[mCurAnimationFrame.mFrameIdx];
+	tMTKeyFrame nextKey = bone.vecKeyFrame[(mCurAnimationFrame.mFrameIdx + 1) % bone.vecKeyFrame.size()];
 
 	Quaternion qRot = Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
 	Vector3 pos = Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);

@@ -9,6 +9,14 @@ class Mesh;
 class Anim3DBuuferCopyCS;
 class Animation3DController;
 
+struct tFrameData
+{
+    int							    mFrameIdx;              // 클립의 현재 프레임
+    int							    mNextFrameIdx;          // 클립의 다음 프레임
+    float						    mRatio;	                // 프레임 사이 비율    
+    bool						    m_bFinalMatUpdate;      // 최종행렬 연산 수행여부
+};
+
 class Animator3D : public Component
 {
 
@@ -33,7 +41,7 @@ public:
 
     void Play(const std::wstring& animationName);
     void Play(const std::wstring& animationName, const float ratio);
-    float GetRatio() { return mRatio; }
+    float GetCurAnimationRatio() { return mCurAnimationFrame.mRatio; }
     void SetController(Animation3DController* const controller) { mController = controller; }
     Animation3DController* GetController() { return mController; }
     Matrix GetCurGrameBoneMatrix(int boneIdx);
@@ -42,21 +50,21 @@ public:
     virtual void Save(FILE* const file) override;
     virtual void Load(FILE* const file) override;
 private:
-    void setCurrentFrame(int frameIde, int nextFrameIdx, float ratio)
+    void setCurrentAnimationFrame(int frameIde, int nextFrameIdx, float ratio)
     {
-        mFrameIdx = frameIde;
-        mNextFrameIdx = nextFrameIdx;
-        mRatio = ratio;
+        mCurAnimationFrame.mFrameIdx = frameIde;
+        mCurAnimationFrame.mNextFrameIdx = nextFrameIdx;
+        mCurAnimationFrame.mRatio = ratio;
     }
 public:
     std::vector<tMTBone>            mBones;        
-    int							    mFrameIdx;              // 클립의 현재 프레임
-    int							    mNextFrameIdx;          // 클립의 다음 프레임
-    float						    mRatio;	                // 프레임 사이 비율    
-    bool						    m_bFinalMatUpdate;      // 최종행렬 연산 수행여부
+
+    Anim3DBuuferCopyCS*             mAnimMatrixCS;
+
+    tFrameData                      mCurAnimationFrame;
+    tFrameData                      mNextAnimationFrame;
 
     Animation3DController*          mController;
     StructuredBuffer*               mSBBoneFinalBuffer;     // 특정 프레임의 최종 행렬
-    Anim3DBuuferCopyCS*             mAnimMatrixCS;
 };
 

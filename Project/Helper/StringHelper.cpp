@@ -57,6 +57,20 @@ std::vector<std::string> StringHelper::WVecToVec(const std::vector<std::wstring>
 	return result;
 }
 
+int StringHelper::GetIndex(const std::vector<std::wstring>& vec, const std::wstring& name)
+{
+	int idx = -1;
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		if (vec[i] == name)
+		{
+			idx = i;
+			break;
+		}
+	}
+	return idx;
+}
+
 std::wstring StringHelper::GetFileExtension(const std::wstring& path)
 {	
 	constexpr UINT FILE_PATH_MAX_LEN = 512;

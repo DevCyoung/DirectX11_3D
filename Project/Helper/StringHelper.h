@@ -12,6 +12,7 @@ private:
 public:
 	static std::vector<std::wstring> VecToWVec(const std::vector<std::string>& vec);
 	static std::vector<std::string>  WVecToVec(const std::vector<std::wstring>& wvec);
+	static int GetIndex(const std::vector<std::wstring>& vec, const std::wstring& name);
 
 	static std::wstring StrToWStr(const std::string& str);
 	static std::string WStrToStr(const std::wstring& wstr);

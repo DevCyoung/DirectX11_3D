@@ -45,7 +45,7 @@ HRESULT Material::Load(const std::wstring& filePath)
 		mShader = gResourceManager->FindAndLoad<Shader>(shaderPath);
 	}	
 
-	fread(&mData, sizeof(tMaterialData), 1, file);
+	fread(&mData, sizeof(tMaterial), 1, file);
 
 	// Texture
 	for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
@@ -86,7 +86,7 @@ HRESULT Material::Save(const std::wstring& relativePath)
 	SaveWString(mShader->GetRelativePathorName(), file);
 
 	// Constant
-	fwrite(&mData, sizeof(tMaterialData), 1, file);
+	fwrite(&mData, sizeof(tMaterial), 1, file);
 
 	// Texture
 	for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)

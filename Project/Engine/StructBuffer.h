@@ -147,58 +147,50 @@ struct alignas(16) tWaveInfo // b6
 	float WaveSpeed;	
 	float dummy2;
 };
-
-struct alignas(16) tMaterial // b7
+enum TEX_PARAM
 {
-	// 재질 계수
-	Vector4 g_vDiff;
-	Vector4 g_vSpec;
-	Vector4 g_vAmb;
-	Vector4 g_vEmv;
+	TEX_0,
+	TEX_1,
+	TEX_2,
+	TEX_3,
+	TEX_4,
+	TEX_5,
+	TEX_6,
+	TEX_7,
 
-	// 재질 상수
-	int g_int_0;
-	int g_int_1;
-	int g_int_2;
-	int g_int_3;
+	TEX_CUBE_0,
+	TEX_CUBE_1,
 
-	float g_float_0;
-	float g_float_1;
-	float g_float_2;
-	float g_float_3;
+	TEX_ARR_0,
+	TEX_ARR_1,
 
-	Vector2 g_vec2_0;
-	Vector2 g_vec2_1;
-	Vector2 g_vec2_2;
-	Vector2 g_vec2_3;
+	TEX_END,
+};
 
-	Vector4 g_vec4_0;
-	Vector4 g_vec4_1;
-	Vector4 g_vec4_2;
-	Vector4 g_vec4_3;
+// Material 계수
+struct tMtrlData
+{
+	Vector4 vDiff;
+	Vector4 vSpec;
+	Vector4 vAmb;
+	Vector4 vEmv;
+};
 
-	Matrix g_mat_0;
-	Matrix g_mat_1;
-	Matrix g_mat_2;
-	Matrix g_mat_3;
+struct /*alignas(16)*/ tMaterial // b7
+{
+	tMtrlData mtrl;
 
-	int g_btex_0;
-	int g_btex_1;
-	int g_btex_2;
-	int g_btex_3;
-	int g_btex_4;
-	int g_btex_5;
-	int g_btex_6;
-	int g_btex_7;
-	int g_btexcube_0;
-	int g_btexcube_1;
-	int g_btexarr_0;
-	int g_btexarr_1;
+	int arrInt[16];
+	float arrFloat[16];
+	Vector2 arrV2[16];
+	Vector4 arrV4[16];
+	Matrix arrMat[16];
+
+	// 텍스쳐 세팅 true / false 용도
+	int arrBTex[(UINT)TEX_PARAM::TEX_END];
 
 	// 3D Animation 정보
-	int                 g_iAnim;
-	int                 g_iBoneCount;
-	int                 padding[2];
+	int	arrAnimData[4];
 };
 
 //static float3 g_vLightPos = float3(0.f, 0.f, 0.f);
@@ -220,11 +212,3 @@ struct /*alignas(16)*/ tLight3DInfo
 	int		pad[3];
 };
 
-// Material 계수
-struct tMtrlData
-{
-	Vector4 vDiff;
-	Vector4 vSpec;
-	Vector4 vAmb;
-	Vector4 vEmv;
-};

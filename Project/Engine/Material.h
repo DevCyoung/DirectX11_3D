@@ -7,43 +7,6 @@
 class Shader;
 class Texture;
 
-enum TEX_PARAM
-{
-	TEX_0,
-	TEX_1,
-	TEX_2,
-	TEX_3,
-	TEX_4,
-	TEX_5,
-	TEX_6,
-	TEX_7,
-
-	TEX_CUBE_0,
-	TEX_CUBE_1,
-
-	TEX_ARR_0,
-	TEX_ARR_1,
-
-	TEX_END,
-};
-
-struct tMaterialData
-{
-	tMtrlData mtrl;
-
-	int arrInt[4];
-	float arrFloat[4];
-	Vector2 arrV2[4];
-	Vector4 arrV4[4];
-	Matrix arrMat[4];
-
-	// 텍스쳐 세팅 true / false 용도
-	int arrBTex[(UINT)TEX_PARAM::TEX_END];
-
-	// 3D Animation 정보
-	int	arrAnimData[4];
-};
-
 class Material : public Resource
 {	
 	friend class GraphicDeviceDX11;
@@ -90,11 +53,11 @@ public:
 
 	void UpdateData();
 
-	tMaterialData& GetMaterialData() { return mData; }
+	tMaterial& GetMaterialData() { return mData; }
 
 private:
 	Shader*					mShader;	
-	tMaterialData           mData;
+	tMaterial				mData;
 	Texture*				mTextures[TEX_END];
 	eRenderPriorityType		mRenderType;
 };

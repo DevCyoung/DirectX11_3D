@@ -19,9 +19,9 @@ void TextureAlphaTo(Texture* const dst, Texture* const src)
 	ComputeShader* cs = gResourceManager->Find<ComputeShader>(L"StdCS");
 	{
 		tMaterial mat;
-		mat.g_int_0 = static_cast<int>(dst->GetWidth());
-		mat.g_int_1 = static_cast<int>(dst->GetHeight());
-		mat.g_float_0 = 1.0f;
+		mat.arrInt[0] = static_cast<int>(dst->GetWidth());
+		mat.arrInt[1] = static_cast<int>(dst->GetHeight());
+		mat.arrFloat[0] = 1.0f;
 
 		gGraphicDevice->PassCB(eCBType::Material, sizeof(tMaterial), &mat);
 		gGraphicDevice->BindCB(eCBType::Material, eShaderBindType::CS);

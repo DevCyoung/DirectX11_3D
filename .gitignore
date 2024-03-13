@@ -41,5 +41,5 @@
 
 #Resource
 **/Resources/*
-
+!**/Resources/Shader
 

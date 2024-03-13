@@ -27,7 +27,7 @@ private:
 
 protected:
     // 쉐이더에 전달할 상수 데이터
-    tMaterialData                   m_Const;
+    tMaterial                       m_Const;
 
     // 그룹 개수
     UINT                            mGroupX;

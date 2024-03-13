@@ -65,7 +65,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MSG msg;
 #pragma endregion
 
-#ifdef SHOW_CURSOR
+#ifndef SHOW_CURSOR
 	ShowCursor(FALSE);
 #endif
 

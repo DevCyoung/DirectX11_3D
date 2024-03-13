@@ -27,7 +27,15 @@ void PlayerMovement::update()
     {
         mController->Play(L"WALK_F", 0.3f);
     }
-}
+    if (gInput->GetKeyDown(eKeyCode::SPACE))
+    {
+        mController->Play(L"ATTACK_1", 0.4f);
+    }
+    if (gInput->GetKeyDown(eKeyCode::Q))
+    {
+        mController->Play(L"ATTACK_2", 0.7f);
+    }
+}   
 
 void PlayerMovement::lateUpdate()
 {

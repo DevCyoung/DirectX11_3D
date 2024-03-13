@@ -55,11 +55,6 @@ void Animation3DController::Play(const std::wstring& animation, float blendTime)
 void Animation3DController::update()
 {	
 	// 현재 재생중인 Clip 의 시간을 진행한다.
-	if (mbStop || m_vecClipUpdateTime.empty())
-	{
-		return;
-	}	
-
 	GetFrameData(mCurClip, &mCurFrameIdx, &mCurNextFrameIdx, &mCurRatio);
 
 	if (mbOtherClip)
@@ -144,38 +139,36 @@ void Animation3DController::GetFrameData(int clip,
 
 	float curTime = 0.f;
 
-	// 현재 재생중인 Clip 의 시간을 진행한다.
-	if (mbStop || m_vecClipUpdateTime.empty())
+	if (!mbStop && !m_vecClipUpdateTime.empty())
 	{
-		return;
+		m_vecClipUpdateTime[clip] += gDeltaTime;
+		int timelength = mAnimClips[clip].iEndFrame - mAnimClips[clip].iStartFrame;
+		if (m_vecClipUpdateTime[clip] >= (float)timelength / mFramePer)
+		{
+			m_vecClipUpdateTime[clip] = 0.f;
+		}
+
+
+		float startTime = (float)mAnimClips[clip].iStartFrame / mFramePer;
+		curTime = startTime + m_vecClipUpdateTime[clip];
+
+		// 현재 프레임 인덱스 구하기
+		double dFrameIdx = curTime * (double)mFramePer;
+		*outFrame = (int)(dFrameIdx);
+
+		// 다음 프레임 인덱스
+		if (*outFrame >= mAnimClips[clip].iEndFrame)
+		{
+			*outNextFrame = mAnimClips[clip].iStartFrame;	// 끝이면 다음인덱스
+		}
+		else
+		{
+			*outNextFrame = *outFrame + 1;
+		}
+
+		// 프레임간의 시간에 따른 비율을 구해준다.
+		*outRatio = (float)(dFrameIdx - (double)*outFrame);
 	}
-
-	m_vecClipUpdateTime[clip] += gDeltaTime;
-	int timelength = mAnimClips[clip].iEndFrame - mAnimClips[clip].iStartFrame;
-	if (m_vecClipUpdateTime[clip] >= (float)timelength / mFramePer)
-	{
-		m_vecClipUpdateTime[clip] = 0.f;
-	}
-
-	float startTime = (float)mAnimClips[clip].iStartFrame / mFramePer;
-	curTime = startTime + m_vecClipUpdateTime[clip];
-
-	// 현재 프레임 인덱스 구하기
-	double dFrameIdx = curTime * (double)mFramePer;
-	*outFrame = (int)(dFrameIdx);
-
-	// 다음 프레임 인덱스
-	if (*outFrame >= mAnimClips[clip].iEndFrame)
-	{
-		*outNextFrame = mAnimClips[clip].iStartFrame;	// 끝이면 다음인덱스
-	}
-	else
-	{
-		*outNextFrame = *outFrame + 1;
-	}
-
-	// 프레임간의 시간에 따른 비율을 구해준다.
-	*outRatio = (float)(dFrameIdx - (double)*outFrame);
 }
 
 void Animation3DController::lateUpdate()

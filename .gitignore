@@ -43,3 +43,6 @@
 **/Resources/*
 !**/Resources/Shader
 
+#ImGUI
+**.ini
+

@@ -43,48 +43,22 @@ void Animation3DController::Play(const std::wstring& animation, float ratio)
 	//이전의 애니메이션과 블렌딩한다.
 	int idx = GetAnimationClipIdx(animation);
 	Assert(idx != -1, ASSERT_MSG_INVALID);
-	m_vecClipUpdateTime[idx] = 0.f;
 
-	for (Animator3D* animator3D : mAnimation3Ds)
-	{
-		animator3D->Play(animation, ratio);
-	}
+	mOtherClip = idx;
+	m_vecClipUpdateTime[mOtherClip] = 0.f;	
+	(void)ratio;
 }
 
 void Animation3DController::update()
-{
-	float curTime = 0.f;
-
+{	
 	// 현재 재생중인 Clip 의 시간을 진행한다.
 	if (!mbStop && !m_vecClipUpdateTime.empty())
 	{
-		m_vecClipUpdateTime[mCurClip] += gDeltaTime;
-		int timelength = mAnimClips[mCurClip].iEndFrame - mAnimClips[mCurClip].iStartFrame;
-		if (m_vecClipUpdateTime[mCurClip] >= (float)timelength / mFramePer)
-		{
-			m_vecClipUpdateTime[mCurClip] = 0.f;
-		}
-
-		float startTime = (float)mAnimClips[mCurClip].iStartFrame / mFramePer;
-		curTime = startTime + m_vecClipUpdateTime[mCurClip];
-
-		// 현재 프레임 인덱스 구하기
-		double dFrameIdx = curTime * (double)mFramePer;
-		mCurFrameIdx = (int)(dFrameIdx);
-
-		// 다음 프레임 인덱스
-		if (mCurFrameIdx >= mAnimClips[mCurClip].iEndFrame)
-		{
-			mCurNextFrameIdx = mAnimClips[mCurClip].iStartFrame;	// 끝이면 현재 인덱스를 유지
-		}
-		else
-		{
-			mCurNextFrameIdx = mCurFrameIdx + 1;
-		}
-
-		// 프레임간의 시간에 따른 비율을 구해준다.
-		mCurRatio = (float)(dFrameIdx - (double)mCurFrameIdx);
+		GetFrameData(mCurClip, &mCurFrameIdx, &mCurNextFrameIdx, &mCurRatio);
 	}
+
+	//두개의 애니메이션을 진행한다.
+
 
 	for (Animator3D* animator3D : mAnimation3Ds)
 	{
@@ -130,6 +104,51 @@ void Animation3DController::CreateClip(const std::wstring& clipName, int startFr
 	clip.strAnimName = clipName;
 	mAnimClips.push_back(clip);
 	SetAnimClip(mAnimClips);
+}
+
+void Animation3DController::GetFrameData(int clip, 
+	int* outFrame, 
+	int* outNextFrame, 
+	float* outRatio)
+{
+	Assert(outFrame, ASSERT_MSG_NULL);
+	Assert(outNextFrame, ASSERT_MSG_NULL);
+	Assert(outRatio, ASSERT_MSG_NULL);
+
+	float curTime = 0.f;
+
+	// 현재 재생중인 Clip 의 시간을 진행한다.
+	if (mbStop || m_vecClipUpdateTime.empty())
+	{
+		return;
+	}
+
+	m_vecClipUpdateTime[clip] += gDeltaTime;
+	int timelength = mAnimClips[clip].iEndFrame - mAnimClips[clip].iStartFrame;
+	if (m_vecClipUpdateTime[clip] >= (float)timelength / mFramePer)
+	{
+		m_vecClipUpdateTime[clip] = 0.f;
+	}
+
+	float startTime = (float)mAnimClips[clip].iStartFrame / mFramePer;
+	curTime = startTime + m_vecClipUpdateTime[clip];
+
+	// 현재 프레임 인덱스 구하기
+	double dFrameIdx = curTime * (double)mFramePer;
+	*outFrame = (int)(dFrameIdx);
+
+	// 다음 프레임 인덱스
+	if (*outFrame >= mAnimClips[clip].iEndFrame)
+	{
+		*outNextFrame = mAnimClips[clip].iStartFrame;	// 끝이면 다음인덱스
+	}
+	else
+	{
+		*outNextFrame = *outFrame + 1;
+	}
+
+	// 프레임간의 시간에 따른 비율을 구해준다.
+	*outRatio = (float)(dFrameIdx - (double)*outFrame);
 }
 
 void Animation3DController::lateUpdate()

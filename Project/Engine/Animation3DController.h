@@ -35,8 +35,10 @@ public:
 	void	SetCurFrameIde(int frameIdx) { mCurFrameIdx = frameIdx; }
 	void	SetAnimClip(std::vector<tMTAnimClip> _vecAnimClip);
 	int		GetAnimationClipIdx(const std::wstring& name);
-	void RemoveClip(const std::wstring& clipName);
-	void CreateClip(const std::wstring& clipName, int startFrame, int endFrame);
+	void	RemoveClip(const std::wstring& clipName);
+	void	CreateClip(const std::wstring& clipName, int startFrame, int endFrame);
+
+	void	GetFrameData(int clip, int* outFrame, int* outNextFrame, float* outRatio);
 
 	virtual void Save(FILE* const file) override;
 	virtual void Load(FILE* const file) override;

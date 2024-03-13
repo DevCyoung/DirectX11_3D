@@ -21,7 +21,8 @@ Animation3DController::Animation3DController()
 	, mOtherFrameIdx(0)
 	, mOtherNextFrameIdx(0)
 	, mOtherRatio(0)
-	, mMixRatio(0)
+	, mCurBlendTime(0)
+	, mMixBlendTime(0)
 	, m_vecClipUpdateTime(0)
 {
 }
@@ -38,31 +39,56 @@ void Animation3DController::Play(const std::wstring& animation)
 	}
 }
 
-void Animation3DController::Play(const std::wstring& animation, float ratio)
+void Animation3DController::Play(const std::wstring& animation, float blendTime)
 {
 	//이전의 애니메이션과 블렌딩한다.
 	int idx = GetAnimationClipIdx(animation);
 	Assert(idx != -1, ASSERT_MSG_INVALID);
 
+	mbOtherClip = true;
 	mOtherClip = idx;
-	m_vecClipUpdateTime[mOtherClip] = 0.f;	
-	(void)ratio;
+	m_vecClipUpdateTime[mOtherClip] = 0.f;
+	mCurBlendTime = 0.f;
+	mMixBlendTime = blendTime;
 }
 
 void Animation3DController::update()
 {	
 	// 현재 재생중인 Clip 의 시간을 진행한다.
-	if (!mbStop && !m_vecClipUpdateTime.empty())
+	if (mbStop || m_vecClipUpdateTime.empty())
 	{
-		GetFrameData(mCurClip, &mCurFrameIdx, &mCurNextFrameIdx, &mCurRatio);
+		return;
+	}	
+
+	GetFrameData(mCurClip, &mCurFrameIdx, &mCurNextFrameIdx, &mCurRatio);
+
+	if (mbOtherClip)
+	{
+		GetFrameData(mOtherClip, &mOtherFrameIdx, &mOtherNextFrameIdx, &mOtherRatio);
+		mCurBlendTime += gDeltaTime;
 	}
 
 	//두개의 애니메이션을 진행한다.
-
-
 	for (Animator3D* animator3D : mAnimation3Ds)
 	{
-		animator3D->setCurrentAnimationFrame(mCurFrameIdx, mCurNextFrameIdx, mCurRatio);
+		if (mbOtherClip)
+		{
+			float blendRatio = mCurBlendTime / mMixBlendTime;
+			blendRatio = blendRatio > 1.f ? 1 : blendRatio;
+			animator3D->setMixAnimationFrame(mCurFrameIdx, mCurNextFrameIdx, mCurRatio,
+				mOtherFrameIdx, mOtherNextFrameIdx, mOtherRatio, blendRatio);
+		}
+		else
+		{
+			animator3D->setCurrentAnimationFrame(mCurFrameIdx, mCurNextFrameIdx, mCurRatio);
+		}		
+	}
+
+	//Ratio끝나면 바꿈 선형적으로 섞는시간
+	if (mbOtherClip && mCurBlendTime >= mMixBlendTime)
+	{
+		mCurClip = mOtherClip;
+		mbOtherClip = false;
 	}
 }
 
@@ -80,6 +106,7 @@ void Animation3DController::RemoveClip(const std::wstring& clipName)
 		if (iter->strAnimName == clipName)
 		{
 			mAnimClips.erase(iter);
+			break;
 		}
 	}
 

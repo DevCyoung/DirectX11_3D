@@ -20,6 +20,8 @@ Animator3D::Animator3D()
 	, mBones()
 	, mCurAnimationFrame{}
 	, mNextAnimationFrame{}
+	, mMixRatio(0)
+	, mbMix(false)
 	, mSBBoneFinalBuffer(nullptr)
 	, mAnimMatrixCS(nullptr)
 	, mController(nullptr)
@@ -100,7 +102,17 @@ void Animator3D::UpdateData()
 
 		mAnimMatrixCS->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
 		mAnimMatrixCS->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
-		mAnimMatrixCS->SetFrameData(BONE_COUNT, mCurAnimationFrame.mFrameIdx, mCurAnimationFrame.mNextFrameIdx, mCurAnimationFrame.mRatio);
+
+		if (mbMix)
+		{
+			mAnimMatrixCS->SetMixFrameData(BONE_COUNT, mCurAnimationFrame.mFrameIdx, mCurAnimationFrame.mNextFrameIdx, mCurAnimationFrame.mRatio,
+				mNextAnimationFrame.mFrameIdx, mNextAnimationFrame.mNextFrameIdx,
+				mNextAnimationFrame.mRatio, mMixRatio);			
+		}
+		else
+		{
+			mAnimMatrixCS->SetFrameData(BONE_COUNT, mCurAnimationFrame.mFrameIdx, mCurAnimationFrame.mNextFrameIdx, mCurAnimationFrame.mRatio);
+		}		
 		mAnimMatrixCS->SetOutputBuffer(mSBBoneFinalBuffer);
 		mAnimMatrixCS->UpdateData();
 

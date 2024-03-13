@@ -15,6 +15,7 @@ public:
 		m_Const.arrInt[0] = boneCount;
 		m_Const.arrInt[1] = frame;
 		m_Const.arrInt[2] = nextFrame;
+		m_Const.arrInt[3] = 0;
 		m_Const.arrFloat[0] = ratio;
 	}
 

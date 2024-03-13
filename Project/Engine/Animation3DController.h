@@ -62,7 +62,8 @@ public:
 	int							mOtherNextFrameIdx;
 	float						mOtherRatio;
 
-	float						mMixRatio;
+	float						mCurBlendTime;
+	float						mMixBlendTime;
 
 
 	std::vector<float>			m_vecClipUpdateTime;

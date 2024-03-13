@@ -4,6 +4,8 @@
 
 REGISTER_SCRIPTCOMPONENT_TYPE(PlayerMovement);
 
+class Animation3DController;
+
 class PlayerMovement : public ScriptComponent
 {
 public:
@@ -16,4 +18,6 @@ private:
 	virtual void initialize() override final;
 	virtual void update() override final;
 	virtual void lateUpdate() override final;
+
+	Animation3DController* mController;
 };

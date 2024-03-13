@@ -55,6 +55,24 @@ private:
         mCurAnimationFrame.mFrameIdx = frameIde;
         mCurAnimationFrame.mNextFrameIdx = nextFrameIdx;
         mCurAnimationFrame.mRatio = ratio;
+
+        mbMix = false;
+    }
+
+    void setMixAnimationFrame(int frame, int nextFrame, float ratio,
+        int frame2, int nextFrame2, float ratio2, float mixRatio)
+    {
+        mCurAnimationFrame.mFrameIdx = frame;
+        mCurAnimationFrame.mNextFrameIdx = nextFrame;
+        mCurAnimationFrame.mRatio = ratio;
+
+        mNextAnimationFrame.mFrameIdx = frame2;
+        mNextAnimationFrame.mNextFrameIdx = nextFrame2;
+        mNextAnimationFrame.mRatio = ratio2;
+
+        mMixRatio = mixRatio;
+
+        mbMix = true;
     }
 public:
     std::vector<tMTBone>            mBones;        
@@ -63,7 +81,8 @@ public:
 
     tFrameData                      mCurAnimationFrame;
     tFrameData                      mNextAnimationFrame;
-
+    float                           mMixRatio;
+    bool                            mbMix;
     Animation3DController*          mController;
     StructuredBuffer*               mSBBoneFinalBuffer;     // 특정 프레임의 최종 행렬
 };

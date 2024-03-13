@@ -156,7 +156,7 @@ void Animator3D::ClearData()
 Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
 {
 	Matrix worldMatrix = GetComponent<Transform>()->GetWorldMatrix();
-	float ratio = GetCurAnimationRatio();
+	float ratio = mCurAnimationFrame.mRatio;
 	Assert(boneIdx < mBones.size(), ASSERT_MSG_INVALID);
 	const tMTBone& bone = mBones[boneIdx];
 	tMTKeyFrame key = bone.vecKeyFrame[mCurAnimationFrame.mFrameIdx];
@@ -165,6 +165,21 @@ Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
 	Quaternion qRot = Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
 	Vector3 pos = Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
 	Vector3 scale = Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
+
+	if (mbMix)
+	{
+		float ratio2 = mNextAnimationFrame.mRatio;
+		tMTKeyFrame key2= bone.vecKeyFrame[mNextAnimationFrame.mFrameIdx];
+		tMTKeyFrame nextKey2 = bone.vecKeyFrame[(mNextAnimationFrame.mFrameIdx + 1) % bone.vecKeyFrame.size()];
+
+		Quaternion qRot2 = Quaternion::Lerp(Quaternion(key2.qRot), Quaternion(nextKey2.qRot), ratio2);
+		Vector3 pos2 = Vector3::Lerp(key2.vTranslate, nextKey2.vTranslate, ratio2);
+		Vector3 scale2 = Vector3::Lerp(key2.vScale, nextKey2.vScale, ratio2);
+
+		qRot = Quaternion::Lerp(qRot, qRot2, mMixRatio);
+		pos = Vector3::Lerp(pos, pos2, mMixRatio);
+		scale = Vector3::Lerp(scale, scale2, mMixRatio);
+	}
 
 	Matrix scaleMatrix = Matrix::CreateScale(scale);
 	Matrix rotationMatrix = XMMatrixRotationQuaternion(qRot);

@@ -11,28 +11,9 @@
 #include "PanelUIManager.h"
 #include "InspectorUI.h"
 
+//엔진, 컨텐트 리소스만 보여줍니다. (폴더에있는 리소스는 FolderViewUI)
 ResourceViewUI::ResourceViewUI()
 {
-	//for (UINT i = 0; i < static_cast<UINT>(eResourceType::End); ++i)
-	//{
-	//	const ResourceManager::Dictionary& dictionary =
-	//		ResourceManager::GetInstance()->GetDictionary(static_cast<eResourceType>(i));
-
-	//	ResourceManager::Dictionary::const_iterator citer = dictionary.cbegin();
-	//	ResourceManager::Dictionary::const_iterator cend = dictionary.cend();
-
-	//	for (; citer != cend; ++citer)
-	//	{
-	//		ResourceUI* childUI = new ResourceUI;
-	//		std::string relativePath = 
-	//			helper::String::WStrToStr(citer->second->GetRelativePath());
-	//		
-	//		childUI->SetName(relativePath);
-	//		childUI->SetFullName(relativePath);
-	//		childUI->SetResource(citer->second);
-	//		mResourceUI.AddResourceUI(childUI);
-	//	}
-	//}
 }
 
 ResourceViewUI::~ResourceViewUI()
@@ -96,13 +77,16 @@ void ResourceViewUI::drawForm()
 		const ResourceManager::Dictionary& dictionary =
 			ResourceManager::GetInstance()->GetDictionary(static_cast<eResourceType>(i));
 
-		//if (dictionary.size())
+		if (dictionary.empty())
+		{
+			continue;
+		}
 
 		ResourceManager::Dictionary::const_iterator citer = dictionary.cbegin();
 		ResourceManager::Dictionary::const_iterator cend = dictionary.cend();
 
 		std::string typeName = GetTypeName(static_cast<eResourceType>(i));		
-		typeName += "##ResourceViewUI";
+		typeName += "##ResourceViewUI";		
 
 		if (ImGui::CollapsingHeader((typeName).c_str()))
 		{
@@ -110,11 +94,14 @@ void ResourceViewUI::drawForm()
 			{
 				std::string relativePath =
 					StringHelper::WStrToStr(citer->second->GetRelativePathorName());
+				if (relativePath.front() == '\\')
+				{
+					continue;
+				}
 				ImGui::Bullet();
 				ImGui::Selectable(relativePath.c_str(), false);
 				if (ImGui::IsItemClicked())
-				{
-					//ImGui::SetMouseCursor(0);
+				{					
 					PanelUI* inspectorUI =
 						PanelUIManager::GetInstance()->FindPanelUIOrNull("InspectorUI");
 					static_cast<InspectorUI*>(inspectorUI)->Register(citer->second);

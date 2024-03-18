@@ -8,6 +8,7 @@
 #include "ComputeShader.h"
 #include "StructVertex.h"
 #include "EngineMath.h"
+#include "BuildSetting.h"
 
 #define USE2D 0
 
@@ -32,7 +33,6 @@ void EngineResourceLoader::loadMaterial()
 
 void EngineResourceLoader::loadMesh()
 {
-//2D
 #pragma region 2DMesh
 
 	///////
@@ -237,7 +237,6 @@ void EngineResourceLoader::loadMesh()
 	}
 #pragma endregion
 
-//3D
 #pragma region Rect
 	///////
 	//3D///
@@ -304,6 +303,7 @@ void EngineResourceLoader::loadMesh()
 				indexes.data(), indexes.size(), sizeof(UINT)));
 	}
 #pragma endregion
+
 #pragma region CUBE
 	//Cube
 	{
@@ -517,11 +517,66 @@ void EngineResourceLoader::loadTexture()
 		gResourceManager->Insert(L"DummyUI", dummyUI);
 	}
 
-	//Noise
+#pragma region Deferred MRT
 	{
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
 
+		Texture* const ColorTargetTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+
+		gResourceManager->Insert(L"ColorTargetTexture", ColorTargetTexture);
 	}
 
+	{
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
+
+		Texture* const NormalTargetTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+		gResourceManager->Insert(L"NormalTargetTexture", NormalTargetTexture);
+	}
+
+	{
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
+
+		Texture* const PisitionTargetTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+
+		gResourceManager->Insert(L"PisitionTargetTexture", PisitionTargetTexture);
+	}
+
+	{
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
+
+		Texture* const EmissiveTargetTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+
+		gResourceManager->Insert(L"EmissiveTargetTexture", EmissiveTargetTexture);
+	}
+
+	{
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
+
+		Texture* const DataTargetTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT);
+
+		gResourceManager->Insert(L"DataTargetTexture", DataTargetTexture);
+	}
+#pragma endregion
 }
 
 void EngineResourceLoader::loadShader()

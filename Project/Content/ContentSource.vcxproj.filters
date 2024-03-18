@@ -121,6 +121,9 @@
     <Filter Include="Source\01. ScriptComponent\Player">
       <UniqueIdentifier>{fa734943-4437-4233-b1d7-9931e1e11e35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ShaderCode\Deffered">
+      <UniqueIdentifier>{f0bc5c33-0bb9-4e10-bfca-e68275755f37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -327,6 +330,9 @@
     </None>
     <None Include="..\..\Output\bin\Resources\Shader\VSAnimation2D.hlsl">
       <Filter>ShaderCode\Animation2D\Default</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\deferred3d.hlsl">
+      <Filter>ShaderCode\Deffered</Filter>
     </None>
   </ItemGroup>
 </Project>

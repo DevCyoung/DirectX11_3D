@@ -1,5 +1,5 @@
-#ifndef _STD3D
-#define _STD3D
+#ifndef _DEFERRED3D
+#define _DEFERRED3D
 
 #include "Header//Struct.fxh"
 #include "Header//ConstantBuffer.fxh"
@@ -80,7 +80,7 @@ void Skinning(inout float3 _vPos, inout float3 _vTangent, inout float3 _vBinorma
 
 VS_OUT VS_Std3D(VS_IN _in)
 {
-	VS_OUT output = (VS_OUT) 0.f;	
+	VS_OUT output = (VS_OUT) 0.f;
 	
 	if (g_bAnim)
 	{
@@ -119,7 +119,7 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
 		vNormal = vNormal * 2.f - 1.f;
         
 		float3x3 vRotateMat =
-		{	
+		{
 			_in.vViewTangent,
             -_in.vViewBinormal,
             _in.vViewNormal
@@ -147,7 +147,7 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
 	fSpecPow = pow(fSpecPow, 40.f);
            
 	vOutColor.xyz = (vOutColor.xyz * LIGHT_COLOR.xyz * fLightPow)
-                    + (vOutColor.xyz * LIGHT_COLOR.xyz * LIGHT_AMB.xyz)	
+                    + (vOutColor.xyz * LIGHT_COLOR.xyz * LIGHT_AMB.xyz)
                     + LIGHT_COLOR.xyz * LIGHT_SPEC_COEFF * fSpecPow;
 	
 	return vOutColor;

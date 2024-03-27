@@ -18,8 +18,7 @@ GameObject::GameObject()
 	, mParent(nullptr)
 	, mChildObjects()
 	, mGameSystem(nullptr)
-{
-	//AddComponent<Transform>();
+{	
 }
 
 GameObject::~GameObject()

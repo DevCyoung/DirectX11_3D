@@ -158,25 +158,25 @@ Matrix Animator3D::GetCurGrameBoneMatrix(int boneIdx)
 	Matrix worldMatrix = GetComponent<Transform>()->GetWorldMatrix();
 	float ratio = mCurAnimationFrame.mRatio;
 	Assert(boneIdx < mBones.size(), ASSERT_MSG_INVALID);
-	const tMTBone& bone = mBones[boneIdx];
-	tMTKeyFrame key = bone.vecKeyFrame[mCurAnimationFrame.mFrameIdx];
-	tMTKeyFrame nextKey = bone.vecKeyFrame[(mCurAnimationFrame.mFrameIdx + 1) % bone.vecKeyFrame.size()];
+	const tMTBone& BONE = mBones[boneIdx];
+	const tMTKeyFrame& KEY = BONE.vecKeyFrame[mCurAnimationFrame.mFrameIdx];
+	const tMTKeyFrame& NEXT_KEY = BONE.vecKeyFrame[(mCurAnimationFrame.mFrameIdx + 1) % BONE.vecKeyFrame.size()];
 
-	Quaternion qRot = Quaternion::Lerp(Quaternion(key.qRot), Quaternion(nextKey.qRot), ratio);
-	Vector3 pos = Vector3::Lerp(key.vTranslate, nextKey.vTranslate, ratio);
-	Vector3 scale = Vector3::Lerp(key.vScale, nextKey.vScale, ratio);
+	Quaternion qRot = Quaternion::Slerp(Quaternion(KEY.qRot), Quaternion(NEXT_KEY.qRot), ratio);
+	Vector3 pos = Vector3::Lerp(KEY.vTranslate, NEXT_KEY.vTranslate, ratio);
+	Vector3 scale = Vector3::Lerp(KEY.vScale, NEXT_KEY.vScale, ratio);
 
 	if (mbMix)
 	{
 		float ratio2 = mNextAnimationFrame.mRatio;
-		tMTKeyFrame key2= bone.vecKeyFrame[mNextAnimationFrame.mFrameIdx];
-		tMTKeyFrame nextKey2 = bone.vecKeyFrame[(mNextAnimationFrame.mFrameIdx + 1) % bone.vecKeyFrame.size()];
+		const tMTKeyFrame& KEY_2= BONE.vecKeyFrame[mNextAnimationFrame.mFrameIdx];
+		const tMTKeyFrame& NEXT_KEY_2 = BONE.vecKeyFrame[(mNextAnimationFrame.mFrameIdx + 1) % BONE.vecKeyFrame.size()];
 
-		Quaternion qRot2 = Quaternion::Lerp(Quaternion(key2.qRot), Quaternion(nextKey2.qRot), ratio2);
-		Vector3 pos2 = Vector3::Lerp(key2.vTranslate, nextKey2.vTranslate, ratio2);
-		Vector3 scale2 = Vector3::Lerp(key2.vScale, nextKey2.vScale, ratio2);
+		Quaternion qRot2 = Quaternion::Slerp(Quaternion(KEY_2.qRot), Quaternion(NEXT_KEY_2.qRot), ratio2);
+		Vector3 pos2 = Vector3::Lerp(KEY_2.vTranslate, NEXT_KEY_2.vTranslate, ratio2);
+		Vector3 scale2 = Vector3::Lerp(KEY_2.vScale, NEXT_KEY_2.vScale, ratio2);
 
-		qRot = Quaternion::Lerp(qRot, qRot2, mMixRatio);
+		qRot = Quaternion::Slerp(qRot, qRot2, mMixRatio);
 		pos = Vector3::Lerp(pos, pos2, mMixRatio);
 		scale = Vector3::Lerp(scale, scale2, mMixRatio);
 	}

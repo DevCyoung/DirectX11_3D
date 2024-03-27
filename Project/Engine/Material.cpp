@@ -14,10 +14,10 @@ Material::Material()
 	: Resource(eResourceType::Material)
 	, mShader(nullptr)
 	, mTextures{ 0, }
-	, mRenderType(eRenderPriorityType::Opqaue)
+	, mRenderType(eRenderType::Opqaue)
 {
 }
-Material::Material(const eRenderPriorityType renderPriorityType)
+Material::Material(const eRenderType renderPriorityType)
 	: Resource(eResourceType::Material)
 	, mShader(nullptr)
 	, mTextures{0,}

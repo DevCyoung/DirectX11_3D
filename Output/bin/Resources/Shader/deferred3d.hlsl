@@ -100,15 +100,38 @@ VS_OUT VS_Std3D(VS_IN _in)
 	return output;
 }
 
-float4 PS_Std3D(VS_OUT _in) : SV_Target
+// ===============
+// Std3D_Deferred
+// DOMAIN : Deferred
+// MRT    : DEFERRED MRT
+// Rasterizer State     : CULL_BACK
+// DepthStencil State   : LESS
+// Blend State          : Default
+
+// Parameter
+#define     SpecCoeff   g_float_0
+// ===============
+
+struct PS_OUT
 {
-	float4 vOutColor = float4(0.5f, 0.0f, 0.5f, 1.f);
-        
+	float4 vColor : SV_Target0;
+	float4 vNormal : SV_Target1;
+	float4 vPosition : SV_Target2;
+	float4 vEmissive : SV_Target3;
+	float4 vData : SV_Target4;
+};
+
+PS_OUT PS_Std3D_Deferred(VS_OUT _in)
+{
+	PS_OUT output = (PS_OUT) 0.f;
+   
+	output.vColor = float4(1.f, 0.f, 1.f, 1.f);
+    
 	float3 vViewNormal = _in.vViewNormal;
-		
+    
 	if (g_btex_0)
 	{
-		vOutColor = MeshRenderer00.Sample(anisotropicSampler, _in.vUV);
+		output.vColor = MeshRenderer00.Sample(anisotropicSampler, _in.vUV);
 	}
     
 	if (g_btex_1)
@@ -122,34 +145,19 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
 		{
 			_in.vViewTangent,
             -_in.vViewBinormal,
-            _in.vViewNormal
+            _in.vViewNormal        
 		};
         
-		vViewNormal = mul(vNormal, vRotateMat);
+		vViewNormal = normalize(mul(vNormal, vRotateMat));
 	}
-		
     
-        
-	//ViewSpace 에서의
-	//광원의 방향
-	float3 vViewLightDir = normalize(mul(float4(normalize(LIGHT_DIR.xyz), 0.f), g_matView)).xyz;
-	
-    
-    // ViewSpace 에서의 노말벡터와 광원의 방향을 내적 (램버트 코사인 법칙)
-	float fLightPow = saturate(dot(vViewNormal, -vViewLightDir));
-    
-    // 반사광
-	float3 vViewReflect = normalize(vViewLightDir + 2.f * (dot(-vViewLightDir, vViewNormal)) * vViewNormal);
-	float3 vEye = normalize(_in.vViewPos);
-   
-    // 반사광의 세기 구하기
-	float fSpecPow = saturate(dot(vViewReflect, -vEye));
-	fSpecPow = pow(fSpecPow, 40.f);
-           
-	vOutColor.xyz = (vOutColor.xyz * LIGHT_COLOR.xyz * fLightPow)
-                    + (vOutColor.xyz * LIGHT_COLOR.xyz * LIGHT_AMB.xyz)
-                    + LIGHT_COLOR.xyz * LIGHT_SPEC_COEFF * fSpecPow;
-	
-	return vOutColor;
+	output.vColor.a = saturate(1.f);
+	output.vNormal = float4(vViewNormal, 1.f);
+	output.vPosition = float4(_in.vViewPos, 1.f);
+	//output.vEmissive
+	output.vData = float4(1.f, 0.f, 1.f, 1.f);
+
+	return output;
 }
+
 #endif

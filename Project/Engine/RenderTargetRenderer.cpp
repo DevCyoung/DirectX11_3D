@@ -62,9 +62,9 @@ void RenderTargetRenderer::registerRenderComponent(RenderComponent* const render
 {
 	Assert(renderComponent, ASSERT_MSG_NULL);
 
-	const eRenderPriorityType RENDER_PRIORITY_TYPE = renderComponent->GetMaterial(0)->GetRenderType();
+	const eRenderType RENDER_PRIORITY_TYPE = renderComponent->GetMaterial(0)->GetRenderType();
 
-	if (eRenderPriorityType::PostProcess == renderComponent->GetMaterial(0)->GetRenderType())
+	if (eRenderType::PostProcess == RENDER_PRIORITY_TYPE)
 	{
 		mPostProcessComponents.push_back(renderComponent);
 	}
@@ -80,7 +80,7 @@ void RenderTargetRenderer::registerLightInfo(const tLightInfo& light2DInfo)
 	mLight2DInfos.push_back(light2DInfo);
 }
 
-void RenderTargetRenderer::zSortRenderObjectArray(const eRenderPriorityType renderPriorityType)
+void RenderTargetRenderer::zSortRenderObjectArray(const eRenderType renderPriorityType)
 {
 	auto& renderObjects = mRenderComponentsArray[static_cast<UINT>(renderPriorityType)];
 
@@ -131,26 +131,31 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 		}
 
 		const UINT CAMERA_PRIORITY = static_cast<UINT>(P_CAMERA->GetPriorityType());
-
 		if (!(mCameraMask & (1 << CAMERA_PRIORITY)))
 		{
 			continue;
 		}
 
-		const UINT CAMERA_LAYER_MASK = P_CAMERA->GetLayerMask();
+		const UINT LAYER_MASK = P_CAMERA->GetLayerMask();
+		const UINT RENDER_MASK = P_CAMERA->GetRenderMask();
 
-		for (auto& renderComponents : mRenderComponentsArray)
+		for (UINT i = 0; i < static_cast<UINT>(eRenderType::End); ++i)
 		{
+			auto& renderComponents = mRenderComponentsArray[i];			
+			setBindRenderTarget(static_cast<eRenderType>(i));
+
 			for (RenderComponent* const renderComponent : renderComponents)
 			{
-				const UINT GAMEOBJECT_LAYER = static_cast<UINT>(renderComponent->GetOwner()->GetLayer());
+				const UINT LAYER  = static_cast<UINT>(renderComponent->GetOwner()->GetLayer());
+				const UINT RENDER = static_cast<UINT>(renderComponent->GetMaterial(0)->GetRenderType());
 
-				if (CAMERA_LAYER_MASK & (1 << GAMEOBJECT_LAYER))
+				//FIXME 그리기전에(register에서) 필터링하기
+				if ((LAYER_MASK & (1 << LAYER)) && (RENDER_MASK & (1 << RENDER)))
 				{
 					renderComponent->render(P_CAMERA);
 				}
 			}
-		}
+		}		
 	}
 
 
@@ -220,4 +225,25 @@ void RenderTargetRenderer::flush()
 	mPostProcessComponents.clear();
 
 	mLight2DInfos.clear();
+}
+
+void RenderTargetRenderer::setBindRenderTarget(const eRenderType type) const
+{
+	switch (type)
+	{
+	case eRenderType::Defereed:
+		break;
+	case eRenderType::Opqaue:
+		break;
+	case eRenderType::CutOut:
+		break;
+	case eRenderType::Transparent:
+		break;
+	case eRenderType::End:
+		break;
+	case eRenderType::PostProcess:
+		break;
+	default:
+		break;
+	}
 }

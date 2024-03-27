@@ -524,7 +524,7 @@ void EngineResourceLoader::loadTexture()
 
 		Texture* const ColorTargetTexture = new Texture(size.x, size.y,
 			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
-			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET,	
 			D3D11_USAGE::D3D11_USAGE_DEFAULT);
 
 		gResourceManager->Insert(L"ColorTargetTexture", ColorTargetTexture);

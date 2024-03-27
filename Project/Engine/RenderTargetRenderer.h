@@ -72,13 +72,15 @@ private:
 	void registerRenderComponent(RenderComponent* const renderComponent);
 	void registerLightInfo(const tLightInfo& light2DInfo);
 
-	void zSortRenderObjectArray(const eRenderPriorityType priorityType);
+	void zSortRenderObjectArray(const eRenderType priorityType);
 	void flush();
+
+	void setBindRenderTarget(const eRenderType type) const;
 
 private:
 	DebugRenderer2D* mDebugRenderer;
 	Camera* mCameras[static_cast<UINT>(eCameraPriorityType::End)];
-	std::vector<RenderComponent*> mRenderComponentsArray[static_cast<UINT>(eRenderPriorityType::End)];
+	std::vector<RenderComponent*> mRenderComponentsArray[static_cast<UINT>(eRenderType::End)];
 	std::vector<RenderComponent*> mPostProcessComponents;
 	std::vector<tLightInfo> mLight2DInfos;
 	bool mbDebugRender;

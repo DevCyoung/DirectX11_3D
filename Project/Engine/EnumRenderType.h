@@ -1,7 +1,8 @@
 #pragma once
 
-enum class eRenderPriorityType
+enum class eRenderType
 {
+	Defereed,
 	Opqaue,
 	CutOut,
 	Transparent,

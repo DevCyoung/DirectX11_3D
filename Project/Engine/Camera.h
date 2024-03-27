@@ -25,6 +25,7 @@ public:
 	const Matrix& GetProjection() const { return mProjection; }
 	eCameraPriorityType GetPriorityType () const { return mCameraType; }
 	UINT GetLayerMask() const { return mLayerMask; }
+	UINT GetRenderMask() const { return mRenderMask; }
 	eCameraProjectionType GetProjectionType() const { return mProjectionType; }
 	Vector2 GetRenderTargetSize() const { return mRenderTargetSize; }
 
@@ -36,9 +37,10 @@ public:
 	void SetPriorityType(const eCameraPriorityType cameraPriorityType) { mCameraType = cameraPriorityType; }
 	void SetProjectionType(const eCameraProjectionType projectionType) { mProjectionType = projectionType; }
 
-	void TurnOnLayer(const  eLayerType layerType)  { mLayerMask |=  (1 <<  static_cast<UINT>(layerType)); }
-	void TurnOffLayer(const eLayerType layerType)  { mLayerMask &= ~(1 <<  static_cast<UINT>(layerType)); }
-
+	void TurnOnLayer(const  eLayerType layerType)		    { mLayerMask  |=  (1  <<  static_cast<UINT>(layerType)); }
+	void TurnOffLayer(const eLayerType layerType)		    { mLayerMask  &= ~(1  <<  static_cast<UINT>(layerType)); }
+	void TurnOnRender(const  eRenderType RT)				{ mRenderMask |=  (1 <<   static_cast<UINT>(RT)); }
+	void TurnOffRender(const eRenderType RT)				{ mRenderMask &= ~(1 <<   static_cast<UINT>(RT)); }
 	void TurnOnAllLayer()  { mLayerMask = 0XFFFFFFFF; }
 	void TurnOffAllLayer() { mLayerMask = 0; }
 
@@ -54,6 +56,7 @@ private:
 	Vector2 mRenderTargetSize;
 
 	UINT mLayerMask;
+	UINT mRenderMask;
 
 	float mNear;
 	float mFar;

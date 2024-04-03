@@ -11,26 +11,29 @@
 #pragma comment(lib, "DirectXTex/Release/DirectXTex.lib")
 #endif
 
-Texture::Texture(UINT _Width, UINT _Height, 
-	DXGI_FORMAT _pixelformat, 
-	UINT _BindFlag, D3D11_USAGE _Usage)
+Texture::Texture(const UINT width, 
+	const UINT height, 
+	const DXGI_FORMAT pixelFormat, 
+	const UINT bindFlag, 
+	const D3D11_USAGE usage, 
+	const bool bCreateView)
 	: Texture()	
 {
-	mWidth = _Width;
-	mHeight = _Height;
+	mWidth = width;
+	mHeight = height;
 
 	D3D11_TEXTURE2D_DESC                m_Desc = {};
 
 	// ID3D11Texture2D 생성
-	m_Desc.Format = _pixelformat;
+	m_Desc.Format = pixelFormat;
 
 	// 반드시 렌더타겟과 같은 해상도로 설정해야 함
-	m_Desc.Width = _Width;
-	m_Desc.Height = _Height;
+	m_Desc.Width = width;
+	m_Desc.Height = height;
 	m_Desc.ArraySize = 1;
 
-	m_Desc.BindFlags = _BindFlag;
-	m_Desc.Usage = _Usage;
+	m_Desc.BindFlags = bindFlag;
+	m_Desc.Usage = usage;
 
 	//if (D3D11_USAGE::D3D11_USAGE_DYNAMIC == _Usage)
 	//{
@@ -52,13 +55,15 @@ Texture::Texture(UINT _Width, UINT _Height,
 		Assert(false, ASSERT_MSG_INVALID);
 	}
 
+	if (!bCreateView)
+	{
+		return;
+	}
+
 	// 바인드 플래그에 맞는 View 를 생성해준다.
 	if (m_Desc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
 	{
-		if (FAILED(device->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf())))
-		{
-			Assert(false, ASSERT_MSG_INVALID);	
-		}
+		CreateDepthStencilView(nullptr);
 	}
 	else
 	{
@@ -72,10 +77,7 @@ Texture::Texture(UINT _Width, UINT _Height,
 
 		if (m_Desc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE)
 		{
-			if (FAILED(device->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf())))
-			{
-				Assert(false, ASSERT_MSG_INVALID);
-			}
+			CreateShaderResourceView2(nullptr);
 		}
 
 		if (m_Desc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS)
@@ -154,5 +156,29 @@ HRESULT Texture::Load(const std::wstring& filePath)
 	mHeight = static_cast<UINT>(mImage.GetMetadata().height);
 
 	return S_OK;
+}
+
+void Texture::CreateDepthStencilView(const D3D11_DEPTH_STENCIL_VIEW_DESC* const descOrNull)
+{	
+	Assert(!mDSV.Get(), ASSERT_MSG_NOT_NULL);
+
+	ID3D11Device* const device = gGraphicDevice->UnSafe_GetDevice();
+
+	if (FAILED(device->CreateDepthStencilView(mTexture.Get(), descOrNull, mDSV.GetAddressOf())))
+	{
+		Assert(false, ASSERT_MSG_INVALID);
+	}
+}
+
+void Texture::CreateShaderResourceView2(const D3D11_SHADER_RESOURCE_VIEW_DESC* const descOrNull)
+{	
+	Assert(!mSRV.Get(), ASSERT_MSG_NOT_NULL);
+
+	ID3D11Device* const device = gGraphicDevice->UnSafe_GetDevice();
+
+	if (FAILED(device->CreateShaderResourceView(mTexture.Get(), descOrNull, mSRV.GetAddressOf())))
+	{
+		Assert(false, ASSERT_MSG_INVALID);
+	}
 }
 

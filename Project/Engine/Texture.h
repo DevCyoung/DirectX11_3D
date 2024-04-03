@@ -11,7 +11,7 @@ class Texture : public Resource
 
 public:
 	Texture(UINT _Width, UINT _Height, DXGI_FORMAT _pixelformat
-		, UINT _BindFlag, D3D11_USAGE _Usage);
+		, UINT _BindFlag, D3D11_USAGE _Usage, bool bCreateView = true);
 	Texture();
 	virtual ~Texture();
 	Texture(const Texture&) = delete;
@@ -51,6 +51,8 @@ public:
 		Assert(mRTV.GetAddressOf(), ASSERT_MSG_NULL); return mRTV.GetAddressOf();
 	}
 
+	void CreateDepthStencilView(const D3D11_DEPTH_STENCIL_VIEW_DESC* const descOrNull);
+	void CreateShaderResourceView2(const D3D11_SHADER_RESOURCE_VIEW_DESC* const descOrNull);
 	//void UpdateDate(const int slot);
 
 private:

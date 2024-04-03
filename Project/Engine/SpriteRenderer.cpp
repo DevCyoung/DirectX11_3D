@@ -111,11 +111,11 @@ void SpriteRenderer::lateUpdate()
 {
 }
 
-void SpriteRenderer::render(const Camera* const camera)
+void SpriteRenderer::render(const Matrix& viewMatrix, const Matrix& projectionMatrix)
 {
 	Assert(mMesh, ASSERT_MSG_NULL);
 	Assert(mMaterials[0], ASSERT_MSG_NULL);
-	Assert(camera, ASSERT_MSG_NULL);
+	//Assert(camera, ASSERT_MSG_NULL);
 
 	tCBTransform CBTransform = {};
 	{
@@ -125,8 +125,8 @@ void SpriteRenderer::render(const Camera* const camera)
 		const Matrix& SCALE_MATRIX = Matrix::CreateScale(SCALE);
 
 		CBTransform.World = SCALE_MATRIX * GetOwner()->GetComponent<Transform>()->GetWorldMatrix();
-		CBTransform.View = camera->GetView();
-		CBTransform.Proj = camera->GetProjection();
+		CBTransform.View = viewMatrix;
+		CBTransform.Proj = projectionMatrix;
 
 		gGraphicDevice->PassCB(eCBType::Transform, sizeof(CBTransform), &CBTransform);
 		gGraphicDevice->BindCB(eCBType::Transform, eShaderBindType::VS);

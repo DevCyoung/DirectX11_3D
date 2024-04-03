@@ -28,7 +28,10 @@ void ParticleSystem::lateUpdate()
 {
 }
 
-void ParticleSystem::render(const Camera* const camera)
+void ParticleSystem::render(const Matrix& viewMatrix, const Matrix& projectionMatrix)
 {
-	(void)camera;
+	(void)viewMatrix;
+	(void)projectionMatrix;
+
+	//(void)camera;
 }

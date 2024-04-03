@@ -54,10 +54,11 @@ protected:
 private:
 	virtual void initialize() override;	
 	virtual void lateUpdate() override;
-	virtual void render(const Camera* const camera)
-	{
-		(void)camera;
-		Assert(false, ASSERT_MSG_INVALID);
+	virtual void render(const Matrix& viewMatrix, const Matrix& projectionMatrix)
+	{		
+		(void)viewMatrix;
+		(void)projectionMatrix;
+		//Assert(false, ASSERT_MSG_INVALID);
 	};
 
 protected:	

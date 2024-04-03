@@ -279,11 +279,11 @@ void Animator2D::lateUpdate()
 	mCurAnimation->lateUpdate();
 }
 
-void Animator2D::render(const Camera* const camera)
+void Animator2D::render(const Matrix& viewMatrix, const Matrix& projectionMatrix)
 {
 	Assert(mMesh, ASSERT_MSG_NULL);
 	Assert(mMaterials[0], ASSERT_MSG_NULL);
-	Assert(camera, ASSERT_MSG_NULL);
+	//Assert(camera, ASSERT_MSG_NULL);
 
 	if (nullptr == mCurAnimation)
 	{
@@ -311,8 +311,8 @@ void Animator2D::render(const Camera* const camera)
 		}
 
 		
-		CBTransform.View = camera->GetView();
-		CBTransform.Proj = camera->GetProjection();
+		CBTransform.View = viewMatrix;
+		CBTransform.Proj = projectionMatrix;
 
 		gGraphicDevice->PassCB(eCBType::Transform, sizeof(CBTransform), &CBTransform);
 		gGraphicDevice->BindCB(eCBType::Transform, eShaderBindType::VS);

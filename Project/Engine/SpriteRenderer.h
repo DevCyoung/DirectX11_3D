@@ -40,7 +40,7 @@ private:
 	virtual void initialize() override final;
 	virtual void update() override final;
 	virtual void lateUpdate() override final;	
-	virtual void render(const Camera* const camera) override final;
+	virtual void render(const Matrix& viewMatrix, const Matrix& projectionMatrix) override final;
 
 	Vector4 mTestColor;
 public:	

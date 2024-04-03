@@ -15,6 +15,6 @@ public:
 	virtual void Load(FILE* const file);
 
 	CLONE(MeshRenderer);
-	virtual void render(const Camera* const camera);	
+	virtual void render(const Matrix& viewMatrix, const Matrix& projectionMatrix) override final;
 };
 

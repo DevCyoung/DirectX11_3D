@@ -26,11 +26,11 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::render(const Camera* const camera)
+void MeshRenderer::render(const Matrix& viewMatrix, const Matrix& projectionMatrix)
 {
 	Assert(mMesh, ASSERT_MSG_NULL);
 	//Assert(mMaterial, ASSERT_MSG_NULL);
-	Assert(camera, ASSERT_MSG_NULL);
+	//Assert(camera, ASSERT_MSG_NULL);
 	
 	tCBTransform CBTransform = {};
 	{
@@ -39,8 +39,8 @@ void MeshRenderer::render(const Camera* const camera)
 
 		const Matrix& WORD_MATRIX = GetComponent<Transform>()->GetWorldMatrix();
 		CBTransform.World = SCALE_MATRIX * WORD_MATRIX;
-		CBTransform.View = camera->GetView();
-		CBTransform.Proj = camera->GetProjection();
+		CBTransform.View = viewMatrix;
+		CBTransform.Proj = projectionMatrix;
 
 		CBTransform.WV = CBTransform.World * CBTransform.View;
 		CBTransform.WVP = CBTransform.WV * CBTransform.Proj;

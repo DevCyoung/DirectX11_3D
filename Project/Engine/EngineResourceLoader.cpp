@@ -490,8 +490,8 @@ void EngineResourceLoader::loadTexture()
 						 static_cast<UINT>(gEngine->GetRenderTargetSize().y)};*/
 						 //FIXME 다시 고칠것 하드코딩으로 해결
 
-		XMUINT2 size = { static_cast<UINT>(1280),
-						 static_cast<UINT>(720) };
+		XMUINT2 size = { static_cast<UINT>(GAME_RENDER_TARGET_WIDTH),
+						 static_cast<UINT>(GAME_RENDER_TARGET_HEIGHT) };
 
 		Texture* const copyRenderTargetTexture = new Texture(size.x, size.y,
 			DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -576,6 +576,35 @@ void EngineResourceLoader::loadTexture()
 
 		gResourceManager->Insert(L"DataTargetTexture", DataTargetTexture);
 	}
+
+
+	{
+		XMUINT2 size = { static_cast<UINT>(SHADOW_MAP_0_WIDTH),
+						 static_cast<UINT>(SHADOW_MAP_0_HEIGHT)};
+
+		Texture* const directionalLightTexture = new Texture(size.x, size.y,
+			DXGI_FORMAT::DXGI_FORMAT_R24G8_TYPELESS,
+			D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL,
+			D3D11_USAGE::D3D11_USAGE_DEFAULT, false);
+
+		// Create the depth stencil view with:
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		directionalLightTexture->CreateDepthStencilView(&dsvDesc);
+
+		// and the resource view for the shader
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = 1; // same as orig texture
+		directionalLightTexture->CreateShaderResourceView2(&srvDesc);
+		
+
+		gResourceManager->Insert(L"ShadowMap_0", directionalLightTexture);
+	}
+
 #pragma endregion
 }
 
@@ -773,6 +802,20 @@ void EngineResourceLoader::loadShader()
 				eBSType::Default);
 
 		gResourceManager->Insert(L"Std3DCubeDebug", wavePostProcess);
+	}
+
+	//shadow map
+	{
+		Shader* const shadowMap =
+			new Shader(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+				L"\\Shader\\ShadowMap.hlsl", L"VS_ShadowMap",
+				L"\\Shader\\ShadowMap.hlsl", L"PS_ShadowMap",
+				eSMType::Std3D,
+				eRSType::CullBack,
+				eDSType::Less,
+				eBSType::Default);
+
+		gResourceManager->Insert(L"ShadowMap", shadowMap);
 	}
 }
 

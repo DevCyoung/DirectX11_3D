@@ -5,6 +5,7 @@
 REGISTER_COMPONENT_TYPE(Camera);
 
 class RenderTargetRenderer;
+class Transform;
 
 enum class eLayerType;
 
@@ -45,6 +46,9 @@ public:
 	void TurnOffAllLayer() { mLayerMask = 0; }
 
 	void CalculateCamera();
+
+	static Matrix CreateViewMatrix(Transform* transform);
+	static Matrix CreateProjectionOrthographicMatrix(UINT width, UINT height, float size, float _near, float _far);
 
 	CLONE(Camera)
 private:

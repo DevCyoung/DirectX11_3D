@@ -28,6 +28,7 @@
 EditorViewUI::EditorViewUI()
 	: mEditorCamera(nullptr)
 {
+	SetTitle("EditorViewUI");
 	//Editor Camera
 	{
 		const Vector2 screenSize = Vector2(1280, 720);
@@ -113,5 +114,16 @@ void EditorViewUI::drawForm()
 	ImGui::Text("mouse posX%d mouse posY%d", ptMousePos.x, ptMousePos.y);
 	ImGui::Text("In Screen Mouse Pos X%f Y%f", screenMousePos.x, screenMousePos.y);
 	WindowManager::GetInstance()->SetWindowScreenPos(Vector2(screenMousePos.x, screenMousePos.y));
+
+
+	Transform* transform = editorCamera->GetComponent<Transform>();
+	Vector3 position = transform->GetPosition();
+	Vector3 scale	= transform->GetScale();
+	Vector3 rotation = transform->GetRotation();
+
+	ImGui::Text("Camera pos X%f Y%f Z%f", position.x, position.y, position.z);
+	ImGui::Text("Camera scale X%f Y%f Z%f", scale.x, scale.y, scale.z);
+	ImGui::Text("Camera rotation X%f Y%f Z%f", rotation.x, rotation.y, rotation.z);		
+
 	ImGui::End();
 }

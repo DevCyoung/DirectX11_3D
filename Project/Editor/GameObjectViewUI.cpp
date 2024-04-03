@@ -7,9 +7,13 @@
 #include "InspectorUI.h"
 #include <Engine/Engine.h>
 #include <Engine/PathManager.h>
+#include <Engine/Transform.h>
+#include "EditorViewUI.h"
+
 GameObjectViewUI::GameObjectViewUI()
 	:mSelectedGameObject(nullptr)
 {
+	SetTitle("GameObjectViewUI");
 }
 
 GameObjectViewUI::~GameObjectViewUI()
@@ -126,6 +130,17 @@ void GameObjectViewUI::popEvent(GameObject* const gameObject)
 				// 사용자가 취소를 눌렀을 때
 				MessageBox(NULL, TEXT("No file selected!"), TEXT("Error"), MB_OK | MB_ICONERROR);
 			}
+
+		}
+		if (ImGui::Button("View"))
+		{
+			EditorViewUI* editorView = static_cast<EditorViewUI*>(PanelUIManager::GetInstance()->FindPanelUIOrNull("EditorViewUI"));
+			Transform* cameraTransform =  editorView->GetEditorCameraObject()->GetComponent<Transform>();
+			Transform* objTransform = gameObject->GetComponent<Transform>();
+
+			objTransform->SetPosition(cameraTransform->GetPosition());
+			//objTransform->SetSca(cameraTransform->GetPosition());
+			objTransform->SetRotation(cameraTransform->GetRotation());
 
 		}
 		ImGui::EndPopup();

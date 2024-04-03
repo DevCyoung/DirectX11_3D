@@ -124,6 +124,9 @@
     <Filter Include="ShaderCode\Deffered">
       <UniqueIdentifier>{f0bc5c33-0bb9-4e10-bfca-e68275755f37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ShaderCode\Shadow">
+      <UniqueIdentifier>{f11db122-fb40-421c-9ae0-263325c8cdfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -333,6 +336,9 @@
     </None>
     <None Include="..\..\Output\bin\Resources\Shader\deferred3d.hlsl">
       <Filter>ShaderCode\Deffered</Filter>
+    </None>
+    <None Include="..\..\Output\bin\Resources\Shader\ShadowMap.hlsl">
+      <Filter>ShaderCode\Shadow</Filter>
     </None>
   </ItemGroup>
 </Project>

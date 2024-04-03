@@ -1,5 +1,8 @@
 ﻿# include "pch.h"
 #include <Engine/Light3D.h>
+#include <Engine/Texture.h>
+#include <Engine/ResourceManager.h>
+
 class Component;
 void ComponentUI(Component* component);
 
@@ -20,4 +23,8 @@ void Light3DUI(Light3D* component)
 
 	component->SetLightInfo(info);
 
+
+	Texture* tex = gResourceManager->Find<Texture>(L"ShadowMap_0");
+	ImVec2 renderTargetSize = ImVec2(500, 500);
+	ImGui::Image((void*)tex->GetSRV(), renderTargetSize);
 }

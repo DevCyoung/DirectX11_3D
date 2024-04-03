@@ -8,6 +8,8 @@
 #include "GameSystem.h"
 #include "RenderTargetRenderer.h"
 #include "DebugRenderer2D.h"
+#include "ResourceManager.h"
+#include "Texture.h"
 
 Light3D::Light3D()
 	: Component(eComponentType::Light3D)
@@ -46,4 +48,17 @@ void Light3D::lateUpdate()
 
 	Matrix word = GetComponent<Transform>()->GetWorldMatrix();
 	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D( word, 0 , Vector4(1.f, 1.f, 0.f, 1.f));
+
+	const FLOAT color[4] = { 0.5f, 0.5f, 0.5f, 1.f };
+
+	//Depth
+	Texture* tex = gResourceManager->Find<Texture>(L"ShadowMap_0");
+	gGraphicDevice->ClearRenderTarget(
+		nullptr,
+		tex->GetDSV(), color);
+
+	gCurrentSceneRenderer->RenderShadowMap(GetComponent<Transform>(),
+		static_cast<UINT>(tex->GetWidth()),
+		static_cast<UINT>(tex->GetHeight()),
+		tex->GetDSV());
 }

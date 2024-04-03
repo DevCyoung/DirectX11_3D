@@ -7,7 +7,7 @@ class Camera;
 class RenderComponent;
 class DebugRenderer2D;
 class Light2D;
-
+class Transform;
 class RenderTargetRenderer
 {
 	friend class Camera;
@@ -23,6 +23,12 @@ public:
 		const UINT renderTargetHeight,
 		ID3D11RenderTargetView** const ppRenderTargetView,
 		ID3D11DepthStencilView* const depthStencilView) const;
+
+	void RenderShadowMap(Transform* transform, 
+		const UINT renderTargetWidth,
+		const UINT renderTargetHeight,
+		ID3D11DepthStencilView* const depthStencilView) const;
+
 
 	Camera* GetRegisteredRenderCameraOrNull(const eCameraPriorityType priorityType) const
 	{		

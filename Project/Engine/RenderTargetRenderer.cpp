@@ -100,6 +100,7 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 	//렌더 준비단계 
 	gGraphicDevice->BindRenderTarget(renderTargetWidth,
 		renderTargetHeight,
+		1,
 		ppRenderTargetView,
 		depthStencilView);
 
@@ -152,10 +153,10 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 				//FIXME 그리기전에(register에서) 필터링하기
 				if ((LAYER_MASK & (1 << LAYER)) && (RENDER_MASK & (1 << RENDER)))
 				{
-					renderComponent->render(P_CAMERA);
+					renderComponent->render(P_CAMERA->GetView(), P_CAMERA->GetProjection());
 				}
 			}
-		}		
+		}
 	}
 
 
@@ -178,7 +179,7 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 
 			gGraphicDevice->CopyResource(copyTexture->GetID3D11Texture2D(), renderTargetTexture);
 			gGraphicDevice->BindSRV(eShaderBindType::PS, 10, copyTexture);
-			postProcessComponent->render(P_MAIN_CAMERA);
+			postProcessComponent->render(P_MAIN_CAMERA->GetView(), P_MAIN_CAMERA->GetProjection());
 
 			renderTargetTexture->Release();
 			renderTargetTexture = nullptr;
@@ -189,6 +190,43 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 	if (mCameras[static_cast<UINT>(eCameraPriorityType::Editor)] && mbDebugRender)
 	{
 		mDebugRenderer->render(P_EDITOR_CAMERA);
+	}
+}
+
+void RenderTargetRenderer::RenderShadowMap(Transform* transform, 
+	const UINT renderTargetWidth,
+	const UINT renderTargetHeight,
+	ID3D11DepthStencilView* const depthStencilView) const
+{
+	gGraphicDevice->BindRenderTarget(renderTargetWidth,
+		renderTargetHeight,
+		0,
+		nullptr,
+		depthStencilView);
+
+	Assert(transform, ASSERT_MSG_NULL);
+	Assert(depthStencilView, ASSERT_MSG_NULL);
+	(void)renderTargetHeight;
+	(void)renderTargetWidth;
+
+	//transform->CalculateTransform();
+
+	Matrix viewMatrix = Camera::CreateViewMatrix(transform);
+	Matrix projectionMatrix = Camera::CreateProjectionOrthographicMatrix(renderTargetWidth, renderTargetHeight, 1.f, 1.f, 10000.f);
+	
+	for (UINT i = 0; i < static_cast<UINT>(eRenderType::End); ++i)
+	{
+		auto& renderComponents = mRenderComponentsArray[i];
+		//setBindRenderTarget(static_cast<eRenderType>(i));
+
+		for (RenderComponent* const renderComponent : renderComponents)
+		{
+			//const UINT LAYER = static_cast<UINT>(renderComponent->GetOwner()->GetLayer());
+			//const UINT RENDER = static_cast<UINT>(renderComponent->GetMaterial(0)->GetRenderType());
+
+			//FIXME 그리기전에(register에서) 필터링하기
+			renderComponent->render(viewMatrix, projectionMatrix);
+		}
 	}
 }
 

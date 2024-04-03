@@ -71,7 +71,9 @@ public:
 	void BindBS(const eBSType BSType) ;
 	void BindDS(const eDSType DSType) const;
 	void BindRS(const eRSType RSType) ;
-	void BindRenderTarget(const UINT renderTargetWidth, const UINT renderTargetHeight,
+	void BindRenderTarget(const UINT renderTargetWidth, 
+		const UINT renderTargetHeight,
+		const UINT renderTargetCount,
 		ID3D11RenderTargetView* const* const ppRnderTargetView,
 		ID3D11DepthStencilView* const depthStencilView) const;
 

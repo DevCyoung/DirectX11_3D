@@ -548,7 +548,11 @@ void GraphicDeviceDX11::ClearRenderTarget(ID3D11RenderTargetView* const* const p
 	ID3D11DepthStencilView* const depthStencilView,
 	const FLOAT (&backgroundColor)[4]) const
 {
-	mContext->ClearRenderTargetView(*ppRnderTargetView, backgroundColor);
+	if (ppRnderTargetView)
+	{
+		mContext->ClearRenderTargetView(*ppRnderTargetView, backgroundColor);
+	}
+
 	mContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
@@ -562,6 +566,7 @@ void GraphicDeviceDX11::CopyResource(ID3D11Resource* const dst, ID3D11Resource* 
 
 void GraphicDeviceDX11::BindRenderTarget(const UINT renderTargetWidth,
 	const UINT renderTargetHeight,
+	const UINT renderTargetCount,
 	ID3D11RenderTargetView* const* const ppRnderTargetView,
 	ID3D11DepthStencilView* const depthStencilView) const
 {
@@ -573,7 +578,7 @@ void GraphicDeviceDX11::BindRenderTarget(const UINT renderTargetWidth,
 	};
 
 	mContext->RSSetViewports(1, &VIEW_PORT);
-	mContext->OMSetRenderTargets(1, ppRnderTargetView, depthStencilView);
+	mContext->OMSetRenderTargets(renderTargetCount, ppRnderTargetView, depthStencilView);
 }
 
 void GraphicDeviceDX11::present()

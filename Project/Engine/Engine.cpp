@@ -58,6 +58,7 @@ void Engine::OmSet()
 
 	gGraphicDevice->BindRenderTarget(RENDER_TARGET_WIDHTH,
 		RENDER_TARGET_HEIGHT,
+		1,
 		gGraphicDevice->GetRenderTargetViewAddressOf(),
 		gGraphicDevice->GetDepthStencilView());
 }

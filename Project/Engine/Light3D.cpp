@@ -10,7 +10,7 @@
 #include "DebugRenderer2D.h"
 #include "ResourceManager.h"
 #include "Texture.h"
-
+#include "InputManager.h"
 Light3D::Light3D()
 	: Component(eComponentType::Light3D)
 	, mLightInfo{}
@@ -50,6 +50,29 @@ void Light3D::lateUpdate()
 	gCurrentSceneRenderer->GetDebugRenderer2D()->DrawCube3D( word, 0 , Vector4(1.f, 1.f, 0.f, 1.f));
 
 	const FLOAT color[4] = { 0.5f, 0.5f, 0.5f, 1.f };
+
+	//FIXME
+	static tGraphicDebug graphicDebug = {};
+
+	if (gInput->GetKeyDown(eKeyCode::NUM7))
+	{
+		graphicDebug.Debug0 ^= 1;
+	}
+	else if (gInput->GetKeyDown(eKeyCode::NUM8))
+	{
+		graphicDebug.Debug1 ^= 1;
+	}
+	else if (gInput->GetKeyDown(eKeyCode::NUM9))
+	{
+		graphicDebug.Debug2 ^= 1;
+	}
+	else if (gInput->GetKeyDown(eKeyCode::NUM0))
+	{
+		graphicDebug.Debug3 ^= 1;
+	}	
+
+
+	gCurrentSceneRenderer->SetGraphicDebug(graphicDebug);
 
 	//Depth
 	Texture* tex = gResourceManager->Find<Texture>(L"ShadowMap_0");

@@ -13,6 +13,7 @@ enum class eCBType
 	Wave,
 	Material,
 	Light3D,
+	GraphicDebug,
 	End,
 };
 

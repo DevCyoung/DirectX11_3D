@@ -250,4 +250,28 @@ cbuffer GlobalLight3D : register(b8)
 	int3	pad;
 };
 
+//Debug
+cbuffer Debug : register(b9)	
+{
+	int g_idebug0;
+	int g_idebug1;
+	int g_idebug2;
+	int g_idebug3;
+	
+	int g_idebug4;
+	int g_idebug5;
+	int g_idebug6;	
+	int g_idebug7;
+	
+	float g_fdebug0;
+	float g_fdebug1;
+	float g_fdebug2;
+	float g_fdebug3;
+	
+	float g_fdebug4;
+	float g_fdebug5;
+	float g_fdebug6;
+	float g_fdebug7;
+}
+
 #endif

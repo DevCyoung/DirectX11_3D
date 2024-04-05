@@ -212,3 +212,27 @@ struct /*alignas(16)*/ tLight3DInfo
 	int		pad[3];
 };
 
+
+struct /*alignas(16)*/ tGraphicDebug
+{
+	int Debug0;
+	int Debug1;
+	int Debug2;
+	int Debug3;
+
+	int Debug4;
+	int Debug5;
+	int Debug6;
+	int Debug7;
+
+	float Fdebug0;
+	float Fdebug1;
+	float Fdebug2;
+	float Fdebug3;
+
+	float Fdebug4;
+	float Fdebug5;
+	float Fdebug6;
+	float Fdebug7;
+};
+

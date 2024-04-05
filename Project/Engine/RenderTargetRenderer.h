@@ -74,6 +74,11 @@ public:
 	void RegisterRenderCamera(Camera* const camera);
 
 	void PopUpCamera(const eCameraPriorityType priorityType);
+
+	//FIXME
+	void SetGraphicDebug(const tGraphicDebug& graphicDebug) { mGraphicDebug = graphicDebug; }
+
+
 private:
 	void registerRenderComponent(RenderComponent* const renderComponent);
 	void registerLightInfo(const tLightInfo& light2DInfo);
@@ -82,6 +87,8 @@ private:
 	void flush();
 
 	void setBindRenderTarget(const eRenderType type) const;
+
+
 
 private:
 	DebugRenderer2D* mDebugRenderer;
@@ -92,4 +99,7 @@ private:
 	bool mbDebugRender;
 	bool mbWireFrame;
 	UINT mCameraMask;
+
+	//FIXME
+	tGraphicDebug mGraphicDebug;
 };

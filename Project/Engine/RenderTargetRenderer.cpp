@@ -27,6 +27,7 @@ RenderTargetRenderer::RenderTargetRenderer()
 	, mbDebugRender(true)
 	, mbWireFrame(false)
 	, mCameraMask(0XFFFFFFFF)
+	, mGraphicDebug{}
 {
 	for (auto& renderObjectArray : mRenderComponentsArray)
 	{
@@ -123,6 +124,11 @@ void RenderTargetRenderer::Render(const UINT renderTargetWidth,
 	gGraphicDevice->PassCB(eCBType::GlobalInfo, sizeof(globalInfo), &globalInfo);
 	gGraphicDevice->BindCB(eCBType::GlobalInfo, eShaderBindType::VS);
 	gGraphicDevice->BindCB(eCBType::GlobalInfo, eShaderBindType::PS);
+
+	//FIXME Graphic Debug
+	gGraphicDevice->PassCB(eCBType::GraphicDebug, sizeof(tGraphicDebug), &mGraphicDebug);
+	gGraphicDevice->BindCB(eCBType::GraphicDebug, eShaderBindType::VS);
+	gGraphicDevice->BindCB(eCBType::GraphicDebug, eShaderBindType::PS);
 
 	for (const Camera* const P_CAMERA : mCameras)
 	{

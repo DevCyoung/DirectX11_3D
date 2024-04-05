@@ -102,7 +102,7 @@ VS_OUT VS_Std3D(VS_IN _in)
 
 float4 PS_Std3D(VS_OUT _in) : SV_Target
 {
-	float4 vOutColor = float4(0.5f, 0.0f, 0.5f, 1.f);
+	float4 vOutColor = float4(0.5f, 0.5f, 0.5f, 1.f);
         
 	float3 vViewNormal = _in.vViewNormal;
 		
@@ -126,8 +126,10 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
 		};
         
 		vViewNormal = mul(vNormal, vRotateMat);
+		//vViewNormal = float3(0.f, 0.f, 0.f);
 	}
-		
+	
+
     
         
 	//ViewSpace 에서의
@@ -137,19 +139,29 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
     
     // ViewSpace 에서의 노말벡터와 광원의 방향을 내적 (램버트 코사인 법칙)
 	float fLightPow = saturate(dot(vViewNormal, -vViewLightDir));
-    
+	    
     // 반사광
 	float3 vViewReflect = normalize(vViewLightDir + 2.f * (dot(-vViewLightDir, vViewNormal)) * vViewNormal);
 	float3 vEye = normalize(_in.vViewPos);
    
     // 반사광의 세기 구하기
 	float fSpecPow = saturate(dot(vViewReflect, -vEye));
-	fSpecPow = pow(fSpecPow, 40.f);
+	fSpecPow = pow(fSpecPow, 16.f);
            
 	vOutColor.xyz = (vOutColor.xyz * LIGHT_COLOR.xyz * fLightPow)
-                    + (vOutColor.xyz * LIGHT_COLOR.xyz * LIGHT_AMB.xyz)	
-                    + LIGHT_COLOR.xyz * LIGHT_SPEC_COEFF * fSpecPow;
+                    + (vOutColor.xyz * LIGHT_COLOR.xyz * LIGHT_AMB.xyz);
 	
+	//FIXME Specular 지멋대로인거 고치기
+	if (g_btex_2)
+	{
+		vOutColor.xyz += LIGHT_COLOR.xyz * MeshRendererSpecul.Sample(anisotropicSampler, _in.vUV).rgb * fSpecPow * 2.5f;
+	}
+	else
+	{
+		vOutColor.xyz += LIGHT_COLOR.xyz * LIGHT_SPEC_COEFF * fSpecPow;
+	}
+
+	//vOutColor.xyz += LIGHT_COLOR.xyz * LIGHT_SPEC_COEFF * fSpecPow;	
 	return vOutColor;
 }
 #endif
